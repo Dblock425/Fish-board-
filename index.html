@@ -632,6 +632,31 @@
   .cbar i { display:block; height:100%; background:var(--amber); }
   .cheat p { margin:0; font-size:13px; color:var(--ink2); line-height:1.55; max-width:70ch; }
 
+  /* ---------- gear reference ---------- */
+  .geargrid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1px;
+              background:var(--key); border:1px solid var(--key); }
+  .gearcard { background:var(--panel); padding:16px 18px; }
+  .gearcard .gh { display:flex; align-items:baseline; gap:9px; flex-wrap:wrap; margin-bottom:3px; }
+  .gearcard h4 { font-family:"Barlow Condensed",sans-serif; font-size:19px; text-transform:uppercase;
+                 letter-spacing:.02em; color:var(--amber-ink); font-weight:700; }
+  .gtag { font-family:"IBM Plex Mono",monospace; font-size:11px; text-transform:uppercase; letter-spacing:.11em;
+          color:var(--go); border:1px solid var(--go); padding:2px 7px; white-space:nowrap; }
+  .gtag.bonus { color:var(--mut); border-color:var(--key2); }
+  .gtag.now { color:var(--amber-ink); border-color:var(--amber); background:var(--amber-dim); }
+  .gsuits { font-family:"IBM Plex Mono",monospace; font-size:11px; text-transform:uppercase; letter-spacing:.1em;
+            color:var(--mut); margin-bottom:11px; }
+  .grows { display:flex; flex-direction:column; }
+  .grow { display:grid; grid-template-columns:96px 1fr; gap:10px; padding:7px 0; border-top:1px solid var(--key); font-size:13px; }
+  .grow:first-child { border-top:0; }
+  .gk { font-family:"IBM Plex Mono",monospace; font-size:11px; text-transform:uppercase; letter-spacing:.1em;
+        color:var(--mut); padding-top:2px; }
+  .gv { color:var(--ink2); line-height:1.55; } .gv b { color:var(--ink); font-weight:600; }
+  @media (max-width:520px){ .grow { grid-template-columns:84px 1fr; gap:8px; } }
+  .hookline { display:flex; flex-wrap:wrap; gap:1px; background:var(--key); border:1px solid var(--key); margin:14px 0 0; }
+  .hookline span { flex:1 1 0; min-width:44px; text-align:center; background:var(--panel); padding:11px 4px;
+                   font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:600; color:var(--ink2); }
+  .hookline span.flip { color:var(--amber-ink); border-left:2px solid var(--amber); }
+
   /* ---------- live session / debrief ---------- */
   .sea { position:relative; margin-inline:-16px; display:flex; flex-direction:column;
          min-height:clamp(320px,46vh,420px); border-bottom:1px solid var(--key); background:var(--panel); }
@@ -1001,6 +1026,7 @@
   <button type="button" id="mCall" role="tab" aria-selected="true">Now</button>
   <button type="button" id="mWeek" role="tab" aria-selected="false">Week</button>
   <button type="button" id="mLearn" role="tab" aria-selected="false">Learn</button>
+  <button type="button" id="mGear" role="tab" aria-selected="false">Gear</button>
 </nav>
 
 <div class="wrap">
@@ -1008,6 +1034,8 @@
 <div id="app"></div>
 
 <div id="learn" hidden></div>
+
+<div id="gear" hidden></div>
 
 <div id="week" hidden>
   <header class="mast">
@@ -2070,6 +2098,121 @@
 `;
   }
 
+
+  /* ============ GEAR: bait sizes, hooks and weights ============
+     A plain reference for what to tie on. Reorders to put the current
+     fishing type first, but shows everything. */
+  const GEAR = [
+    { name:"Spotted bay bass", tag:"In season", tagcls:"", types:["bay","pier"], suits:"Bay / jetty / pier",
+      rows:[
+        ["Rig","<b>Dropshot</b> or weedless Texas-rig swimbait"],
+        ["Lure","<b>3 to 4 in paddle-tail swimbait</b> (Keitech, MC), green or brown"],
+        ["Weight","<b>3/8 oz</b> jighead standard &middot; <b>1/2 oz</b> if the current or wind is up &middot; 1/4 oz in calm, clear shallow"],
+        ["Hook","Built-in 3/0 to 4/0 swimbait hook, or a #1 to 1/0 dropshot hook"],
+        ["Line","15 lb braid to a <b>10 to 15 lb fluoro leader</b>"],
+        ["Pole","Penn Squadron 7'6\" + Spinfisher 4500"],
+      ] },
+    { name:"Halibut", tag:"Bonus fish", tagcls:"bonus", types:["bay","pier"], suits:"Bay / pier, on bait",
+      rows:[
+        ["Rig","<b>Carolina / fish-finder</b> (sliding sinker)"],
+        ["Weight","<b>3/4 to 1 oz</b> egg sinker in the bay &middot; up to 2 oz if the current runs"],
+        ["Hook","<b>#1 to 2/0</b> live-bait hook"],
+        ["Bait","Live or frozen <b>anchovy or sardine</b>, or a 5 in swimbait dragged slow"],
+        ["Leader","15 to 18 in of <b>15 lb fluoro</b>"],
+        ["Pole","Varmac 7' + Okuma Strikeforce 4000"],
+      ] },
+    { name:"Rockfish & cabezon", tag:"Opens Oct 1", tagcls:"", types:["bay"], suits:"Low-tide reef & rocks",
+      rows:[
+        ["Rig","<b>Texas-rig weedless swimbait</b> so it slides through rock"],
+        ["Weight","<b>3/8 to 1/2 oz</b> &middot; 3/4 oz in deeper or rougher water"],
+        ["Hook","3/0 to 4/0 weighted worm/swimbait hook"],
+        ["Lure","4 in swimbait or a curl-tail grub, dark colors"],
+        ["Pole","Penn Squadron 7'6\" + Spinfisher 4500"],
+      ] },
+    { name:"Surfperch & corbina", tag:"", tagcls:"", types:["surf"], suits:"Open beach / surf",
+      rows:[
+        ["Rig","<b>Light Carolina rig</b> or a two-hook high-low"],
+        ["Weight","<b>1 to 2 oz pyramid</b> to hold in the wash &middot; 2 to 3 oz if the surf is up"],
+        ["Hook","<b>#4 to #2</b> for perch &middot; #2 to #1 for corbina"],
+        ["Bait","<b>Sand crab</b> is the best &middot; Gulp sandworm or a bloodworm also work"],
+        ["Leader","12 to 18 in of 10 to 15 lb"],
+        ["Pole","Shimano Talavera 7' + Battle II 4000"],
+      ] },
+    { name:"Mackerel, smelt & bonito", tag:"", tagcls:"", types:["pier"], suits:"Pier, off the rail",
+      rows:[
+        ["Mackerel / smelt","<b>Sabiki rig, size 6 to 10</b>, with a <b>1 to 2 oz</b> weight on the bottom"],
+        ["Bonito","A <b>1/2 to 1 oz metal jig</b> (Kastmaster), or a bonito splasher and feather"],
+        ["Bait","Sabiki tips: a sliver of squid on each hook helps"],
+        ["Pole","Your bass rod is fine; the sabiki does the work"],
+      ] },
+    { name:"For Noah (kids)", tag:"Easy", tagcls:"", types:["bay","pier","surf"], suits:"Any calm spot, no license on a pier",
+      rows:[
+        ["Easiest","<b>1/2 oz Kastmaster</b>: just cast out and reel it back"],
+        ["Bait option","A <b>#4 baitholder hook</b> with a strip of <b>market squid under a float</b>, tiny split shot"],
+        ["Weight","Keep it light, 1/4 to 1/2 oz, so a small fish still bends the rod"],
+        ["Pole","The Abu Garcia combo"],
+      ] },
+  ];
+
+  function renderGear(){
+    const el=document.getElementById("gear"); if(!el) return;
+    const ft=(typeof FISH_TYPE!=="undefined")?FISH_TYPE:"bay";
+    const list=GEAR.slice().sort((a,b)=>(b.types.includes(ft)?1:0)-(a.types.includes(ft)?1:0));
+    const card = g => `<div class="gearcard">
+      <div class="gh"><h4>${g.name}</h4>${g.tag?`<span class="gtag ${g.tagcls}">${g.tag}</span>`:""}
+        ${g.types.includes(ft)?`<span class="gtag now">Your pick</span>`:""}</div>
+      <div class="gsuits">${g.suits}</div>
+      <div class="grows">${g.rows.map(([k,v])=>`<div class="grow"><span class="gk">${k}</span><span class="gv">${v}</span></div>`).join("")}</div>
+    </div>`;
+    el.innerHTML = `
+    <header class="mast">
+      <div><div class="eyebrow">Tackle reference</div><h1>Gear &amp; rigs</h1></div>
+      <div class="stamp"><div>Bait, hooks &amp; weights</div><div>ordered for your <b>${(typeof FTYPE!=="undefined"&&FTYPE[ft]?FTYPE[ft].short:"Bay")}</b> pick</div></div>
+    </header>
+
+    <section class="band"><div class="bandhead"><h2>What to tie on</h2><span class="sub">by target species</span></div>
+      <div class="geargrid">${list.map(card).join("")}</div>
+    </section>
+
+    <section class="band tint"><div class="bandhead"><h2>Weights, in one rule</h2><span class="sub">the only call you make every trip</span></div>
+      <p class="take"><b>Use the lightest weight that still lets you feel the bottom and hold position.</b> That is the whole game.</p>
+      <div class="cols">
+        <div><h4>Go heavier</h4><ul>
+          <li>The <b>current is running hard</b> (the middle of a tide)</li>
+          <li>The <b>wind is up</b> and bowing your line</li>
+          <li>The water is <b>deeper</b>, or the <b>surf is up</b></li>
+          <li>You <b>cannot feel the bottom</b> or you are dragging</li>
+        </ul></div>
+        <div><h4>Go lighter</h4><ul>
+          <li>The tide is <b>slack</b> and the water is barely moving</li>
+          <li>The water is <b>calm, clear or shallow</b></li>
+          <li>Fish are <b>spooky</b> and refusing</li>
+          <li>A lighter bait <b>falls more naturally</b> and gets bit</li>
+        </ul></div>
+      </div>
+      <p class="note">Practical spread to carry: bay bass 1/4, 3/8, 1/2 oz jigheads; halibut 3/4 and 1 oz egg sinkers; surf 1, 2 and 3 oz pyramids.</p>
+    </section>
+
+    <section class="band"><div class="bandhead"><h2>Hook sizes, decoded</h2><span class="sub">the numbering that confuses everyone</span></div>
+      <p class="take">Two scales meet in the middle. For plain numbers, <b>bigger number means a smaller hook</b>: a #8 is tiny, a #1 is bigger. Then it flips to <b>"aught" sizes</b> (written 1/0, 2/0, said "one-oh"), where <b>bigger number means a bigger hook</b>.</p>
+      <div class="hookline">
+        <span>#8</span><span>#6</span><span>#4</span><span>#2</span><span>#1</span><span class="flip">1/0</span><span>2/0</span><span>3/0</span><span>4/0</span>
+      </div>
+      <p class="note"><b>smallest &rarr; largest.</b> For this board: perch and squid strips sit around #4 to #1, bay bass and halibut around 1/0 to 2/0, reef swimbaits 3/0 to 4/0.</p>
+    </section>
+
+    <section class="band tint"><div class="bandhead"><h2>Your rods</h2><span class="sub">which one for what</span></div>
+      <div class="cols">
+        <div><h4>Penn Squadron 7'6" + Spinfisher 4500</h4><ul><li>Your <b>bass and reef</b> rod: dropshot, swimbaits, lures</li><li>15 lb braid, the all-day workhorse</li></ul></div>
+        <div><h4>Varmac 7' + Okuma Strikeforce 4000</h4><ul><li>The <b>bait rod</b> for <b>halibut</b> and soaking anchovies</li><li>Carolina rig, heavier sinkers</li></ul></div>
+        <div><h4>Shimano Talavera 7' + Battle II 4000</h4><ul><li>The <b>surf</b> rod: perch and corbina on light Carolina rigs</li><li>Sand crabs and Gulp in the trough</li></ul></div>
+        <div><h4>Abu Garcia combo</h4><ul><li><b>Noah's</b> rod: Kastmaster or bait under a float</li><li>Light and forgiving, lots of bites</li></ul></div>
+      </div>
+      <p class="note"><b>Before you keep anything:</b> halibut 22 in minimum, saltwater basses 14 in with a 5-fish combined limit. Measure every fish and confirm current CDFW rules before one goes in the bag.</p>
+    </section>`;
+  }
+
+
   /* ---- ON THE WATER ---- */
   const TAPS = ["Spotted bay bass","Sand bass","Calico bass","Bonito","Mackerel","Halibut","Other"];
   function renderLive(){
@@ -2183,12 +2326,15 @@
     document.getElementById("detail").hidden=true;
     document.getElementById("week").hidden  = (m!=="week");
     document.getElementById("learn").hidden = (m!=="learn");
-    document.getElementById("app").hidden   = (m==="week"||m==="learn");
+    const gearEl=document.getElementById("gear"); if(gearEl) gearEl.hidden = (m!=="gear");
+    document.getElementById("app").hidden   = (m==="week"||m==="learn"||m==="gear");
     if(m==="gonow"){ renderApp(); window.scrollTo(0,0); return; }
-    document.getElementById("mCall").setAttribute("aria-selected", m!=="week"&&m!=="learn");
+    document.getElementById("mCall").setAttribute("aria-selected", m!=="week"&&m!=="learn"&&m!=="gear");
     document.getElementById("mWeek").setAttribute("aria-selected", m==="week");
     document.getElementById("mLearn").setAttribute("aria-selected", m==="learn");
+    const mg=document.getElementById("mGear"); if(mg) mg.setAttribute("aria-selected", m==="gear");
     if(m==="learn"){ renderLearn(); paintBW(); wireHeroTest(); }
+    else if(m==="gear"){ renderGear(); }
     else if(m!=="week") renderApp();
     window.scrollTo(0,0);
   }
@@ -2282,6 +2428,7 @@
   document.getElementById("homeBtn").addEventListener("click", ()=>{
     document.getElementById("detail").hidden=true; setMode(SESSION?"live":"call"); window.scrollTo(0,0);
   });
+  { const _mg=document.getElementById("mGear"); if(_mg) _mg.addEventListener("click", ()=>setMode("gear")); }
 
   /* ============ SEASON / RIGS / SPOTS ============ */
   const SEASON = [
@@ -2743,6 +2890,7 @@
       FISH_TYPE=sel.value;
       try { localStorage.setItem("biteboard.fishtype",FISH_TYPE); } catch(e){}
       renderSpots(); renderAll();
+      const gv=document.getElementById("gear"); if(gv && !gv.hidden) renderGear();
       if(!document.getElementById("detail").hidden) openDay(CUR);
     });
   })();
