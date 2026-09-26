@@ -1,30 +1,10 @@
 {
-  "generated_at": "2026-09-25T16:22:14+00:00",
+  "generated_at": "2026-09-26T08:15:03+00:00",
   "station": "9410170",
   "lat": 32.7157,
   "lon": -117.173,
   "note": "Fetched by GitHub Actions. Tides exact (NOAA), weather from Open-Meteo, moon computed.",
   "tides": [
-    {
-      "t": "2026-09-24 02:32",
-      "v": 0.19,
-      "type": "L"
-    },
-    {
-      "t": "2026-09-24 08:44",
-      "v": 5.25,
-      "type": "H"
-    },
-    {
-      "t": "2026-09-24 14:30",
-      "v": 1.36,
-      "type": "L"
-    },
-    {
-      "t": "2026-09-24 20:31",
-      "v": 5.91,
-      "type": "H"
-    },
     {
       "t": "2026-09-25 02:56",
       "v": 0.25,
@@ -199,31 +179,31 @@
       "t": "2026-10-03 23:19",
       "v": 0.26,
       "type": "L"
+    },
+    {
+      "t": "2026-10-04 06:38",
+      "v": 4.1,
+      "type": "H"
+    },
+    {
+      "t": "2026-10-04 10:54",
+      "v": 3.3,
+      "type": "L"
+    },
+    {
+      "t": "2026-10-04 16:49",
+      "v": 5.52,
+      "type": "H"
     }
   ],
   "days": [
-    {
-      "date": "2026-09-25",
-      "dow": "Fri",
-      "sunrise": "06:38",
-      "sunset": "18:41",
-      "wind_mph": 10,
-      "swell_ft": 2.9,
-      "water_f": 73.5,
-      "weather_code": 45,
-      "precip_in": 0.0,
-      "moon_phase": "Full",
-      "moon_illum": 98,
-      "moon_transit": "11:47 PM",
-      "moon_underfoot": "12:12 PM"
-    },
     {
       "date": "2026-09-26",
       "dow": "Sat",
       "sunrise": "06:39",
       "sunset": "18:39",
-      "wind_mph": 9,
-      "swell_ft": 4.0,
+      "wind_mph": 8,
+      "swell_ft": 3.8,
       "water_f": 73.7,
       "weather_code": 45,
       "precip_in": 0.0,
@@ -237,7 +217,7 @@
       "dow": "Sun",
       "sunrise": "06:40",
       "sunset": "18:38",
-      "wind_mph": 10,
+      "wind_mph": 8,
       "swell_ft": 3.7,
       "water_f": 74.0,
       "weather_code": 3,
@@ -252,8 +232,8 @@
       "dow": "Mon",
       "sunrise": "06:40",
       "sunset": "18:37",
-      "wind_mph": 10,
-      "swell_ft": 3.9,
+      "wind_mph": 12,
+      "swell_ft": 4.3,
       "water_f": 73.6,
       "weather_code": 3,
       "precip_in": 0.0,
@@ -268,7 +248,7 @@
       "sunrise": "06:41",
       "sunset": "18:35",
       "wind_mph": 12,
-      "swell_ft": 4.1,
+      "swell_ft": 4.3,
       "water_f": 73.1,
       "weather_code": 0,
       "precip_in": 0.0,
@@ -282,10 +262,10 @@
       "dow": "Wed",
       "sunrise": "06:42",
       "sunset": "18:34",
-      "wind_mph": 10,
-      "swell_ft": 3.4,
+      "wind_mph": 14,
+      "swell_ft": 3.2,
       "water_f": 73.5,
-      "weather_code": 3,
+      "weather_code": 2,
       "precip_in": 0.0,
       "moon_phase": "Waning gibbous",
       "moon_illum": 86,
@@ -297,10 +277,10 @@
       "dow": "Thu",
       "sunrise": "06:42",
       "sunset": "18:33",
-      "wind_mph": 8,
-      "swell_ft": 1.8,
+      "wind_mph": 10,
+      "swell_ft": 1.9,
       "water_f": 73.6,
-      "weather_code": 3,
+      "weather_code": 2,
       "precip_in": 0.0,
       "moon_phase": "Waning gibbous",
       "moon_illum": 78,
@@ -313,9 +293,9 @@
       "sunrise": "06:43",
       "sunset": "18:31",
       "wind_mph": 11,
-      "swell_ft": 1.8,
+      "swell_ft": 1.7,
       "water_f": 73.4,
-      "weather_code": 3,
+      "weather_code": 0,
       "precip_in": 0.0,
       "moon_phase": "Last quarter",
       "moon_illum": 69,
@@ -327,15 +307,30 @@
       "dow": "Sat",
       "sunrise": "06:44",
       "sunset": "18:30",
-      "wind_mph": 10,
-      "swell_ft": 1.7,
+      "wind_mph": 9,
+      "swell_ft": 1.6,
       "water_f": 73.0,
-      "weather_code": 1,
+      "weather_code": 0,
       "precip_in": 0.0,
       "moon_phase": "Last quarter",
       "moon_illum": 59,
       "moon_transit": "6:18 AM",
       "moon_underfoot": "6:43 PM"
+    },
+    {
+      "date": "2026-10-04",
+      "dow": "Sun",
+      "sunrise": "06:45",
+      "sunset": "18:29",
+      "wind_mph": 9,
+      "swell_ft": null,
+      "water_f": 73.0,
+      "weather_code": 0,
+      "precip_in": 0.0,
+      "moon_phase": "Last quarter",
+      "moon_illum": 48,
+      "moon_transit": "7:07 AM",
+      "moon_underfoot": "7:32 PM"
     }
   ]
 }
