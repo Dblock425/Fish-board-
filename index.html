@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f8f9fd"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f8f9fd"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px);overflow-x:hidden}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>San Diego Bite Board</title>
 <meta name="description" content="A San Diego tide instrument: eight days of bay water read as five kinds of fishing day, one-tap "go now" with spot, rig and first cast, and a catch log that retunes the model to your own fish.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;600&family=IBM+Plex+Mono:wght@400;600&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800;900&display=swap">
@@ -74,7 +74,7 @@
   *, *::before, *::after { box-sizing:border-box; }
   body { margin:0; background:var(--bg); color:var(--ink);
          font-family:"Barlow",ui-sans-serif,system-ui,sans-serif; font-size:15px; line-height:1.5;
-         -webkit-font-smoothing:antialiased; padding-bottom:0; }
+         -webkit-font-smoothing:antialiased; padding-bottom:0; overflow-x:hidden; }
   h1,h2,h3,h4 { margin:0; font-weight:600; font-family:"Barlow Condensed",sans-serif;
                 letter-spacing:.005em; line-height:1.03; }
   .wrap { max-width:1120px; margin:0 auto; padding-inline:16px; padding-block:0 96px; }
@@ -114,16 +114,17 @@
             border-bottom:1px solid var(--key); padding-inline:16px; }
   .nowbar-in { max-width:1120px; margin:0 auto; display:flex; align-items:center;
                gap:8px 16px; flex-wrap:wrap; padding-block:9px; }
-  .brandmark { display:flex; align-items:baseline; gap:9px; margin-right:auto; min-width:0;
+  .brandmark { display:flex; align-items:center; gap:8px; margin-right:auto; min-width:0;
                background:none; border:0; padding:2px 0; cursor:pointer; font:inherit; color:inherit; text-align:left; }
   .brandmark:hover .nm { color:var(--amber-ink); }
+  .bm-col { display:flex; flex-direction:column; line-height:1.05; min-width:0; }
   .brandmark .homehint { font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--mut);
                border:1px solid var(--key); padding:1px 5px; margin-left:2px; }
   .brandmark:hover .homehint { border-color:var(--amber); color:var(--amber-ink); }
   .brandmark .nm { font-family:"Barlow Condensed",sans-serif; font-weight:700; font-size:17px;
                    text-transform:uppercase; letter-spacing:.06em; }
-  .brandmark .st { font-family:"IBM Plex Mono",monospace; font-size:11px; text-transform:uppercase;
-                   letter-spacing:.16em; color:var(--mut); }
+  .brandmark .st { font-family:"Barlow",sans-serif; font-size:11px; text-transform:none;
+                   letter-spacing:0; color:var(--mut); margin-top:1px; white-space:nowrap; }
   .readout { display:flex; align-items:center; gap:7px 16px; flex-wrap:wrap; min-width:0;
              font-family:"IBM Plex Mono",monospace; font-size:11px; font-variant-numeric:tabular-nums; }
   .readout .rr { display:flex; flex-direction:column; line-height:1.25; }
@@ -152,10 +153,15 @@
   /* on a phone the strip has one job: what the water is doing right now */
   @media (max-width:640px){
     .caps { display:none; }
-    .readout .rr:nth-child(4) { display:none; }
-    .brandmark .st { display:none; }
-    .nowbar-in { gap:5px 12px; padding-block:8px; }
+    .readout { display:none; }
+    #designSel { display:none; }
+    .nowbar-in { gap:8px 10px; padding-block:8px; }
+    .brandmark { flex:1 1 100%; margin-right:0; }
     .brandmark .nm { font-size:17px; }
+    .brandmark .st { font-size:11px; }
+    #fishSel { max-width:132px; }
+    .nowbar-in .iconbtn { margin-left:auto; }
+    .nowbar-in .iconbtn + .iconbtn { margin-left:0; }
   }
 
   /* ---------- navigation: at the bottom, where your thumb is ---------- */
@@ -874,6 +880,9 @@
      above the fold on a phone. The dial still exists; it is the dig-in
      layer now, not the greeting. */
   .hero { padding-block:16px 20px; border-bottom:1px solid var(--key); }
+  .hintro { font-size:13px; line-height:1.5; color:var(--ink2); margin:0 0 14px; max-width:62ch;
+            border-left:2px solid var(--amber); padding-left:11px; }
+  .hintro b { color:var(--ink); font-weight:600; }
   .hmeta { display:flex; gap:14px; align-items:center; flex-wrap:wrap;
            font-family:"IBM Plex Mono",monospace; font-size:11px; text-transform:uppercase;
            letter-spacing:.13em; color:var(--mut); }
@@ -999,9 +1008,8 @@
 <div class="nowbar">
   <div class="nowbar-in">
     <button class="brandmark" id="homeBtn" type="button" title="Home: back to Now" aria-label="Home, back to the Now view">
-      <span class="nm">Bite Board</span>
-      <span class="st">SD Bay &middot; 9410170</span>
-      <span class="homehint">&#8962; Home</span>
+      <span class="bm-col"><span class="nm">Bite Board</span><span class="st">San Diego Bay fishing</span></span>
+      <span class="homehint">&#8962;</span>
     </button>
     <div class="readout" id="readout"></div>
     <div class="caps" id="capChips"></div>
@@ -3841,6 +3849,7 @@
     const rate=(function(){ const h=(hStats()[k]||{}); return (h.seen?Math.round((h.tap||0)/h.seen*100):0); })();
     return `${staleNoteHTML()}
     <section class="hero" data-v="${k}">
+      <div class="hintro"><b>San Diego Bay fishing.</b> The best days, times and spots to fish this week. Green means go; tap a day for the tides and the plan.</div>
       <div class="hmeta">
         <span class="hlive"><i></i>${c.live?fmtHM(c.m):"Board out of range"}</span>
         <span>${tideAt(c.d.di*1440+c.m).toFixed(1)} ft ${c.g.state.dir}</span>
