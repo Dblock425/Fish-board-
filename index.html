@@ -350,6 +350,22 @@
   .barwrap { margin-top:20px; border-top:1px solid var(--key); padding-top:12px; }
   .barhead { display:flex; align-items:baseline; gap:10px; margin-bottom:6px; }
   .barhint { font-size:11px; text-transform:uppercase; letter-spacing:.12em; color:var(--mut); margin-left:auto; }
+  .bar .bl small { display:block; font-family:"IBM Plex Mono",monospace; font-size:10px; text-transform:uppercase;
+                   letter-spacing:.06em; color:var(--mut); margin-top:1px; }
+  /* conditions-this-hour strip near the dial score */
+  .condhead { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin:20px 0 8px; }
+  .condrow { display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:var(--key); border:1px solid var(--key); }
+  @media (max-width:560px){ .condrow { grid-template-columns:repeat(3,1fr); } }
+  .cond { background:var(--panel); padding:9px 9px 10px; display:flex; flex-direction:column; gap:1px; position:relative; }
+  .cond::before { content:""; position:absolute; top:0; left:0; width:100%; height:2px; background:var(--key2); }
+  .cond.c-g::before { background:var(--go); } .cond.c-o::before { background:var(--warn); }
+  .cond.c-b::before { background:var(--bad); } .cond.c-n::before { background:var(--mut); }
+  .cond .ck { font-family:"IBM Plex Mono",monospace; font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--mut); }
+  .cond .cv { font-family:"Barlow Condensed",sans-serif; font-weight:700; font-size:19px; line-height:1.05; }
+  .cond.c-g .cv { color:var(--go); } .cond.c-o .cv { color:var(--warn); } .cond.c-b .cv { color:var(--bad); } .cond.c-n .cv { color:var(--mut); }
+  .cond .cs { font-size:11px; color:var(--mut); line-height:1.3; }
+  .dialabout { font-size:12px; line-height:1.55; color:var(--mut); margin:12px 0 0; max-width:56ch; }
+  .dialabout b { color:var(--ink2); font-weight:600; }
   .bars { display:flex; flex-direction:column; }
   .bar { display:grid; grid-template-columns:100px 1fr 42px; gap:10px; align-items:center;
          font:inherit; text-align:left; cursor:pointer; background:none; border:0;
@@ -1858,6 +1874,7 @@
           <span>Hand<i style="background:var(--hand-prime)"></i><i style="background:var(--hand-go)"></i><i
             style="background:var(--hand-low)"></i>prime to slower</span>
         </div>
+        <p class="dialabout"><b>The middle number</b> is the bite score for the hour the hand points to. <b>The blue band</b> is the tide height around the clock: it bulges out where the water is high and pulls in where it is low. Drag the hand, or tap Dawn / Midday / Dusk above, to read any other hour.</p>
       </div>
       <div class="todayside" id="probeSide"></div>
     </section>
@@ -4136,6 +4153,27 @@
   }
 
 
+  /* ---- the glanceable conditions behind the score, for the probed hour ---- */
+  function conditionsStrip(d, m){
+    const st=tideState(d,m);
+    const wind = d.wind==null?null:windAt(d.wind,m);
+    const inBand = d.water!=null && d.water>=64 && d.water<=76;
+    const tv = st.speed==="rip"?["g","Strong"] : st.speed==="run"?["g","Moving"] : st.speed==="crawl"?["o","Soft"] : ["o","Slack"];
+    const wv = wind==null?["n","n/a"] : wind<=5?["g",wind+" mph"] : wind<=8?["o",wind+" mph"] : ["b",wind+" mph"];
+    const wtv= d.water==null?["n","n/a"] : [inBand?"g":"o", Math.round(d.water)+"\u00b0"];
+    const slv= d.swell==null?["n","n/a"] : d.swell<2.8?["g",d.swell+" ft"] : d.swell<3.5?["o",d.swell+" ft"] : ["b",d.swell+" ft"];
+    const mv = [(d.illum>=90||d.illum<=15)?"g":"o", d.illum+"%"];
+    const tiles=[
+      ["Tide", tv[1], tv[0], st.dir],
+      ["Wind", wv[1], wv[0], wind==null?"":"gust ~"+Math.round(wind*1.4)],
+      ["Water", wtv[1], wtv[0], inBand?"in band":"off band"],
+      ["Swell", slv[1], slv[0], d.swell==null?"":(d.swell<2.8?"coast open":"bay better")],
+      ["Moon", mv[1], mv[0], String(d.moon).toLowerCase()],
+    ];
+    return `<div class="condhead"><span class="labp">Conditions this hour</span><span class="barhint">wind &amp; swell = how fishable &middot; the rest drive the score</span></div>
+      <div class="condrow">${tiles.map(([k,v,c,sub])=>`<div class="cond c-${c}"><span class="ck">${k}</span><span class="cv">${v}</span><span class="cs">${sub}</span></div>`).join("")}</div>`;
+  }
+
   /* ---- everything that changes when the hand or the day moves ---- */
   function paintProbe(){
     const d=probeDay(), m=probeMin(), live=probeIsLive();
@@ -4196,7 +4234,7 @@
         const pt2=a.parts.find(x=>x.k===k);
         const up=pt2.v>=0.5, got=pt2.got*100, lost=(pt2.max-pt2.got)*100;
         return `<button class="bar" type="button" data-k="${k}" aria-expanded="false">
-            <span class="bl">${TERM_LABEL[k]}</span>
+            <span class="bl">${TERM_LABEL[k]}<small>${a.terms[k].reg}</small></span>
             <span class="bt"><i class="${up?'up':'dn'}" style="width:${Math.round(pt2.v*100)}%"></i></span>
             <span class="bv ${up?'up':'dn'}">${up?"+":"−"}${Math.round(up?got:lost)}</span>
           </button>
@@ -4211,6 +4249,8 @@
          <div class="modebadge">${glyphSVG(md,22)}<span><b>${MODES[md].name}</b>${MODES[md].tag}</span>${kidOK(d,m)?'<span class="kidok">good one for Noah</span>':''}</div>
          <h1>${pb.head}.</h1>
          ${meterHTML(a.bay)}
+
+         ${conditionsStrip(d,m)}
 
          <p class="oneline"><b>${pickSpot(d,m,md,false).spot.name}.</b> ${pb.where.split(".")[0]}. ${pb.rig.split(".")[0]}.</p>
          <details class="plan"><summary>The full plan for ${fmtHM(m)}</summary>
