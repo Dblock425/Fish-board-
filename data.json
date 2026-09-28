@@ -1,30 +1,10 @@
 {
-  "generated_at": "2026-09-27T16:15:56+00:00",
+  "generated_at": "2026-09-28T19:08:31+00:00",
   "station": "9410170",
   "lat": 32.7157,
   "lon": -117.173,
   "note": "Fetched by GitHub Actions. Tides exact (NOAA), weather from Open-Meteo, moon computed.",
   "tides": [
-    {
-      "t": "2026-09-26 03:21",
-      "v": 0.44,
-      "type": "L"
-    },
-    {
-      "t": "2026-09-26 09:29",
-      "v": 5.98,
-      "type": "H"
-    },
-    {
-      "t": "2026-09-26 15:42",
-      "v": 0.49,
-      "type": "L"
-    },
-    {
-      "t": "2026-09-26 21:45",
-      "v": 5.59,
-      "type": "H"
-    },
     {
       "t": "2026-09-27 03:45",
       "v": 0.75,
@@ -194,34 +174,39 @@
       "t": "2026-10-05 18:02",
       "v": 5.76,
       "type": "H"
+    },
+    {
+      "t": "2026-10-06 01:03",
+      "v": -0.14,
+      "type": "L"
+    },
+    {
+      "t": "2026-10-06 07:33",
+      "v": 5.09,
+      "type": "H"
+    },
+    {
+      "t": "2026-10-06 13:06",
+      "v": 1.89,
+      "type": "L"
+    },
+    {
+      "t": "2026-10-06 18:59",
+      "v": 5.94,
+      "type": "H"
     }
   ],
   "days": [
-    {
-      "date": "2026-09-27",
-      "dow": "Sun",
-      "sunrise": "06:40",
-      "sunset": "18:38",
-      "wind_mph": 7,
-      "swell_ft": 3.9,
-      "water_f": 73.6,
-      "weather_code": 3,
-      "precip_in": 0.0,
-      "moon_phase": "Full",
-      "moon_illum": 100,
-      "moon_transit": "1:25 AM",
-      "moon_underfoot": "1:50 PM"
-    },
     {
       "date": "2026-09-28",
       "dow": "Mon",
       "sunrise": "06:40",
       "sunset": "18:37",
       "wind_mph": 10,
-      "swell_ft": 3.4,
-      "water_f": 73.6,
-      "weather_code": 51,
-      "precip_in": 0.031,
+      "swell_ft": 3.7,
+      "water_f": 73.7,
+      "weather_code": 45,
+      "precip_in": 0.0,
       "moon_phase": "Full",
       "moon_illum": 97,
       "moon_transit": "2:14 AM",
@@ -233,9 +218,9 @@
       "sunrise": "06:41",
       "sunset": "18:35",
       "wind_mph": 10,
-      "swell_ft": 3.7,
-      "water_f": 73.3,
-      "weather_code": 2,
+      "swell_ft": 4.2,
+      "water_f": 73.6,
+      "weather_code": 0,
       "precip_in": 0.0,
       "moon_phase": "Waning gibbous",
       "moon_illum": 93,
@@ -247,10 +232,10 @@
       "dow": "Wed",
       "sunrise": "06:42",
       "sunset": "18:34",
-      "wind_mph": 8,
-      "swell_ft": 3.1,
-      "water_f": 73.5,
-      "weather_code": 0,
+      "wind_mph": 10,
+      "swell_ft": 3.2,
+      "water_f": 73.6,
+      "weather_code": 3,
       "precip_in": 0.0,
       "moon_phase": "Waning gibbous",
       "moon_illum": 86,
@@ -263,8 +248,8 @@
       "sunrise": "06:42",
       "sunset": "18:33",
       "wind_mph": 10,
-      "swell_ft": 2.7,
-      "water_f": 73.7,
+      "swell_ft": 2.8,
+      "water_f": 73.6,
       "weather_code": 0,
       "precip_in": 0.0,
       "moon_phase": "Waning gibbous",
@@ -277,8 +262,8 @@
       "dow": "Fri",
       "sunrise": "06:43",
       "sunset": "18:31",
-      "wind_mph": 11,
-      "swell_ft": 2.2,
+      "wind_mph": 12,
+      "swell_ft": 2.4,
       "water_f": 73.4,
       "weather_code": 0,
       "precip_in": 0.0,
@@ -292,9 +277,9 @@
       "dow": "Sat",
       "sunrise": "06:44",
       "sunset": "18:30",
-      "wind_mph": 12,
-      "swell_ft": 1.6,
-      "water_f": 73.3,
+      "wind_mph": 10,
+      "swell_ft": 1.7,
+      "water_f": 73.4,
       "weather_code": 0,
       "precip_in": 0.0,
       "moon_phase": "Last quarter",
@@ -307,9 +292,9 @@
       "dow": "Sun",
       "sunrise": "06:45",
       "sunset": "18:29",
-      "wind_mph": 7,
-      "swell_ft": 1.8,
-      "water_f": 73.3,
+      "wind_mph": 9,
+      "swell_ft": 2.0,
+      "water_f": 73.4,
       "weather_code": 0,
       "precip_in": 0.0,
       "moon_phase": "Last quarter",
@@ -322,15 +307,30 @@
       "dow": "Mon",
       "sunrise": "06:45",
       "sunset": "18:27",
-      "wind_mph": 13,
-      "swell_ft": 3.9,
-      "water_f": 73.3,
-      "weather_code": 3,
+      "wind_mph": 9,
+      "swell_ft": 4.5,
+      "water_f": 73.4,
+      "weather_code": 0,
       "precip_in": 0.0,
       "moon_phase": "Last quarter",
       "moon_illum": 38,
       "moon_transit": "7:55 AM",
       "moon_underfoot": "8:20 PM"
+    },
+    {
+      "date": "2026-10-06",
+      "dow": "Tue",
+      "sunrise": "06:46",
+      "sunset": "18:26",
+      "wind_mph": 8,
+      "swell_ft": 4.9,
+      "water_f": 73.0,
+      "weather_code": 0,
+      "precip_in": 0.0,
+      "moon_phase": "Waning crescent",
+      "moon_illum": 28,
+      "moon_transit": "8:44 AM",
+      "moon_underfoot": "9:09 PM"
     }
   ]
 }
