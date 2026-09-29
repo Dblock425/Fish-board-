@@ -5101,7 +5101,9 @@
       if(clearT){ clearTimeout(clearT); clearT=null; }
       if(txt && cls) clearT=setTimeout(()=>{ el.textContent=""; el.className="refreshstatus"; }, 3600);
     }
+    let lastPull=0, pulling=false;
     async function pull(manual){
+      if(pulling) return; pulling=true;
       const btn=document.getElementById("refreshBtn");
       if(btn) btn.disabled=true;
       if(manual) setStatus("Refreshing…","");
@@ -5112,11 +5114,19 @@
         if(!applyLiveData(data)) throw new Error("bad data");
         WEEK_RANGE=null; renderAll();
         if(!document.getElementById("detail").hidden) openDay(Math.min(CUR, DAYS.length-1));
+        lastPull=Date.now();
         setStatus("Updated · "+new Date().toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"}), "ok");
       }catch(e){
         if(manual) setStatus("Could not refresh · showing last saved data","err");
-      }finally{ if(btn) btn.disabled=false; }
+      }finally{ if(btn) btn.disabled=false; pulling=false; }
     }
+    // A phone freezes a background tab and restores the old page on reopen
+    // without re-running scripts; re-pull whenever the page is shown again or
+    // brought back to the foreground, so a reopened site never shows old data.
+    function maybePull(){ if(Date.now()-lastPull > 90000) pull(false); }
+    window.addEventListener("pageshow", e=>{ if(e.persisted) pull(false); });
+    document.addEventListener("visibilitychange", ()=>{ if(document.visibilityState==="visible") maybePull(); });
+    window.addEventListener("focus", maybePull);
     const btn=document.getElementById("refreshBtn");
     if(btn) btn.addEventListener("click", ()=>pull(true));
     pull(false);
