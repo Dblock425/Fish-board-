@@ -5102,7 +5102,8 @@
       if(txt && cls) clearT=setTimeout(()=>{ el.textContent=""; el.className="refreshstatus"; }, 3600);
     }
     let lastPull=0, pulling=false;
-    async function pull(manual){
+    async function pull(manual, attempt){
+      attempt = attempt||0;
       if(pulling) return; pulling=true;
       const btn=document.getElementById("refreshBtn");
       if(btn) btn.disabled=true;
@@ -5118,6 +5119,7 @@
         setStatus("Updated · "+new Date().toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"}), "ok");
       }catch(e){
         if(manual) setStatus("Could not refresh · showing last saved data","err");
+        else if(attempt < 3){ setTimeout(()=>pull(false, attempt+1), 2500*(attempt+1)); }  // transient load hiccup: try again
       }finally{ if(btn) btn.disabled=false; pulling=false; }
     }
     // A phone freezes a background tab and restores the old page on reopen
