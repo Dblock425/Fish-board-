@@ -899,6 +899,14 @@
   .hintro { font-size:13px; line-height:1.5; color:var(--ink2); margin:0 0 14px; max-width:62ch;
             border-left:2px solid var(--amber); padding-left:11px; }
   .hintro b { color:var(--ink); font-weight:600; }
+  .maplink { font-family:"IBM Plex Mono",monospace; font-size:11px; text-transform:uppercase; letter-spacing:.07em;
+             color:var(--amber-ink); text-decoration:none; border-bottom:1px solid var(--amber); white-space:nowrap; margin-left:8px; }
+  .maplink:hover { color:var(--ink); }
+  .bestcard { display:flex; align-items:baseline; gap:8px 12px; flex-wrap:wrap; margin:0 0 16px; padding:11px 14px;
+              background:var(--amber-dim); border-left:2px solid var(--amber); }
+  .bestcard .bk { font-family:"IBM Plex Mono",monospace; font-size:11px; text-transform:uppercase; letter-spacing:.13em; color:var(--amber-ink); }
+  .bestcard .bv { font-family:"Barlow Condensed",sans-serif; font-weight:700; font-size:19px; line-height:1; text-transform:uppercase; letter-spacing:.02em; color:var(--ink); }
+  .bestcard .bwn { font-size:12px; color:var(--ink2); }
   .hmeta { display:flex; gap:14px; align-items:center; flex-wrap:wrap;
            font-family:"IBM Plex Mono",monospace; font-size:11px; text-transform:uppercase;
            letter-spacing:.13em; color:var(--mut); }
@@ -1031,7 +1039,7 @@
     <div class="caps" id="capChips"></div>
     <label class="sr-only" for="fishSel">Fishing type</label>
     <select class="designsel fishsel" id="fishSel" title="Fishing type" aria-label="Fishing type">
-      <option value="bay">Jetty / Bay</option>
+      <option value="bay">Bay &amp; harbor</option>
       <option value="pier">Pier</option>
       <option value="surf">Surf</option>
     </select>
@@ -1238,11 +1246,12 @@
      bite score and conditions stay overall; this reshapes every recommendation
      (spot, rig, tactics, target species) to match how you actually fish. */
   const FTYPE = {
-    bay:  { name:"Jetty / Bay", short:"Bay",  species:"spotted bay bass, with halibut on the bait rod" },
+    bay:  { name:"Bay & harbor", short:"Bay",  species:"spotted bay bass, with halibut on the bait rod" },
     pier: { name:"Pier",        short:"Pier", species:"mackerel, bonito, bass and halibut" },
     surf: { name:"Surf",        short:"Surf", species:"barred surfperch, corbina and halibut" },
   };
   let FISH_TYPE = "bay";
+  function mapsLink(name){ return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent((name||"")+", San Diego, CA"); }
 
   const POLE = {
     bass:{ rig:"Dropshot / swimbait", pole:"Penn Squadron 7'6\" + Spinfisher 4500" },
@@ -2772,7 +2781,7 @@
         <div class="l">${best.time}: ${best.target}.</div>
         <div class="grid">
           <div class="p"><div class="k">When</div><div class="v">${best.time}<small>${best.tide}</small></div></div>
-          <div class="p"><div class="k">Where</div><div class="v">${best.spot}</div></div>
+          <div class="p"><div class="k">Where</div><div class="v">${best.spot}<a class="maplink" href="${mapsLink(best.spot)}" target="_blank" rel="noopener">Directions &#8599;</a></div></div>
           <div class="p"><div class="k">Weather</div><div class="v">${skyIcon(d.sky)} ${d.sky.split(",")[0]}<small>${d.wind==null?'wind: no forecast':`wind ~${windAt(d.wind,best.s[0])}–${windAt(d.wind,best.s[1])} mph`}</small></div></div>
           <div class="p"><div class="k">Rig</div><div class="v">${P.rig||''}</div></div>
           <div class="p"><div class="k">Pole</div><div class="v">${P.pole||''}</div></div>
@@ -3657,7 +3666,7 @@
 
       <div class="gnrows">
         <div class="gnrow"><span class="gnk">Go to</span><div>
-          <b>${g.spot.name}</b>
+          <b>${g.spot.name}</b> <a class="maplink" href="${mapsLink(g.spot.name)}" target="_blank" rel="noopener">Directions &#8599;</a>
           <p>${g.why.length?g.why[0].replace(/^./,c=>c.toUpperCase())+"."
               :"Your home water, and nothing today argues against it."}
           ${g.runnerUp?` If it is packed, <b>${g.runnerUp.name}</b> is the same call.`:""}</p>
@@ -3866,11 +3875,14 @@
     const rate=(function(){ const h=(hStats()[k]||{}); return (h.seen?Math.round((h.tap||0)/h.seen*100):0); })();
     return `${staleNoteHTML()}
     <section class="hero" data-v="${k}">
-      <div class="hintro"><b>San Diego Bay fishing.</b> The best days, times and spots to fish this week. Green means go; tap a day for the tides and the plan.</div>
+      <div class="hintro"><b>San Diego Bay fishing.</b> The best days, times and spots to fish this week, in plain English. Every hour gets a <b>0&ndash;100 score, higher is better</b>, and green means go. Tap any day for its tides and a full plan.</div>
+      ${(function(){ const bd=DAYS.find(x=>x.best); if(!bd) return ""; const bw=bd.wins&&bd.wins[0]; const np=nowPos();
+        const when=(np.inRange&&bd.di===np.di)?"Today":(np.inRange&&bd.di===np.di+1)?"Tomorrow":(bd.dow+" "+bd.date);
+        return `<div class="bestcard"><span class="bk">Best day this week</span><span class="bv">${when}</span>${bw?`<span class="bwn">${bw.time} &middot; ${bw.spot}</span>`:""}</div>`; })()}
       <div class="hmeta">
         <span class="hlive"><i></i>${c.live?fmtHM(c.m):"Board out of range"}</span>
         <span>${tideAt(c.d.di*1440+c.m).toFixed(1)} ft ${c.g.state.dir}</span>
-        <span>${c.M.name}</span>
+        <span>score ${c.bay}/100</span>
       </div>
       <h1 class="hhead">${V.head(c)}</h1>
       <p class="hsub">${V.sub(c)}</p>
@@ -4252,7 +4264,7 @@
 
          ${conditionsStrip(d,m)}
 
-         <p class="oneline"><b>${pickSpot(d,m,md,false).spot.name}.</b> ${pb.where.split(".")[0]}. ${pb.rig.split(".")[0]}.</p>
+         <p class="oneline"><b>${pickSpot(d,m,md,false).spot.name}.</b> ${pb.where.split(".")[0]}. ${pb.rig.split(".")[0]}. <a class="maplink" href="${mapsLink(pickSpot(d,m,md,false).spot.name)}" target="_blank" rel="noopener">Directions &#8599;</a></p>
          <details class="plan"><summary>The full plan for ${fmtHM(m)}</summary>
            <div class="pbgrid">
              <div><div class="k">Where</div><p>${pb.where}</p></div>
