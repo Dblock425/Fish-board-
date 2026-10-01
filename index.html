@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f8f9fd"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px);overflow-x:hidden}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>San Diego Bite Board</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f8f9fd"><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"><link rel="apple-touch-icon" href="icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Bite Board"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px);overflow-x:hidden}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>San Diego Bite Board</title>
 <meta name="description" content="A San Diego tide instrument: eight days of bay water read as five kinds of fishing day, one-tap "go now" with spot, rig and first cast, and a catch log that retunes the model to your own fish.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;600&family=IBM+Plex+Mono:wght@400;600&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800;900&display=swap">
@@ -144,6 +144,17 @@
   .refreshstatus:not(:empty) { opacity:1; }
   .refreshstatus.ok { border-color:var(--go); color:var(--go); }
   .refreshstatus.err { border-color:var(--warn); color:var(--warn); }
+  .helpmodal { position:fixed; inset:0; z-index:100; background:rgba(5,10,16,.55); display:flex; align-items:center;
+               justify-content:center; padding:20px; -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px); }
+  .helpcard { background:var(--panel); border:1px solid var(--key); max-width:430px; width:100%; padding:22px 22px 20px;
+              box-shadow:0 20px 60px rgba(0,0,0,.4); }
+  .helpcard h2 { font-family:"Barlow Condensed",sans-serif; font-size:24px; text-transform:uppercase; letter-spacing:.02em; color:var(--amber-ink); }
+  .helpcard p { font-size:14px; line-height:1.6; color:var(--ink2); margin:10px 0 0; }
+  .helpcard ul { margin:14px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:11px; }
+  .helpcard li { font-size:13px; line-height:1.55; color:var(--ink2); padding-left:24px; position:relative; }
+  .helpcard li::before { content:"\1F3A3"; position:absolute; left:0; top:0; }
+  .helpcard li b { color:var(--ink); font-weight:600; }
+  .helpcard .btn { margin-top:18px; width:100%; }
   .caps { display:flex; gap:7px; flex-wrap:wrap; align-items:center; }
   .capchip { font-size:11px; text-transform:uppercase; letter-spacing:.13em; color:var(--mut);
              display:inline-flex; align-items:center; gap:5px; }
@@ -895,7 +906,7 @@
      Order is the whole design: claim, proof, action, in that order, all
      above the fold on a phone. The dial still exists; it is the dig-in
      layer now, not the greeting. */
-  .hero { padding-block:16px 20px; border-bottom:1px solid var(--key); }
+  .hero { padding-block:18px 24px; border-bottom:1px solid var(--key); }
   .hintro { font-size:13px; line-height:1.5; color:var(--ink2); margin:0 0 14px; max-width:62ch;
             border-left:2px solid var(--amber); padding-left:11px; }
   .hintro b { color:var(--ink); font-weight:600; }
@@ -1049,6 +1060,7 @@
       <option value="classic">Classic</option>
       <option value="apple">Apple</option>
     </select>
+    <button class="iconbtn" id="helpBtn" type="button" title="How this works" aria-label="How this works">&#63;</button>
     <button class="iconbtn" id="refreshBtn" type="button" title="Refresh tide data" aria-label="Refresh tide data">&#8635;</button>
     <button class="iconbtn" id="themeBtn" type="button" title="Switch theme" aria-label="Switch theme">&#9681;</button>
   </div>
@@ -1238,6 +1250,20 @@
 </div>
 </div>
 
+<div id="helpModal" class="helpmodal" hidden role="dialog" aria-modal="true" aria-label="How the Bite Board works">
+  <div class="helpcard">
+    <h2>Welcome aboard</h2>
+    <p>This shows the best <b>times and spots to fish San Diego Bay</b> this week. All you need to know:</p>
+    <ul>
+      <li>Every hour gets a <b>0 to 100 score</b>. Higher is better, and <b>green means go</b>.</li>
+      <li>The big round dial is <b>today</b>. Drag the hand to check any other hour.</li>
+      <li><b>Tap any day</b> to see its tides and a full plan.</li>
+      <li>Bottom tabs: <b>Week</b> compares the days, <b>Gear</b> is exactly what to tie on.</li>
+    </ul>
+    <button class="btn" id="helpClose" type="button">Got it, let's fish</button>
+  </div>
+</div>
+
 <script>
   "use strict";
 
@@ -1251,7 +1277,17 @@
     surf: { name:"Surf",        short:"Surf", species:"barred surfperch, corbina and halibut" },
   };
   let FISH_TYPE = "bay";
-  function mapsLink(name){ return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent((name||"")+", San Diego, CA"); }
+  const SPOT_LL = {
+    "Shelter Island Pier":[32.7089,-117.2283], "Harbor Island":[32.7266,-117.2066],
+    "Harbor Island / Embarcadero":[32.7266,-117.2066], "Mission Bay (Dana Landing)":[32.7705,-117.2345],
+    "Zuniga Jetty, Point Loma":[32.6845,-117.2360], "Crystal Pier, PB":[32.7985,-117.2570],
+    "Imperial Beach Pier":[32.5790,-117.1350], "Torrey Pines State Beach":[32.9200,-117.2590],
+    "Silver Strand, Coronado":[32.6333,-117.1420], "La Jolla Shores":[32.8570,-117.2570],
+    "La Jolla Cove & Shores":[32.8520,-117.2720]
+  };
+  function mapsLink(name){ const ll=SPOT_LL[name];
+    return ll ? "https://www.google.com/maps/search/?api=1&query="+ll[0]+","+ll[1]
+              : "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent((name||"")+", San Diego, CA"); }
 
   const POLE = {
     bass:{ rig:"Dropshot / swimbait", pole:"Penn Squadron 7'6\" + Spinfisher 4500" },
@@ -2463,6 +2499,16 @@
     document.getElementById("detail").hidden=true; setMode(SESSION?"live":"call"); window.scrollTo(0,0);
   });
   { const _mg=document.getElementById("mGear"); if(_mg) _mg.addEventListener("click", ()=>setMode("gear")); }
+  (function help(){
+    const m=document.getElementById("helpModal"); if(!m) return;
+    const open=()=>{ m.hidden=false; };
+    const close=()=>{ m.hidden=true; try{localStorage.setItem("biteboard.help2","1");}catch(e){} };
+    const cl=document.getElementById("helpClose"); if(cl) cl.addEventListener("click", close);
+    m.addEventListener("click", e=>{ if(e.target===m) close(); });
+    const hb=document.getElementById("helpBtn"); if(hb) hb.addEventListener("click", open);
+    let seen=false; try{ seen=!!localStorage.getItem("biteboard.help2"); }catch(e){}
+    if(!seen) setTimeout(open, 650);
+  })();
 
   /* ============ SEASON / RIGS / SPOTS ============ */
   const SEASON = [
@@ -3519,35 +3565,35 @@
      blind. Every day is a fishing day. They are just different days. */
   const MODES = {
     power: {
-      name:"Power hour", tag:"The water does the work",
+      name:"Power hour", tag:"The current does the work for you",
       glyph:`<path d="M3 5l6 7-6 7M12 5l6 7-6 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`,
       what:"Hard current through structure. Bait gets pushed past and the fish just sit there and eat. Cover ground, fish fast, expect it in bursts.",
       rig:"Dropshot or weedless swimbait, 3/8 oz. Go to 1/2 oz if you cannot feel bottom.",
       cast:"Stand at the up-current end of the pilings. First cast straight up-current and let it wash back past the posts without reeling. Take up slack only."
     },
     ambush: {
-      name:"Ambush", tag:"Precision, not distance",
+      name:"Ambush", tag:"Few casts, placed well",
       glyph:`<path d="M4 3h6v18H4z" fill="currentColor"/><path d="M13 8a5 5 0 010 8z" fill="currentColor" opacity=".55"/><path d="M19 4v16" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".45"/>`,
       what:"Water is moving but the light is flat and hard. They will not leave shade to chase, so they tuck against structure and wait. Fewer casts, better placed.",
       rig:"Dropshot, 3/8 oz. Slow. Let it sit longer than feels right.",
       cast:"Get under the pier deck where it throws shade. Drop straight down the shaded side of the second piling from the end and hold it there for a slow count of ten."
     },
     hunt: {
-      name:"Hunt", tag:"They are stacked, go find them",
+      name:"Hunt", tag:"They are grouped up, go find them",
       glyph:`<path d="M12 2v13" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/><path d="M5 12l7 8 7-8" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`,
       what:"Little or no current, so nothing is being delivered to them. The flats have drained and the fish are packed into a fraction of the water. Your job is to locate, not to wait.",
       rig:"Dropshot, 1/4 to 3/8 oz, longer leader. Light, because they spook in thin water.",
       cast:"Find the deepest water you can reach. Drop vertical, three slow lifts, then move ten feet along and do it again. Keep moving until one answers."
     },
     scout: {
-      name:"Scout", tag:"The bay shows you its bones",
+      name:"Scout", tag:"Low water, learn the spot",
       glyph:`<path d="M1 6h22" stroke="currentColor" stroke-width="1.8" stroke-dasharray="4 3" opacity=".55"/><path d="M1 22l6-11 4 6 4-9 8 14z" fill="currentColor"/>`,
       what:"The lowest water of the day. This is the one window where you can see the structure you spend the rest of the month fishing blind: the rock, the channel edge, the sand seam. Fish come second today. What you learn here you use for the next year.",
       rig:"Texas-rigged weedless swimbait so it slides through rock. And your phone.",
       cast:"Walk the exposed edge before you fish it. Photograph every rock, gap and channel you can see. Then fish the sand-to-rock seam you just mapped."
     },
     night: {
-      name:"Night shift", tag:"The one you can actually make",
+      name:"Night shift", tag:"Fish the pier lights after dark",
       glyph:`<path d="M12 1v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M12 4l9 12H3z" fill="currentColor" opacity=".9"/><path d="M1 21h22" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" opacity=".5"/>`,
       what:"Pier lights pull bait into a bright patch and the bass sit just outside it in the dark where the bait cannot see them. It needs no tide and no daylight, which makes it the window that actually fits around a workday.",
       rig:"Dropshot or small weedless swimbait, 3/8 oz. Steady, no jerking.",
@@ -3680,6 +3726,17 @@
         <div class="gnrow"><span class="gnk">Tie on</span><div>
           <b>${pbg.rig.split(".")[0]}.</b>
           <p>${pbg.rig.split(".").slice(1).join(".").trim()||"Nothing else needed."}</p>
+        </div></div>
+
+        <div class="gnrow"><span class="gnk">Bring</span><div>
+          <b>Pack list</b>
+          <p>${(function(){ const isPier=(g.spot.pier)|| /pier/i.test(g.spot.type||""); const L=[
+            "Your rod with 3/8 and 1/2 oz jigheads",
+            "Swimbaits, plus a dropshot setup",
+            isPier?"No license needed on a public pier":"A valid California fishing license",
+            "Pliers, a tape measure, a rag"];
+            if(GO_KID) L.push("Water, snacks and sunscreen for Noah");
+            return L.join(" &middot; "); })()}</p>
         </div></div>
 
         <div class="gnrow first"><span class="gnk">First cast</span><div>
