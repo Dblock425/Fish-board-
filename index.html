@@ -1147,7 +1147,7 @@
     <div class="grid">
       <div class="g up"><div class="k">The upside</div><p>Full-moon spring tides all weekend, the biggest, hardest-running water of the stretch. Wind <b>8 to 12 mph</b>, swell 2.9 to 4.1 ft mid-week then dropping to <b>1.8 ft</b> by Thursday, water near <b>73.5&deg;</b>. Mornings are wide open every day, so the dawn flood is yours all week.</p></div>
       <div class="g safe"><div class="k">On the water</div><p>Nothing active offshore. <b>No surf or coastal-flood advisory</b>, low rip-current risk. Surf 1 to 3 ft with occasional 4 ft sets mid-week. Bay and open coast are both open. Check the lifeguard flag on arrival, as always.</p></div>
-      <div class="g watch"><div class="k">The catch</div><p><b>Saturday is the pick:</b> the biggest morning high of the stretch at 6.0 ft and a wide-open dawn before the Padres night game. The tides ease into next week as the moon wanes. <b>Rockfish and cabezon open October 1</b>, this Thursday, which reshuffles the board.</p></div>
+      <div class="g watch"><div class="k">The pick</div><p>The strongest water of the stretch is on the biggest morning high, so fish the dawn flood. The tides ease into next week as the moon wanes. <b>Rockfish and cabezon open October 1</b>, which reshuffles the board.</p></div>
     </div>
   </section>
 
@@ -1318,7 +1318,7 @@
       storm:{c:"st-busy",t:"Meetings PM"}, sky:"Overcast", pmShowers:false,
       wins:[
         { rank:"best", time:"7:00 AM–12:00 PM", tide:"4.3 ft rise into the 11:31a high", kind:"bass",
-          target:"The high has slid toward midday, so this is a long, slow late-morning flood. Swell easing to 3.4 ft. Your afternoon and evening are stacked with meetings and Noah at the swing lab, so this is a morning-only day.",
+          target:"The high has slid toward midday, so this is a long, slow late-morning flood. Swell easing to 3.4 ft. Your afternoon and evening are stacked with meetings in the afternoon, so this is a morning-only day.",
           spot:"Shelter Island Pier", kid:true, s:[420,691] },
         { rank:"next", time:"1:30–4:00 PM", tide:"ebb off the midday high", kind:"bass",
           target:"A short ebb window before the 4:30 meetings begin. Harbor Island.",
@@ -1656,7 +1656,7 @@
       { h:"Timing", items:timing },
       { h:"Conditions", items:cond },
     ];
-    if(w.kid) cards.push({ h:"For Noah", items:[
+    if(w.kid) cards.push({ h:"For kids", items:[
       "<b>The Abu Garcia</b> and a 1/2 oz Kastmaster",
       "Squid strips under a float when the casting gets old",
       "No license needed for him or you on the pier",
@@ -2632,7 +2632,7 @@
       pier:true, lit:true, shade:true, walk:false, open:true, reef:false, flat:false },
     { name:"Torrey Pines State Beach", type:"Open surf", types:["surf"], home:false, shelter:"exposed", kid:true, species:"Barred perch, corbina, halibut", tide:"Incoming over the troughs", note:"Read the beach at low tide, fish the incoming; open to west swell",
       pier:false, lit:false, shade:false, walk:true, open:true, reef:false, flat:false },
-    { name:"Silver Strand, Coronado", type:"Open surf", types:["surf"], home:false, shelter:"ok", kid:true, species:"Perch, corbina, croaker", tide:"Incoming", note:"Gentle sand beach, easy wading, good with Noah",
+    { name:"Silver Strand, Coronado", type:"Open surf", types:["surf"], home:false, shelter:"ok", kid:true, species:"Perch, corbina, croaker", tide:"Incoming", note:"Gentle sand beach, easy wading, good with kids",
       pier:false, lit:false, shade:false, walk:true, open:true, reef:false, flat:false },
     { name:"La Jolla Cove & Shores", type:"Kelp / reef", types:["bay"], home:false, shelter:"ok", kid:false, species:"Calico, sheephead", tide:"Low tide", note:"Fri and Sat afternoon lows are the week's best reef walks",
       pier:false, lit:false, shade:false, walk:true, open:true, reef:true, flat:false },
@@ -2643,7 +2643,7 @@
     el.innerHTML = (pool.length?pool:SPOTS).map(s =>
       `<div><h4>${s.name}${s.home?' &middot; home':''}</h4><ul>
         <li>${s.species}</li><li class="muted">${s.tide} &middot; ${s.note}</li>
-        <li class="muted">${s.shelter==='ok'?'Sheltered':'Exposed to swell'}${s.kid?' &middot; works for Noah':''}</li></ul></div>`).join("");
+        <li class="muted">${s.shelter==='ok'?'Sheltered':'Exposed to swell'}${s.kid?' &middot; works for kids':''}</li></ul></div>`).join("");
   }
   renderSpots();
 
@@ -3683,7 +3683,7 @@
     return "power";
   }
 
-  /* a quiet note when a window suits bringing Noah, never a whole category */
+  /* a quiet note when a window suits bringing kids, never a whole category */
   function kidOK(d, m){
     const s=tideState(d,m);
     const w=d.wind==null?null:windAt(d.wind,m);
@@ -3733,8 +3733,8 @@
       if(sp.reef && s.h>2.2){ sc-=55; why.push("needs low water and it is "+s.h.toFixed(1)+" ft"); }
       if(wantKid){
         if(!sp.kid) sc-=70;
-        else if(sp.flat){ sc+=26; why.push("flat water, which is the easy one with Noah"); }
-        else { sc+=10; why.push("it works for Noah"); }
+        else if(sp.flat){ sc+=26; why.push("flat water, which is the easy one with kids"); }
+        else { sc+=10; why.push("it works for kids"); }
       }
       if(sp.home) sc+=7;                 // known water is less friction, but it does not win alone
       if(FISH_TYPE==="surf" && !sp.pier){ sc+=30; why.push("open sand, which is what surf fishing is"); }
@@ -4378,7 +4378,7 @@
 
       side.innerHTML =
         `<div class="tt">Showing ${fmtDayName(d).toLowerCase()} &middot; the 2 hours ${fmtHM(a.w.s[0])}–${fmtHM(a.w.s[1])}${live?" &middot; happening now":""}${busyHit?` &middot; <span class="warn">you have ${busyHit}</span>`:""}</div>
-         <div class="modebadge">${glyphSVG(md,22)}<span><b>${MODES[md].name}</b>${MODES[md].tag}</span>${kidOK(d,m)?'<span class="kidok">good one for Noah</span>':''}</div>
+         <div class="modebadge">${glyphSVG(md,22)}<span><b>${MODES[md].name}</b>${MODES[md].tag}</span>${kidOK(d,m)?'<span class="kidok">good one for kids</span>':''}</div>
          <h1>${pb.head}.</h1>
          ${meterHTML(a.bay)}
 
@@ -4772,7 +4772,7 @@
   function boardBrief(){
     const np=nowPos();
     const L=[];
-    L.push("You are the San Diego Bite Board, a fishing dashboard belonging to Daniel, who fishes San Diego Bay, usually Shelter Island Pier, often with his son Noah, around a heavy youth baseball schedule.");
+    L.push("You are the San Diego Bite Board, a fishing dashboard for San Diego Bay shore anglers, home base around Shelter Island Pier, often fishing with kids.");
     L.push("Answer in 2 to 5 short sentences. Be specific and practical. No preamble, no bullet lists, no sign-off.");
     L.push("Use ONLY the data below. Never invent a tide height, time, bite score or advisory. If the data does not answer the question, say so plainly and say what you would check.");
     L.push("Tide heights are exact NOAA data for station 9410170. Wind, swell and water temperature are the Open-Meteo daily forecast. There is no third-party bite score this refresh; every day runs on the board's own bay score, computed from the tide, moon and season. Full moon this weekend means the biggest spring tides of the stretch. Halibut is off peak until January; September is bass month; rockfish and cabezon open Oct 1.");
@@ -4780,7 +4780,7 @@
       const d=DAYS[np.di];
       L.push(`RIGHT NOW: ${d.dow} ${d.date}, ${fmtHM(np.min)} PT. Tide ${tideAt(np.abs).toFixed(1)} ft and ${(tideAt(np.abs+20)-tideAt(np.abs-20))>0.01?"rising":(tideAt(np.abs+20)-tideAt(np.abs-20))<-0.01?"falling":"slack"}. This hour rates ${rateHour(d,np.min).t}.`);
     }
-    L.push("GEAR: Penn Squadron III 7'6\" + Spinfisher V 4500 with 15 lb braid (dropshot or Texas-rig 4in weedless swimbait, 3/8 oz) is the bass setup. Varmac 7' + Okuma Strikeforce 4000 is the bait rod for halibut. Abu Garcia combo is Noah's.");
+    L.push("GEAR: Penn Squadron III 7'6\" + Spinfisher V 4500 with 15 lb braid (dropshot or Texas-rig 4in weedless swimbait, 3/8 oz) is the bass setup. Varmac 7' + Okuma Strikeforce 4000 is the bait rod for halibut. Abu Garcia combo is kids's.");
     L.push("THE WEEK:");
     DAYS.forEach(d=>{
       const ex=EXT.filter(([t])=>t>=d.di*1440 && t<(d.di+1)*1440)
@@ -4814,7 +4814,7 @@
     if(WATER_OK) renderApp();
 
     const SUGGEST = [
-      "When should I take Noah this weekend?",
+      "When should I take the kids this weekend?",
       "The bite died on the incoming. What now?",
       "Why is Saturday better than today?",
       "What should I tie on for the best window?",
