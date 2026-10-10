@@ -1051,6 +1051,37 @@
 /* calendar removed, so the "only when I'm free" filters no longer apply */
 #freeTog, #freeTog2{ display:none !important; }
 
+/* ---- Today hero: verdict + why + better window (no headline) ---- */
+.hero2 .vrow{ display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+.hero2 .vword{ font-family:"Barlow Condensed",sans-serif; font-weight:700; font-size:clamp(30px,8vw,40px);
+  line-height:1; text-transform:uppercase; letter-spacing:.005em; }
+.hero2 .vscore{ font-family:"Barlow Condensed",sans-serif; font-weight:700; font-size:clamp(30px,8vw,40px);
+  line-height:1; color:var(--ink); font-variant-numeric:tabular-nums; }
+.hero2 .vscore small{ font-family:"IBM Plex Mono",monospace; font-size:13px; color:var(--mut); font-weight:400; letter-spacing:0; }
+.hero2 .vnowt{ font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--mut); text-transform:uppercase;
+  letter-spacing:.07em; margin-left:auto; align-self:center; }
+.hero2 .vwhere{ font-size:16px; color:var(--ink2); margin:12px 0 0; line-height:1.45; max-width:60ch; }
+.hero2 .vwhere b{ color:var(--ink); font-weight:600; }
+.hero2 .vchips{ display:flex; flex-wrap:wrap; gap:7px; margin-top:13px; }
+.hero2 .vc{ font-size:12px; padding:6px 11px; border-radius:999px; border:1px solid var(--key2); color:var(--ink2);
+  display:inline-flex; align-items:center; gap:5px; line-height:1.1; }
+.hero2 .vc.good{ color:var(--go); border-color:color-mix(in srgb,var(--go) 50%,transparent); background:var(--go-wash); }
+.hero2 .vc.good::before{ content:"\2713"; font-weight:700; }
+.hero2 .vc.weak{ color:var(--warn); border-color:color-mix(in srgb,var(--warn) 45%,transparent); background:var(--marg-wash); }
+.hero2 .vc.weak::before{ content:"\2219"; font-weight:700; font-size:16px; line-height:0; }
+.hero2 .vbetter{ display:flex; align-items:center; gap:9px; flex-wrap:wrap; margin-top:15px; width:100%;
+  text-align:left; font:inherit; cursor:pointer; background:var(--panel); color:inherit;
+  border:1px solid var(--key); border-left:3px solid var(--amber); border-radius:11px; padding:12px 15px; }
+button.vbetter:hover{ border-color:var(--amber); }
+.hero2 .vbetter .blab{ font-family:"IBM Plex Mono",monospace; font-size:11px; text-transform:uppercase;
+  letter-spacing:.12em; color:var(--amber-ink); }
+.hero2 .vbetter b{ font-family:"Barlow Condensed",sans-serif; font-weight:700; font-size:19px; letter-spacing:.01em; color:var(--ink); }
+.hero2 .vbetter .bsc{ font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--mut); }
+.hero2 .vbetter .bspot{ font-size:12px; color:var(--mut); margin-left:auto; }
+.hero2 .vbetter.in{ border-left-color:var(--go); color:var(--go); font-size:13px; font-weight:600; cursor:default; }
+.hero2 .hfig{ margin-top:16px; }
+.hero2 .htrust{ font-size:11px; color:var(--mut); margin-top:14px; line-height:1.5; }
+
 /* ---- Gear tab: fish/bait suggestion picker ---- */
 .pseg{ display:flex; gap:6px; margin:2px 0 12px; }
 .pbtn{ flex:1; font:inherit; font-weight:600; font-size:13px; cursor:pointer; color:var(--mut);
@@ -3988,43 +4019,83 @@
     </svg>`;
   }
 
+  /* the reasons behind this hour's score, in a few plain words */
+  function heroWhy(d,m){
+    const w=probeWin(d,m), sc=bayScore(d,w), t=sc.terms;
+    const fish=(TARGET[w.kind]||TARGET.bass).name;
+    const P={
+      "movement:strong":"strong current","movement:modest":"some current","movement:slack":"slack water, no current",
+      "solunar:major":"moon major on now","solunar:underfoot":"minor moon window","solunar:none":"no moon window",
+      "range:spring":"big spring tides","range:mid":"moderate tide swing","range:neap":"weak neap tides",
+      "thermal:in":"water temp in the zone","thermal:out":"water temp off target",
+      "light:edge":"dawn/dusk light","light:partdark":"low light, near dark","light:flat":"flat midday sun",
+      "season:peak":fish+" in season","season:shoulder":fish+" on the shoulder","season:off":fish+" off season",
+    };
+    const items=Object.keys(t).map(k=>({v:t[k].v, wt:(MODEL.w[k]||0), p:P[k+":"+t[k].reg]||""}));
+    const good=items.filter(x=>x.v>=0.55&&x.p).sort((a,b)=>b.v*b.wt-a.v*a.wt).slice(0,2).map(x=>x.p);
+    const weak=items.filter(x=>x.v<=0.40&&x.p).sort((a,b)=>(1-b.v)*b.wt-(1-a.v)*a.wt).slice(0,2).map(x=>x.p);
+    return { good, weak, score:sc.bay };
+  }
+  /* the best window still ahead, so "now" always has something to compare to */
+  function heroNext(d,m){
+    const np=nowPos();
+    const all=candidates();
+    if(!all.length) return null;
+    const nowAbs = np.inRange ? np.abs : d.di*1440+m;
+    const top=all[0];
+    const topStart=top.d.di*1440+top.w.s[0], topEnd=top.d.di*1440+top.w.s[1];
+    const openNow = topStart<=nowAbs+30 && topEnd>nowAbs;
+    const when = (np.inRange&&top.d.di===np.di)?"today":(np.inRange&&top.d.di===np.di+1)?"tomorrow":(top.d.dow+" "+top.d.date);
+    return { top, openNow, when, time:top.w.time, spot:top.w.spot, score:bayScore(top.d, top.w).bay };
+  }
+
   function renderHero(){
     const c=heroCtx();
-    const k=HERO_V||(HERO_V=heroPick());
-    const V=HERO_COPY[k];
-    const rate=(function(){ const h=(hStats()[k]||{}); return (h.seen?Math.round((h.tap||0)/h.seen*100):0); })();
+    const gt=goTier(c.bay);
+    const why=heroWhy(c.d, c.m);
+    const nb=heroNext(c.d, c.m);
+    const tideH=tideAt(c.d.di*1440+c.m).toFixed(1);
+    const chips = why.good.map(g=>`<span class="vc good">${g}</span>`).join("")
+                + why.weak.map(g=>`<span class="vc weak">${g}</span>`).join("");
+    let better="";
+    if(nb){
+      if(nb.openNow){
+        better=`<div class="vbetter in">This is the best window going right now.</div>`;
+      } else {
+        const cap=nb.when.charAt(0).toUpperCase()+nb.when.slice(1);
+        better=`<button class="vbetter" type="button" id="heroBetter" data-di="${nb.top.d.di}">
+          <span class="blab">Better window</span>
+          <b>${cap} &middot; ${nb.time}</b>
+          <span class="bsc">${nb.score}/100</span>
+          <span class="bspot">${nb.spot} &rarr;</span></button>`;
+      }
+    }
     return `${staleNoteHTML()}
-    <section class="hero" data-v="${k}">
-      <div class="hintro"><b>San Diego Bay fishing.</b> Every hour is scored <b>0&ndash;100, higher is better, green means go.</b></div>
-      ${(function(){ const bd=DAYS.find(x=>x.best); if(!bd) return ""; const bw=bd.wins&&bd.wins[0]; const np=nowPos();
-        const when=(np.inRange&&bd.di===np.di)?"Today":(np.inRange&&bd.di===np.di+1)?"Tomorrow":(bd.dow+" "+bd.date);
-        return `<div class="bestcard"><span class="bk">Best day this week</span><span class="bv">${when}</span>${bw?`<span class="bwn">${bw.time} &middot; ${bw.spot}</span>`:""}</div>`; })()}
-      <div class="hmeta">
-        <span class="hlive"><i></i>${c.live?fmtHM(c.m):"Board out of range"}</span>
-        <span>${tideAt(c.d.di*1440+c.m).toFixed(1)} ft ${c.g.state.dir}</span>
-        <span>score ${c.bay}/100</span>
+    <section class="hero hero2">
+      <div class="vrow">
+        <span class="vword ${gt.c}">${gt.word}</span>
+        <span class="vscore">${c.bay}<small>/100</small></span>
+        <span class="vnowt">${c.live?fmtHM(c.m):"out of range"} &middot; ${tideH} ft ${c.g.state.dir}</span>
       </div>
-      <h1 class="hhead">${V.head(c)}</h1>
-      <p class="hsub">${V.sub(c)}</p>
+      <p class="vwhere">${c.M.name} at <b>${c.spot}</b>${c.live&&c.hrs>=0.5?`, about ${spellHours(c.hrs)} left`:""}.</p>
+      ${chips?`<div class="vchips">${chips}</div>`:""}
+      ${better}
       <div class="hfig">${sixHour(c.d, c.m)}</div>
       <div class="hacts">
-        <button class="cta hcta" type="button" id="heroGo">${V.cta} &rarr;</button>
-        <button class="cta ink hsec" type="button" id="heroSec">${V.sec}</button>
+        <button class="cta hcta" type="button" id="heroGo">Show me the plan &rarr;</button>
+        <button class="cta ink hsec" type="button" id="heroSec">See the week</button>
       </div>
-      <p class="htrust">Tide and moon computed here from NOAA 9410170 and exact. Scores, wind and swell from the last refresh${
+      <p class="htrust">Tides and moon exact from NOAA 9410170. Wind, swell and scores from the last refresh${
         dataAge().fresh?" today":", "+dataAge().days+" day"+(dataAge().days===1?"":"s")+" ago"}.</p>
     </section>`;
   }
   function wireHero(){
-    const k=HERO_V; if(!k) return;
-    heroCount(k,"seen");
     const go=document.getElementById("heroGo");
-    if(go) go.addEventListener("click", ()=>{ heroCount(k,"tap"); setMode("gonow"); });
+    if(go) go.addEventListener("click", ()=>setMode("gonow"));
     const sec=document.getElementById("heroSec");
-    if(sec) sec.addEventListener("click", ()=>{
-      if(k==="C"){ setMode("call"); const el=document.getElementById("jumps"); if(el) el.scrollIntoView({behavior:"smooth",block:"center"}); }
-      else setMode("week");
-    });
+    if(sec) sec.addEventListener("click", ()=>setMode("week"));
+    const bt=document.getElementById("heroBetter");
+    if(bt) bt.addEventListener("click", ()=>openDay(+bt.dataset.di));
   }
 
   /* the test, made honest: counts, not a verdict */
