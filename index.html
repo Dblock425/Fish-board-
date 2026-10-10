@@ -1082,6 +1082,53 @@ button.vbetter:hover{ border-color:var(--amber); }
 .hero2 .hfig{ margin-top:16px; }
 .hero2 .htrust{ font-size:11px; color:var(--mut); margin-top:14px; line-height:1.5; }
 
+/* ===== Today: slide-timeline redesign ===== */
+.t3{ padding-top:10px; }
+.fchips{ display:flex; gap:8px; margin:0 0 18px; flex-wrap:wrap; }
+.fchip{ font:inherit; font-family:"Roboto","Helvetica Neue",Arial,sans-serif; font-size:13px; font-weight:600; cursor:pointer;
+  padding:9px 17px; border-radius:999px; border:1px solid var(--key); background:var(--panel); color:var(--ink2); }
+.fchip.on{ background:var(--amber-dim); color:var(--amber-ink); border-color:transparent; }
+.fchip:active{ transform:scale(.96); }
+.t3verdict{ margin-bottom:2px; }
+.t3v{ display:flex; align-items:baseline; gap:12px; }
+.t3v .vword{ font-family:"Roboto","Helvetica Neue",Arial,sans-serif; font-weight:700; font-size:clamp(30px,8.5vw,44px); line-height:1; letter-spacing:-.02em; }
+.t3v .vscore{ font-family:"Roboto","Helvetica Neue",Arial,sans-serif; font-weight:700; font-size:clamp(30px,8.5vw,44px); line-height:1; letter-spacing:-.02em; color:var(--ink); font-variant-numeric:tabular-nums; }
+.t3v .vscore small{ font-size:14px; font-weight:500; color:var(--mut); letter-spacing:0; }
+.t3sub{ font-size:15px; color:var(--ink2); margin:9px 0 0; line-height:1.45; }
+.t3sub b{ color:var(--ink); font-weight:600; }
+.tlback{ font:inherit; font-size:14px; cursor:pointer; background:none; border:0; padding:0; color:var(--amber-ink); text-decoration:underline; }
+.whyrow{ display:flex; gap:7px; flex-wrap:wrap; margin-top:13px; }
+.whyrow .wc{ font-size:12px; font-weight:500; padding:6px 11px; border-radius:999px; display:inline-flex; align-items:center; gap:4px; }
+.whyrow .wc.g{ background:var(--go-wash); color:var(--go); }
+.whyrow .wc.g::before{ content:"\2713"; font-weight:700; }
+.whyrow .wc.a{ background:var(--marg-wash); color:var(--warn); }
+.timecard{ margin-top:18px; background:var(--panel); border-radius:var(--r-l,20px); padding:16px 16px 13px; box-shadow:var(--m-shadow,0 1px 3px rgba(0,0,0,.12)); border:0; }
+.tlhead{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+.tlk{ font-size:13px; font-weight:600; color:var(--ink2); }
+.tlnow{ font:inherit; font-family:"Roboto",sans-serif; font-size:12px; font-weight:600; cursor:pointer; border:1px solid var(--key2);
+  background:transparent; color:var(--amber-ink); border-radius:999px; padding:5px 14px; }
+.tlwrap{ touch-action:none; }
+.tlsvg{ display:block; cursor:grab; touch-action:none; -webkit-tap-highlight-color:transparent; }
+.tlsvg:active{ cursor:grabbing; }
+.tlaxis{ display:flex; justify-content:space-between; font-size:11px; color:var(--mut); margin-top:1px; padding:0 2px; }
+.tlhint{ font-size:12px; color:var(--mut); margin:9px 0 0; text-align:center; }
+.rigcard{ display:flex; align-items:center; gap:14px; width:100%; text-align:left; font:inherit; cursor:pointer;
+  margin-top:16px; background:var(--panel); border:0; border-radius:var(--r-l,20px); padding:16px; box-shadow:var(--m-shadow,0 1px 3px rgba(0,0,0,.12)); color:inherit; }
+.rigcard:hover{ box-shadow:var(--m-shadow2,0 3px 10px rgba(0,0,0,.16)); }
+.rigcard:active{ transform:scale(.99); }
+.rigic{ width:44px; height:44px; border-radius:14px; background:var(--amber-dim); display:grid; place-items:center; font-size:22px; flex:none; }
+.rigtx{ flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
+.rigk{ font-size:11px; font-weight:600; letter-spacing:.07em; text-transform:uppercase; color:var(--mut); }
+.rigtx b{ font-size:16px; font-weight:600; color:var(--ink); line-height:1.25; }
+.rigtx p{ font-size:13px; color:var(--mut); line-height:1.4; margin:0; }
+.rigdot{ color:var(--amber-ink); font-size:26px; flex:none; line-height:1; }
+.t3better{ display:flex; align-items:center; gap:9px; flex-wrap:wrap; width:100%; text-align:left; font:inherit; cursor:pointer;
+  margin-top:14px; background:var(--panel); border:0; border-left:3px solid var(--amber); border-radius:14px; padding:13px 15px; box-shadow:var(--m-shadow,0 1px 3px rgba(0,0,0,.1)); color:inherit; }
+.t3better .bk{ font-size:11px; font-weight:600; letter-spacing:.07em; text-transform:uppercase; color:var(--amber-ink); }
+.t3better b{ font-size:16px; font-weight:600; color:var(--ink); }
+.t3better .bsc{ font-size:12px; color:var(--mut); }
+.t3better .bspot{ font-size:12px; color:var(--mut); margin-left:auto; }
+
 /* ---- Gear tab: fish/bait suggestion picker ---- */
 .pseg{ display:flex; gap:6px; margin:2px 0 12px; }
 .pbtn{ flex:1; font:inherit; font-weight:600; font-size:13px; cursor:pointer; color:var(--mut);
@@ -1117,6 +1164,7 @@ button.vbetter:hover{ border-color:var(--amber); }
     <label class="sr-only" for="fishSel">Fishing type</label>
     <select class="designsel fishsel" id="fishSel" title="Fishing type" aria-label="Fishing type">
       <option value="bay">Bay &amp; harbor</option>
+      <option value="jetty">Jetty</option>
       <option value="pier">Pier</option>
       <option value="surf">Surf</option>
     </select>
@@ -1257,9 +1305,10 @@ button.vbetter:hover{ border-color:var(--amber); }
      bite score and conditions stay overall; this reshapes every recommendation
      (spot, rig, tactics, target species) to match how you actually fish. */
   const FTYPE = {
-    bay:  { name:"Bay & harbor", short:"Bay",  species:"spotted bay bass, with halibut on the bait rod" },
-    pier: { name:"Pier",        short:"Pier", species:"mackerel, bonito, bass and halibut" },
-    surf: { name:"Surf",        short:"Surf", species:"barred surfperch, corbina and halibut" },
+    bay:   { name:"Bay & harbor", short:"Bay",   species:"spotted bay bass, with halibut on the bait rod" },
+    jetty: { name:"Jetty",        short:"Jetty", species:"sand bass, bonito and halibut off the rocks" },
+    pier:  { name:"Pier",         short:"Pier",  species:"mackerel, bonito, bass and halibut" },
+    surf:  { name:"Surf",         short:"Surf",  species:"barred surfperch, corbina and halibut" },
   };
   let FISH_TYPE = "bay";
   const SPOT_LL = {
@@ -1268,7 +1317,8 @@ button.vbetter:hover{ border-color:var(--amber); }
     "Zuniga Jetty, Point Loma":[32.6845,-117.2360], "Crystal Pier, PB":[32.7985,-117.2570],
     "Imperial Beach Pier":[32.5790,-117.1350], "Torrey Pines State Beach":[32.9200,-117.2590],
     "Silver Strand, Coronado":[32.6333,-117.1420], "La Jolla Shores":[32.8570,-117.2570],
-    "La Jolla Cove & Shores":[32.8520,-117.2720]
+    "La Jolla Cove & Shores":[32.8520,-117.2720],
+    "Mission Bay Jetty (South)":[32.7566,-117.2529], "Oceanside Harbor Jetty":[33.2060,-117.3960]
   };
   function mapsLink(name){ const ll=SPOT_LL[name];
     return ll ? "https://www.google.com/maps/search/?api=1&query="+ll[0]+","+ll[1]
@@ -1844,64 +1894,141 @@ button.vbetter:hover{ border-color:var(--amber); }
   function tideToPx(h){ return Math.max(4, Math.min(SEA_SPAN, (h/SEA_MAX_FT)*SEA_SPAN)); }
   let SEA_SCRUB=null;
 
-  function renderCall(){
-    const all=candidates();
-    if(!all.length){
-      return `<section class="sea"><div class="deep"></div><div class="rise" style="--tide-h:90px"></div>
-        <div class="seainner"><div class="air"><div class="seaeyebrow"><span class="lab">The call</span></div>
-        <h1 class="verdict">Week's <em>spent</em>.</h1>
-        <p class="seawhy">Every window on the board has passed. The next refresh pulls a fresh seven days.</p>
-        <div style="margin-top:20px"><button class="cta" type="button" onclick="setMode('week')">See the week anyway</button></div>
-        </div></div></section>`;
-    }
-    const c=all[0], d=c.d, w=c.w, r=c.r;
-    const np=nowPos();
-    const startAbs=d.di*1440+w.s[0];
-    const mins = np.inRange ? startAbs-np.abs : null;
-    const open = mins!==null && mins<=0;
-    const today = np.inRange && np.di===d.di;
-    const dayWord = today ? "today" : (np.inRange && d.di===np.di+1) ? "tomorrow" : (DOWFULL[d.dow]||d.dow);
-    const Cap = dayWord.charAt(0).toUpperCase()+dayWord.slice(1);
-    const verdict = open ? `Go <em>now</em>.`
-      : r.fit>=58 ? `Go <em>${dayWord}</em>.`
-      : r.fit>=45 ? `<em>${Cap}</em> is your window.`
-      : `Thin week.<br><em>${Cap}</em> is the best of it.`;
-    const nowH = np.inRange ? tideAt(np.abs) : tideAt(startAbs);
-    const packs=packFor(d,w);
-    const alts=all.slice(1,4);
-    let sooner=null;
-    for(const x of all){
-      const xa=x.d.di*1440+x.w.s[0];
-      if(xa<startAbs && x.r.fit>=r.fit-8 && (!sooner || xa<(sooner.d.di*1440+sooner.w.s[0]))) sooner=x;
-    }
-    const todayIsLead = np.inRange && d.di===np.di;
-    return `${renderHero()}
+  /* ================= TODAY: the slide-timeline redesign ================= */
+  const TL_X0=360, TL_X1=1290, TL_W=340, TL_H=122, TL_PADX=8, TL_PADT=12, TL_PADB=12;
+  let TL_MIN=null;   // null = follow "now"; otherwise the scrubbed minute
+  function tlDayIdx(){ const np=nowPos(); return np.inRange ? np.di : 0; }
+  function tlDay(){ return DAYS[tlDayIdx()]; }
+  function tlMin(){
+    if(TL_MIN!=null) return Math.max(TL_X0, Math.min(TL_X1, TL_MIN));
+    const np=nowPos(), d=tlDay();
+    if(np.inRange && np.di===tlDayIdx()) return Math.max(TL_X0, Math.min(TL_X1, np.min));
+    return Math.round((d.sr||420)+90);
+  }
+  const tlX = mm => TL_PADX + ((Math.max(TL_X0,Math.min(TL_X1,mm))-TL_X0)/(TL_X1-TL_X0))*(TL_W-2*TL_PADX);
+  const tlY = s => TL_PADT + (1-Math.max(0,Math.min(100,s))/100)*(TL_H-TL_PADT-TL_PADB);
+  function tlScore(d,mm){ return bayScore(d, probeWin(d,mm)).bay; }
 
-    <section class="today2">
-      <div class="dialcol">
-        <div class="daynav">
-          <button class="dnav" id="dPrev" type="button" aria-label="Previous day">&#8249;</button>
-          <div class="dnm"><b id="dnmDay">Today</b><span id="dnmDate"></span></div>
-          <button class="dnav" id="dNext" type="button" aria-label="Next day">&#8250;</button>
-        </div>
-        <div class="dialwrap" id="dialWrap">
-          ${dialSVG(probeDay())}
-          <div class="dialface" id="dialFace"></div>
-        </div>
-        <div class="jumps" id="jumps"></div>
-        <p class="dialhint" id="dialHint"></p>
-        <div class="daystrip" id="dayStrip">${dayStripHTML()}</div>
-        <div class="diallegend">
-          <span><i style="background:var(--dial-water)"></i>Tide height</span>
-          <span><i style="background:var(--dial-night)"></i>Night</span>
-          <span><i style="background:var(--buoy)"></i>Best window</span>
-          <span><i class="lg-dash"></i>Slack, tide turns</span>
-        </div>
-        <p class="dialabout">The big number is this hour's score. <b>Drag the hand</b> around the clock to check any other hour.</p>
+  function fishChips(){
+    const order=["bay","jetty","pier","surf"];
+    return `<div class="fchips">`+order.map(t=>{
+      const lab=(FTYPE[t]&&FTYPE[t].short)||t;
+      return `<button class="fchip ${FISH_TYPE===t?'on':''}" type="button" data-ft="${t}">${lab}</button>`;
+    }).join("")+`</div>`;
+  }
+
+  function t3VerdictHTML(d,m){
+    const sc=tlScore(d,m), gt=goTier(sc), np=nowPos();
+    const isNow = np.inRange && d.di===np.di && Math.abs(m-np.min)<=12;
+    const slope=tideAt(d.di*1440+m+20)-tideAt(d.di*1440+m-20);
+    const dir=slope>0.02?"rising":slope<-0.02?"falling":"slack";
+    const g=goPlan(d,m,false);
+    const why=heroWhy(d,m);
+    const chips=why.good.map(x=>`<span class="wc g">${x}</span>`).join("")+why.weak.map(x=>`<span class="wc a">${x}</span>`).join("");
+    const sub = isNow
+      ? `<b>${g.spot.name}</b> &middot; right now`
+      : `at <b>${fmtHM(m)}</b> &middot; ${dir} tide &middot; <button class="tlback" type="button" id="tlBack2">back to now</button>`;
+    return `<div class="t3v"><span class="vword ${gt.c}">${gt.word}</span><span class="vscore">${sc}<small>/100</small></span></div>
+      <p class="t3sub">${sub}</p>
+      ${chips?`<div class="whyrow">${chips}</div>`:""}`;
+  }
+
+  function timelineSVG(d,selM){
+    let pts=[];
+    for(let mm=TL_X0; mm<=TL_X1; mm+=20) pts.push([tlX(mm), tlY(tlScore(d,mm))]);
+    const line=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");
+    const area="M"+TL_PADX+" "+(TL_H-TL_PADB)+" "+pts.map(p=>"L"+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ")+" L"+(TL_W-TL_PADX)+" "+(TL_H-TL_PADB)+" Z";
+    const sx=tlX(selM), sy=tlY(tlScore(d,selM));
+    const np=nowPos(); let nowT="";
+    if(np.inRange && d.di===np.di && np.min>=TL_X0 && np.min<=TL_X1){ const nx=tlX(np.min).toFixed(1); nowT=`<line x1="${nx}" y1="${TL_H-TL_PADB}" x2="${nx}" y2="${TL_H-1}" stroke="var(--mut)" stroke-width="1.5"/>`; }
+    return `<svg id="tlSvg" class="tlsvg" viewBox="0 0 ${TL_W} ${TL_H}" width="100%" tabindex="0" role="slider"
+        aria-valuemin="${TL_X0}" aria-valuemax="${TL_X1}" aria-valuenow="${Math.round(selM)}" aria-label="Drag to see any hour's bite score">
+      <defs><linearGradient id="tlg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--dial-hi)" stop-opacity=".40"/><stop offset="1" stop-color="var(--dial-hi)" stop-opacity="0"/></linearGradient></defs>
+      <path d="${area}" fill="url(#tlg)"/>
+      <path d="${line}" fill="none" stroke="var(--dial-hi)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      ${nowT}
+      <line id="tlHand" x1="${sx.toFixed(1)}" y1="4" x2="${sx.toFixed(1)}" y2="${TL_H-TL_PADB}" stroke="var(--go)" stroke-width="2"/>
+      <circle id="tlDot" cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="7" fill="var(--go)" stroke="var(--panel)" stroke-width="3"/>
+    </svg>`;
+  }
+
+  function t3RigInner(d,m){
+    const g=goPlan(d,m,false);
+    const rig=(g.M&&g.M.rig)||"";
+    const title=rig.split(".")[0] || "What to tie on";
+    let sub=rig.split(".").slice(1).join(".").trim();
+    if(!sub) sub=(g.M&&g.M.tag)||"The full rig, hooks and weights";
+    return `<span class="rigic">&#127907;</span>
+      <span class="rigtx"><span class="rigk">Tie on &middot; tap for all gear</span><b>${title}</b><p>${sub}</p></span>
+      <span class="rigdot">&rsaquo;</span>`;
+  }
+
+  function t3BetterHTML(){
+    const d=tlDay(), nb=heroNext(d, tlMin());
+    if(!nb || nb.openNow) return "";
+    const cap=nb.when.charAt(0).toUpperCase()+nb.when.slice(1);
+    return `<button class="t3better" type="button" id="t3Better" data-di="${nb.top.d.di}">
+      <span class="bk">Better window</span><b>${cap} &middot; ${nb.time}</b>
+      <span class="bsc">${nb.score}/100</span><span class="bspot">${nb.spot} &rarr;</span></button>`;
+  }
+
+  function paintTimeline(){
+    const d=tlDay(), m=tlMin();
+    const svg=document.getElementById("tlSvg");
+    if(svg){
+      const sx=tlX(m), sy=tlY(tlScore(d,m));
+      const hand=document.getElementById("tlHand"), dot=document.getElementById("tlDot");
+      if(hand){ hand.setAttribute("x1",sx.toFixed(1)); hand.setAttribute("x2",sx.toFixed(1)); }
+      if(dot){ dot.setAttribute("cx",sx.toFixed(1)); dot.setAttribute("cy",sy.toFixed(1)); }
+    }
+    const v=document.getElementById("t3Verdict"); if(v) v.innerHTML=t3VerdictHTML(d,m);
+    const rg=document.getElementById("t3Rig"); if(rg) rg.innerHTML=t3RigInner(d,m);
+    const bk=document.getElementById("tlBack2"); if(bk) bk.addEventListener("click", ()=>{ TL_MIN=null; paintTimeline(); });
+  }
+
+  function wireTimeline(){
+    const svg=document.getElementById("tlSvg"); if(!svg) return;
+    const toMin=ev=>{ const r=svg.getBoundingClientRect();
+      const cx=(ev.clientX!=null?ev.clientX:(ev.touches&&ev.touches[0]&&ev.touches[0].clientX));
+      if(cx==null) return tlMin();
+      const frac=Math.max(0,Math.min(1,(cx-r.left)/r.width));
+      const vx=frac*TL_W, f2=Math.max(0,Math.min(1,(vx-TL_PADX)/(TL_W-2*TL_PADX)));
+      return Math.round((TL_X0+f2*(TL_X1-TL_X0))/5)*5; };
+    let drag=false;
+    const set=ev=>{ TL_MIN=toMin(ev); paintTimeline(); };
+    svg.addEventListener("pointerdown", ev=>{ drag=true; document.documentElement.classList.add("scrubbing");
+      try{ svg.setPointerCapture(ev.pointerId); }catch(e){} set(ev); ev.preventDefault(); });
+    svg.addEventListener("pointermove", ev=>{ if(drag) set(ev); });
+    const stop=()=>{ drag=false; document.documentElement.classList.remove("scrubbing"); };
+    svg.addEventListener("pointerup", stop); svg.addEventListener("pointercancel", stop); svg.addEventListener("pointerleave", stop);
+    svg.addEventListener("keydown", ev=>{ let m=tlMin(), u=true; const st=ev.shiftKey?60:15;
+      if(ev.key==="ArrowRight"||ev.key==="ArrowUp") m=Math.min(TL_X1,m+st);
+      else if(ev.key==="ArrowLeft"||ev.key==="ArrowDown") m=Math.max(TL_X0,m-st);
+      else u=false;
+      if(u){ ev.preventDefault(); TL_MIN=m; paintTimeline(); } });
+  }
+
+  function renderCall(){
+    if(!candidates().length){
+      return `${staleNoteHTML()}<section class="t3">
+        <div class="t3verdict"><div class="t3v"><span class="vword">Week spent</span></div>
+          <p class="t3sub">Every window on the board has passed. The next refresh pulls a fresh week.</p></div>
+        <button class="rigcard" type="button" onclick="setMode('week')"><span class="rigtx"><b>See the week</b><p>Browse the days anyway</p></span><span class="rigdot">&rsaquo;</span></button></section>`;
+    }
+    const d=tlDay(), m=tlMin();
+    return `${staleNoteHTML()}
+    <section class="t3">
+      ${fishChips()}
+      <div id="t3Verdict" class="t3verdict">${t3VerdictHTML(d,m)}</div>
+      <div class="card timecard">
+        <div class="tlhead"><span class="tlk">Today, hour by hour</span><button class="tlnow" type="button" id="tlNow">Now</button></div>
+        <div class="tlwrap">${timelineSVG(d,m)}</div>
+        <div class="tlaxis"><span>6a</span><span>9a</span><span>12p</span><span>3p</span><span>6p</span><span>9p</span></div>
+        <p class="tlhint">Drag the dot to check any hour.</p>
       </div>
-      <div class="todayside" id="probeSide"></div>
-    </section>
-`;
+      <button class="rigcard" type="button" id="t3Rig">${t3RigInner(d,m)}</button>
+      ${t3BetterHTML()}
+    </section>`;
   }
 
 
@@ -2187,7 +2314,7 @@ button.vbetter:hover{ border-color:var(--amber); }
      A plain reference for what to tie on. Reorders to put the current
      fishing type first, but shows everything. */
   const GEAR = [
-    { name:"Spotted bay bass", tag:"In season", tagcls:"", types:["bay","pier"], suits:"Bay / jetty / pier",
+    { name:"Spotted bay bass", tag:"In season", tagcls:"", types:["jetty","bay","pier"], suits:"Bay / jetty / pier",
       rows:[
         ["Rig","<b>Dropshot</b> or weedless Texas-rig swimbait"],
         ["Lure","<b>3 to 4 in paddle-tail swimbait</b> (Keitech, MC), green or brown"],
@@ -2196,7 +2323,7 @@ button.vbetter:hover{ border-color:var(--amber); }
         ["Line","15 lb braid to a <b>10 to 15 lb fluoro leader</b>"],
         ["Pole","Penn Squadron 7'6\" + Spinfisher 4500"],
       ] },
-    { name:"Halibut", tag:"Bonus fish", tagcls:"bonus", types:["bay","pier"], suits:"Bay / pier, on bait",
+    { name:"Halibut", tag:"Bonus fish", tagcls:"bonus", types:["jetty","bay","pier"], suits:"Bay / jetty / pier, on bait",
       rows:[
         ["Rig","<b>Carolina / fish-finder</b> (sliding sinker)"],
         ["Weight","<b>3/4 to 1 oz</b> egg sinker in the bay &middot; up to 2 oz if the current runs"],
@@ -2205,7 +2332,7 @@ button.vbetter:hover{ border-color:var(--amber); }
         ["Leader","15 to 18 in of <b>15 lb fluoro</b>"],
         ["Pole","Varmac 7' + Okuma Strikeforce 4000"],
       ] },
-    { name:"Rockfish & cabezon", tag:"Opens Oct 1", tagcls:"", types:["bay"], suits:"Low-tide reef & rocks",
+    { name:"Rockfish & cabezon", tag:"Opens Oct 1", tagcls:"", types:["jetty","bay"], suits:"Low-tide reef, rocks & jetty",
       rows:[
         ["Rig","<b>Texas-rig weedless swimbait</b> so it slides through rock"],
         ["Weight","<b>3/8 to 1/2 oz</b> &middot; 3/4 oz in deeper or rougher water"],
@@ -2222,7 +2349,7 @@ button.vbetter:hover{ border-color:var(--amber); }
         ["Leader","12 to 18 in of 10 to 15 lb"],
         ["Pole","Shimano Talavera 7' + Battle II 4000"],
       ] },
-    { name:"Mackerel, smelt & bonito", tag:"", tagcls:"", types:["pier"], suits:"Pier, off the rail",
+    { name:"Mackerel, smelt & bonito", tag:"", tagcls:"", types:["jetty","pier"], suits:"Pier or jetty, off the rail",
       rows:[
         ["Mackerel / smelt","<b>Sabiki rig, size 6 to 10</b>, with a <b>1 to 2 oz</b> weight on the bottom"],
         ["Bonito","A <b>1/2 to 1 oz metal jig</b> (Kastmaster), or a bonito splasher and feather"],
@@ -2555,14 +2682,17 @@ button.vbetter:hover{ border-color:var(--amber); }
      plan to read, nothing is tracked or stored. */
   function beginTrip(d, w){ openDay(d.di); }
   function wireCall(){
-    wireSea();
-    wireDial();
-    wireHero();
-    const bLead=document.getElementById("startTripLead");
-    if(bLead) bLead.addEventListener("click", ()=>{
-      const all=candidates(); if(all.length) beginTrip(all[0].d, all[0].w);
-    });
-    document.querySelectorAll(".rowitem[data-di]").forEach(row=>row.addEventListener("click", ()=>openDay(+row.dataset.di)));
+    wireTimeline();
+    document.querySelectorAll(".fchip[data-ft]").forEach(b=>b.addEventListener("click", ()=>{
+      FISH_TYPE=b.dataset.ft;
+      try{ localStorage.setItem("biteboard.fishtype",FISH_TYPE); }catch(e){}
+      const sel=document.getElementById("fishSel"); if(sel) sel.value=FISH_TYPE;
+      renderSpots(); TL_MIN=null; renderApp();
+    }));
+    const tn=document.getElementById("tlNow"); if(tn) tn.addEventListener("click", ()=>{ TL_MIN=null; paintTimeline(); });
+    const rg=document.getElementById("t3Rig"); if(rg) rg.addEventListener("click", ()=>setMode("gear"));
+    const bt=document.getElementById("t3Better"); if(bt) bt.addEventListener("click", ()=>openDay(+bt.dataset.di));
+    const bk=document.getElementById("tlBack2"); if(bk) bk.addEventListener("click", ()=>{ TL_MIN=null; paintTimeline(); });
   }
   function wireLive(){
     paintWater();
@@ -2652,8 +2782,12 @@ button.vbetter:hover{ border-color:var(--amber); }
       pier:false, lit:false, shade:false, walk:true, open:false, reef:false, flat:false },
     { name:"Mission Bay (Dana Landing)", type:"Bay", types:["bay"], home:false, shelter:"ok", kid:true, species:"Bass, halibut, perch", tide:"Tide swings", note:"Flat water, best with kids",
       pier:false, lit:false, shade:false, walk:true, open:false, reef:false, flat:true },
-    { name:"Zuniga Jetty, Point Loma", type:"Rock jetty", types:["bay"], home:false, shelter:"ok", kid:false, species:"Sand bass, halibut, bonito", tide:"Moving water", note:"Rock structure at the bay mouth; fish where the current sweeps the rocks",
+    { name:"Zuniga Jetty, Point Loma", type:"Rock jetty", types:["jetty","bay"], home:true, shelter:"ok", kid:false, species:"Sand bass, halibut, bonito", tide:"Moving water", note:"Rock structure at the bay mouth; fish where the current sweeps the rocks",
       pier:false, lit:false, shade:false, walk:true, open:true, reef:false, flat:false },
+    { name:"Mission Bay Jetty (South)", type:"Rock jetty", types:["jetty","bay","surf"], home:false, shelter:"ok", kid:false, species:"Sand bass, halibut, bonito, perch", tide:"Incoming & moving water", note:"Fish the channel side where the current rakes the rocks; corbina and perch on the sand side",
+      pier:false, lit:false, shade:false, walk:true, open:true, reef:true, flat:false },
+    { name:"Oceanside Harbor Jetty", type:"Rock jetty", types:["jetty","surf"], home:false, shelter:"ok", kid:false, species:"Calico & sand bass, bonito, halibut", tide:"Incoming", note:"Work lures tight to the rocks on the harbor mouth; watch the sets on the outer wall",
+      pier:false, lit:false, shade:false, walk:true, open:true, reef:true, flat:false },
     { name:"Crystal Pier, PB", type:"Open-coast pier", types:["pier","surf"], home:false, shelter:"ok", kid:true, species:"Surfperch, halibut, bonito", tide:"Incoming", note:"Small 2 to 4 ft surf, fishable",
       pier:true, lit:true, shade:true, walk:false, open:true, reef:false, flat:false },
     { name:"Imperial Beach Pier", type:"Open coast (south)", types:["pier","surf"], home:false, shelter:"ok", kid:true, species:"Halibut, croaker, perch", tide:"Incoming", note:"Small south swell, calm",
@@ -3061,7 +3195,7 @@ button.vbetter:hover{ border-color:var(--amber); }
     const sel=document.getElementById("fishSel");
     let t=null;
     try { t=localStorage.getItem("biteboard.fishtype"); } catch(e){}
-    if(!["bay","pier","surf"].includes(t)) t="bay";
+    if(!["bay","jetty","pier","surf"].includes(t)) t="bay";
     FISH_TYPE=t; if(sel) sel.value=t;
     renderSpots();
     if(sel) sel.addEventListener("change", ()=>{
@@ -4634,12 +4768,9 @@ button.vbetter:hover{ border-color:var(--amber); }
   renderAll();
   setMode(SESSION ? "live" : "call");
   setInterval(()=>{
-    // never redraw the page out from under a finger that is scrubbing the dial
-    const w=document.getElementById("dialWrap");
-    if(w && w.classList.contains("scrubbing")) return;
+    // never redraw the page out from under a finger that is scrubbing the timeline
+    if(document.documentElement.classList.contains("scrubbing")) return;
     renderReadout(); buildRibbon(); renderPlanner();
-    const mc=document.getElementById("mCall");
-    if(mc) mc.textContent = SESSION ? "On the water" : "Now";
     if(!document.getElementById("app").hidden && MODE!=="debrief") renderApp();
   }, 60000);
 
