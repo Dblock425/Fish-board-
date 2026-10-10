@@ -1053,10 +1053,10 @@
 
 /* ---- Today hero: verdict + why + better window (no headline) ---- */
 .hero2 .vrow{ display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
-.hero2 .vword{ font-family:"Barlow Condensed",sans-serif; font-weight:700; font-size:clamp(30px,8vw,40px);
-  line-height:1; text-transform:uppercase; letter-spacing:.005em; }
-.hero2 .vscore{ font-family:"Barlow Condensed",sans-serif; font-weight:700; font-size:clamp(30px,8vw,40px);
-  line-height:1; color:var(--ink); font-variant-numeric:tabular-nums; }
+.hero2 .vword{ font-family:"Roboto","Helvetica Neue",Arial,sans-serif; font-weight:700; font-size:clamp(28px,7.5vw,38px);
+  line-height:1; letter-spacing:-.01em; }
+.hero2 .vscore{ font-family:"Roboto","Helvetica Neue",Arial,sans-serif; font-weight:700; font-size:clamp(28px,7.5vw,38px);
+  line-height:1; color:var(--ink); font-variant-numeric:tabular-nums; letter-spacing:-.01em; }
 .hero2 .vscore small{ font-family:"IBM Plex Mono",monospace; font-size:13px; color:var(--mut); font-weight:400; letter-spacing:0; }
 .hero2 .vnowt{ font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--mut); text-transform:uppercase;
   letter-spacing:.07em; margin-left:auto; align-self:center; }
@@ -1892,15 +1892,12 @@ button.vbetter:hover{ border-color:var(--amber); }
         <p class="dialhint" id="dialHint"></p>
         <div class="daystrip" id="dayStrip">${dayStripHTML()}</div>
         <div class="diallegend">
-          <span><i style="background:var(--dial-water)"></i>Tide</span>
+          <span><i style="background:var(--dial-water)"></i>Tide height</span>
           <span><i style="background:var(--dial-night)"></i>Night</span>
-          <span><i style="background:var(--buoy)"></i>Window &amp; solunar</span>
-          <span><i style="background:var(--dial-busy)"></i>Your calendar</span>
-          <span><i class="lg-dash"></i>Slack, the water turns</span>
-          <span>Hand<i style="background:var(--hand-prime)"></i><i style="background:var(--hand-go)"></i><i
-            style="background:var(--hand-low)"></i>prime to slower</span>
+          <span><i style="background:var(--buoy)"></i>Best window</span>
+          <span><i class="lg-dash"></i>Slack, tide turns</span>
         </div>
-        <p class="dialabout"><b>The middle number</b> is the bite score for the hour the hand points to. <b>The blue band</b> is the tide height around the clock: it bulges out where the water is high and pulls in where it is low. Drag the hand, or tap Dawn / Midday / Dusk above, to read any other hour.</p>
+        <p class="dialabout">The big number is this hour's score. <b>Drag the hand</b> around the clock to check any other hour.</p>
       </div>
       <div class="todayside" id="probeSide"></div>
     </section>
@@ -3018,8 +3015,8 @@ button.vbetter:hover{ border-color:var(--amber); }
   /* ============ THEME ============ */
   (function theme(){
     const btn=document.getElementById("themeBtn");
-    let mode="system";
-    try { mode=localStorage.getItem("biteboard.theme")||"system"; } catch(e){}
+    let mode="light";   /* default to the clean light look; the toggle still cycles light -> dark -> system */
+    try { mode=localStorage.getItem("biteboard.theme")||"light"; } catch(e){}
     const apply=()=>{
       if(mode==="system") document.documentElement.removeAttribute("data-theme");
       else document.documentElement.setAttribute("data-theme",mode);
