@@ -175,25 +175,28 @@
     .nowbar-in .iconbtn + .iconbtn { margin-left:0; }
   }
 
-  /* ---------- navigation: at the bottom, where your thumb is ---------- */
-  .modeswitch { position:fixed; left:0; right:0; bottom:0; z-index:70; display:flex; gap:6px;
-                background:color-mix(in srgb,var(--bg) 95%,transparent);
-                backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  /* ---------- navigation: a real app tab bar, where your thumb is ---------- */
+  .modeswitch { position:fixed; left:0; right:0; bottom:0; z-index:70; display:flex; gap:2px;
+                background:color-mix(in srgb,var(--bg) 97%,transparent);
+                backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
                 border-top:1px solid var(--key);
-                padding:6px 10px calc(6px + env(safe-area-inset-bottom,0px)); }
-  .modeswitch button { flex:1; font:inherit; font-family:"IBM Plex Mono",monospace; font-size:11px;
-                       text-transform:uppercase; letter-spacing:.14em; cursor:pointer;
-                       border:1px solid transparent; background:transparent; color:var(--mut);
-                       padding:12px 6px; }
+                padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));
+                box-shadow:0 -6px 24px rgba(0,0,0,.14); }
+  .modeswitch button { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
+                       font:inherit; font-family:"Barlow",sans-serif; font-size:11px; font-weight:600;
+                       letter-spacing:.01em; text-transform:none; cursor:pointer; line-height:1;
+                       border:0; background:transparent; color:var(--mut); padding:7px 4px 5px;
+                       border-radius:13px; -webkit-tap-highlight-color:transparent;
+                       transition:color .15s, background .15s; }
+  .modeswitch button svg { width:23px; height:23px; display:block; }
   .modeswitch button:hover { color:var(--ink2); }
-  .modeswitch button[aria-selected="true"] { background:var(--amber-dim); color:var(--amber-ink);
-                                             border-color:var(--amber); font-weight:600; }
+  .modeswitch button:active { transform:scale(.94); }
+  .modeswitch button[aria-selected="true"] { color:var(--amber-ink); background:var(--amber-dim); }
   @media (min-width:900px){
-    .modeswitch { left:50%; right:auto; transform:translateX(-50%); bottom:18px; gap:0;
-                  border:1px solid var(--key); border-radius:0; padding:5px; max-width:420px; width:100%;
-                  box-shadow:0 8px 28px rgba(0,0,0,.35); }
+    .modeswitch { justify-content:center; gap:10px; padding:8px 6px; }
+    .modeswitch button { flex:0 0 104px; border-radius:14px; }
   }
-  .wrap { padding-bottom:calc(88px + env(safe-area-inset-bottom,0px)); }
+  .wrap { padding-bottom:calc(84px + env(safe-area-inset-bottom,0px)); }
 
   /* ---------- masthead ---------- */
   .mast { padding-block:24px 8px; display:flex; align-items:flex-end; justify-content:space-between;
@@ -1036,15 +1039,47 @@
   border:0; border-top:2px solid transparent; border-radius:0; padding:12px 6px; color:var(--mut); }:root[data-design="netflix"] .modeswitch button:hover{ color:var(--ink); }:root[data-design="netflix"] .modeswitch button[aria-selected="true"]{ color:var(--ink); border-top-color:var(--amber); background:transparent; }@media (min-width:900px){:root[data-design="netflix"] .modeswitch{ border-radius:6px; border:1px solid var(--key); background:var(--panel); } }:root[data-design="netflix"] .mbar{ height:8px; border-radius:4px; background:var(--sunk); border:0; overflow:hidden; gap:1px; }:root[data-design="netflix"] .mseg.prime{ background:var(--amber); }:root[data-design="netflix"] .mmark{ border-radius:2px; }:root[data-design="netflix"] .hhead{ font-weight:800; }:root[data-design="netflix"] .dg svg{ border:0; border-radius:6px; background:var(--panel); }:root[data-design="netflix"] .dg figcaption{ border-left:3px solid var(--amber); }:root[data-design="netflix"] .ratewhy{ font-family:"Inter",sans-serif !important; }:root[data-design="netflix"] .fld input, :root[data-design="netflix"] .fld select, :root[data-design="netflix"] .fld textarea, :root[data-design="netflix"] .frow input, :root[data-design="netflix"] .frow select{
   background:#333; border:0; border-radius:4px; padding:12px 14px; color:var(--ink); }:root[data-design="netflix"] .fld input:focus, :root[data-design="netflix"] .fld select:focus{ outline:2px solid var(--amber); }
 
+/* ---- Find tab: directions button ---- */
+.dirlink{ display:inline-flex; align-items:center; gap:6px; margin-top:14px;
+  font:inherit; font-weight:600; font-size:13px; text-decoration:none; color:var(--amber-ink);
+  background:var(--amber-dim); border:1px solid var(--amber); padding:9px 15px; border-radius:11px; }
+.dirlink:hover{ background:var(--amber); color:#fff; }
+.dirlink:focus-visible{ outline:2px solid var(--amber); outline-offset:2px; }
+
+/* lock the design language to Google/Material; hide the selector for an app feel */
+#designSel{ display:none !important; }
+/* calendar removed, so the "only when I'm free" filters no longer apply */
+#freeTog, #freeTog2{ display:none !important; }
+
+/* ---- Gear tab: fish/bait suggestion picker ---- */
+.pseg{ display:flex; gap:6px; margin:2px 0 12px; }
+.pbtn{ flex:1; font:inherit; font-weight:600; font-size:13px; cursor:pointer; color:var(--mut);
+  background:var(--panel); border:1px solid var(--key); padding:11px 10px; border-radius:11px; line-height:1.2; }
+.pbtn.on{ color:var(--amber-ink); background:var(--amber-dim); border-color:var(--amber); }
+.pbtn:focus-visible{ outline:2px solid var(--amber); outline-offset:2px; }
+.pselrow{ margin-bottom:14px; }
+.psel-dd{ width:100%; font:inherit; font-size:15px; cursor:pointer; color:var(--ink);
+  background:var(--panel); border:1px solid var(--key); padding:12px 14px; border-radius:11px; }
+.psel-dd:focus-visible{ outline:2px solid var(--amber); outline-offset:2px; }
+.plead{ font-size:14px; line-height:1.5; color:var(--ink2); margin:0 0 12px; }
+.pcards{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
+@media (max-width:560px){ .pcards{ grid-template-columns:1fr; } }
+.pcard{ display:flex; flex-direction:column; gap:4px; background:var(--panel); border:1px solid var(--key);
+  border-radius:12px; padding:13px 14px; }
+.pcard .pk{ font-size:11px; text-transform:uppercase; letter-spacing:.13em; color:var(--mut); }
+.pcard .pv{ font-family:"Barlow Condensed",sans-serif; font-weight:700; font-size:20px; color:var(--ink); line-height:1.12; }
+.pcard .pmeta{ font-size:12px; color:var(--mut); line-height:1.35; }
+.dirlink.sm{ margin-top:8px; padding:6px 11px; font-size:12px; border-radius:9px; align-self:flex-start; }
+.prows{ border-top:1px solid var(--key); padding-top:4px; }
+
 </style>
 
 
 <div id="refreshStatus" class="refreshstatus" role="status" aria-live="polite"></div>
 <div class="nowbar">
   <div class="nowbar-in">
-    <button class="brandmark" id="homeBtn" type="button" title="Home: back to Now" aria-label="Home, back to the Now view">
+    <button class="brandmark" id="homeBtn" type="button" title="Home: back to Today" aria-label="Home, back to Today">
       <span class="bm-col"><span class="nm">Bite Board</span><span class="st">San Diego Bay fishing</span></span>
-      <span class="homehint">&#8962;</span>
     </button>
     <div class="readout" id="readout"></div>
     <div class="caps" id="capChips"></div>
@@ -1066,11 +1101,19 @@
   </div>
 </div>
 
-<nav class="modeswitch" role="tablist" aria-label="View">
-  <button type="button" id="mCall" role="tab" aria-selected="true">Now</button>
-  <button type="button" id="mWeek" role="tab" aria-selected="false">Week</button>
-  <button type="button" id="mLearn" role="tab" aria-selected="false">Learn</button>
-  <button type="button" id="mGear" role="tab" aria-selected="false">Gear</button>
+<nav class="modeswitch" role="tablist" aria-label="Sections">
+  <button type="button" id="mCall" role="tab" aria-selected="true" aria-label="Today">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.4"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5.2 5.2l1.7 1.7M17.1 17.1l1.7 1.7M18.8 5.2l-1.7 1.7M6.9 17.1l-1.7 1.7"/></svg>
+    <span>Today</span></button>
+  <button type="button" id="mWeek" role="tab" aria-selected="false" aria-label="Week">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.3" y="4.6" width="17.4" height="15.4" rx="2.2"/><path d="M3.3 9h17.4M8 2.8v3.4M16 2.8v3.4"/></svg>
+    <span>Week</span></button>
+  <button type="button" id="mGear" role="tab" aria-selected="false" aria-label="Gear">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 3.5v9.3a4 4 0 1 1-4-4h5.5"/><circle cx="16.5" cy="3.5" r="1.1" fill="currentColor" stroke="none"/></svg>
+    <span>Gear</span></button>
+  <button type="button" id="mFind" role="tab" aria-selected="false" aria-label="Find a spot">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21.5c4.2-4.2 6.3-7.6 6.3-10.6a6.3 6.3 0 0 0-12.6 0c0 3 2.1 6.4 6.3 10.6Z"/><circle cx="12" cy="10.8" r="2.3"/></svg>
+    <span>Find</span></button>
 </nav>
 
 <div class="wrap">
@@ -1081,10 +1124,12 @@
 
 <div id="gear" hidden></div>
 
+<div id="find" hidden></div>
+
 <div id="week" hidden>
   <header class="mast">
     <div>
-      <div class="eyebrow">Personal Fishing Dashboard &middot; San Diego</div>
+      <div class="eyebrow">San Diego Bay &middot; 8-day outlook</div>
       <h1>Eight days of water</h1>
     </div>
     <div class="stamp">
@@ -1129,108 +1174,17 @@
   </div>
   <div class="picker" id="picker"></div></section>
 
-  <section class="band tint" id="askHead" hidden><div class="bandhead"><h2>Ask the board</h2><span class="sub">it can see this week's numbers</span></div></section>
-  <section class="band" id="askPanel" hidden>
-    <div class="askchips" id="askChips"></div>
-    <div class="askrow">
-      <input type="text" id="askInput" placeholder="Bite died on the incoming, what now?" autocomplete="off">
-      <button class="mini solid" type="button" id="askBtn">Ask</button>
-      <button class="mini" type="button" id="askStop" hidden>Stop</button>
+  <section class="band tint"><div class="bandhead"><h2>Where the data comes from</h2><span class="sub">all free, public sources</span></div>
+    <div class="cols">
+      <div><h4>Tides</h4><ul><li><b>NOAA</b> tide station 9410170 in San Diego Bay. Highs and lows are exact to the minute.</li></ul></div>
+      <div><h4>Wind, swell &amp; water temp</h4><ul><li><b>Open-Meteo</b> marine forecast. The moon phase is computed.</li></ul></div>
+      <div><h4>The score</h4><ul><li>This board&rsquo;s own 0&ndash;100 model, built from the tide, moon, season and conditions. No paid feed.</li></ul></div>
     </div>
-    <div class="askout" id="askOut"></div>
-    <div class="askerr" id="askErr"></div>
-    <div class="askfoot">Answers come from Claude on your account, using the tide, moon, calendar and gear on this page. It cannot see the internet or your catch log.</div>
-  </section>
-
-  <section class="band"><div class="bandhead"><h2>Your catch log</h2><span class="sub">the board learns from what actually happened</span></div>
-  <div class="cols">
-    <div class="card">
-      <details class="fold logfold"><summary><h3>Log a trip</h3></summary>
-      <p class="hint">Thirty seconds after you get off the water. The time matters: it lets the board record what it predicted for that exact hour, so it can be graded later. Even a skunk is data.</p>
-      <div id="logState" class="empty" hidden></div>
-      <form id="logForm" hidden>
-        <div class="frow">
-          <div class="fld"><label for="f-date">Date</label><input type="date" id="f-date" required></div>
-          <div class="fld"><label for="f-time">Time you fished</label><input type="time" id="f-time" required></div>
-        </div>
-        <div class="frow">
-          <div class="fld"><label for="f-spot">Spot</label><select id="f-spot"></select></div>
-          <div class="fld"><label for="f-rig">Rig</label><select id="f-rig"></select></div>
-        </div>
-        <div class="frow">
-          <div class="fld"><label for="f-phase">Tide phase</label><select id="f-phase">
-            <option value="incoming">Incoming</option><option value="high slack">High slack</option>
-            <option value="outgoing">Outgoing</option><option value="low slack">Low slack</option></select></div>
-          <div class="fld"><label for="f-species">Caught</label><select id="f-species"></select></div>
-        </div>
-        <div class="frow">
-          <div class="fld"><label for="f-count">How many</label><input type="number" id="f-count" min="0" max="99" value="0"></div>
-          <div class="fld"><label for="f-notes">Notes (optional)</label><input type="text" id="f-notes" placeholder="bait, clarity, what you'd change"></div>
-        </div>
-        <button class="btn" type="submit" id="logBtn">Log it</button>
-        <div class="logmsg" id="logMsg"></div>
-      </form>
-      </details>
-    </div>
-    <div class="card learncard">
-      <h3>What the board has learned from you</h3>
-      <p class="hint">Its six weights start as the author's prior. Every logged trip stores the model's own inputs for that hour, so with enough trips the weights become yours, not mine.</p>
-      <div id="modelPanel"></div>
-    </div>
-    <div class="card">
-      <h3>Your patterns</h3>
-      <p class="hint">Built only from your own logged trips, and it grades the board's own forecast against what you actually caught.</p>
-      <div id="patterns"></div>
-      <div class="resetwrap">
-        <button class="mini" type="button" id="resetArm">Reset the trip board</button>
-        <div class="resetbox" id="resetBox" hidden>
-          <p><b>Delete every logged trip?</b> <span id="resetCount"></span>
-             The board's weights go back to the author's prior and your patterns
-             panel empties. This cannot be undone.</p>
-          <div class="resetacts">
-            <button class="mini solid" type="button" id="resetGo">Yes, delete them all</button>
-            <button class="mini" type="button" id="resetNo">Keep them</button>
-          </div>
-        </div>
-        <div class="logmsg" id="resetMsg"></div>
-      </div>
-    </div>
-  </div>
-
-  </section>
-
-  <details class="band tint fold"><summary class="bandhead"><h2>Rigs to tie on</h2><span class="sub">ordered for the season</span></summary>
-  <div class="cols" id="rigs"></div></details>
-
-  <details class="band fold"><summary class="bandhead"><h2>Your spots</h2><span class="sub">all open, swell is down</span></summary>
-  <div class="cols" id="spots"></div></details>
-
-  <section class="band"><div class="prov">
-    <div class="card">
-      <details class="fold provfold"><summary><h3>Where the data comes from</h3></summary>
-      <div class="src"><span class="dot"></span><div><span class="k">Tide curve &amp; heights</span> <span class="v">&mdash; NOAA 9410170 highs/lows, MLLW (exact)</span></div></div>
-      <div class="src"><span class="dot"></span><div><span class="k">Moon &amp; solunar majors</span> <span class="v">&mdash; computed this refresh</span></div></div>
-      <div class="src"><span class="dot"></span><div><span class="k">Calendar</span> <span class="v">&mdash; Google Calendar, re-read live in your browser each time you open this page; falls back to the schedule baked in at the last refresh</span></div></div>
-      <div class="src"><span class="dot"></span><div><span class="k">Bay score</span> <span class="v">&mdash; this board's own model, computed here from the tide table, the moon and the season. No feed, so it never goes blank</span></div></div>
-      <div class="src"><span class="dot"></span><div><span class="k">Water read</span> <span class="v">&mdash; your photo, read by Claude on your account, when you ask for it</span></div></div>
-      <div class="src"><span class="dot"></span><div><span class="k">FishNotify</span> <span class="v">&mdash; not pulled this refresh; the board runs on its own bay score instead</span></div></div>
-      <div class="src"><span class="dot"></span><div><span class="k">Your catch log</span> <span class="v">&mdash; synced private storage, follows you across devices</span></div></div>
-      </details>
-    </div>
-    <div class="card">
-      <h3>Read me / to confirm</h3>
-      <div class="flag"><span class="tag">source pull</span><div><b>NOAA tides and Open-Meteo weather were pulled live for this Fri 10:35 AM refresh.</b> Tide highs and lows come straight from NOAA station 9410170 and are exact to the minute. Wind, swell and water temperature are the Open-Meteo daily forecast. There is no third-party bite score this refresh, so every day runs on the board's own bay score, recomputed live on every load from the tide, the moon and the season.</div></div>
-      <div class="flag"><span class="tag">modeled</span><div><b>Hourly wind</b> is estimated from the daily figure plus the normal dawn-calm to afternoon-sea-breeze pattern. <b>Moon times</b> are computed, accurate to about 15 minutes. Tide heights are exact.</div></div>
-      <div class="flag"><span class="tag">scored</span><div><b>The bay score is derived here</b>, from six terms: water moving through the window, solunar, spring versus neap, water temperature against the target species band, light, and season. Tap any row under "What makes that number" to see that term's raw reading and why it matters. It depends on no third-party score, which is why every day has one.</div></div>
-      <div class="flag"><span class="tag">learning</span><div><b>The six weights start as a prior and then become yours.</b> Every logged trip stores the model's own inputs for the hour you fished, so once you have four trips the board refits the weights against what you actually landed, shrunk toward the prior so a lucky day cannot swing it. "What the board has learned from you" shows what moved and why.</div></div>
-      <div class="flag"><span class="tag">safety</span><div>Surf calls track the advisory but shift fast. Check the lifeguard flag on arrival before the kids get near the water.</div></div>
-    </div>
-  </div>
-
+    <p class="note">Tides refresh automatically twice a day. Wind and swell are a forecast, so check them before you load the truck. Confirm current CDFW size and bag limits before keeping any fish.</p>
   </section>
   <footer>
-    <span>NOAA CO-OPS &middot; Open-Meteo &middot; NWS San Diego &middot; Google Calendar</span>
-    <span><a href="https://fishnotify.com/california/san-diego/fishing-forecast">fishnotify.com/san-diego</a></span>
+    <span>NOAA CO-OPS &middot; Open-Meteo</span>
+    <span>San Diego Bay fishing</span>
   </footer>
 </div>
 
@@ -1245,7 +1199,7 @@
   <div id="detailBody"></div>
   <footer>
     <span>Wind modeled &middot; tide exact from NOAA &middot; moon computed &middot; use &larr; &rarr; to change day, Esc to go back</span>
-    <span><a href="https://fishnotify.com/california/san-diego/fishing-forecast">fishnotify.com/san-diego</a></span>
+    <span>San Diego Bay fishing</span>
   </footer>
 </div>
 </div>
@@ -1257,8 +1211,8 @@
     <ul>
       <li>Every hour gets a <b>0 to 100 score</b>. Higher is better, and <b>green means go</b>.</li>
       <li>The big round dial is <b>today</b>. Drag the hand to check any other hour.</li>
-      <li><b>Tap any day</b> to see its tides and a full plan.</li>
-      <li>Bottom tabs: <b>Week</b> compares the days, <b>Gear</b> is exactly what to tie on.</li>
+      <li>Use the tabs at the bottom to get around.</li>
+      <li><b>Week</b> compares the days, <b>Gear</b> tells you what to tie on, <b>Find</b> maps the spots.</li>
     </ul>
     <button class="btn" id="helpClose" type="button">Got it, let's fish</button>
   </div>
@@ -1397,15 +1351,10 @@
 
   ];
 
-  /* ============ CALENDAR (minutes past midnight PT) ============ */
-  const BUSY = {
-    0:[[855,915,"Wage adj. Zoom"]],
-    1:[[1060,1270,"Padres vs Diamondbacks"]],
-    3:[[1020,1080,"IDR Zoom"]],
-    4:[[985,1170,"Practice"]],
-    5:[[990,1200,"Meetings + swing lab"]],
-    6:[[990,1170,"Practice"]],
-  };
+  /* ============ CALENDAR ============
+     Personal calendar removed so the board is a general tool, not tied to
+     one person's schedule. No busy times are shown. */
+  const BUSY = {};
   DAYS.forEach(d => d.busy = BUSY[d.di] || []);
 
   /* ============ TIDE EXTREMES ============
@@ -1637,7 +1586,8 @@
   let MODE="call", SESSION=null, DEBRIEF=null;
   function sLoad(){ try { return JSON.parse(localStorage.getItem(SKEY)||"null"); } catch(e){ return null; } }
   function sSave(){ try { SESSION ? localStorage.setItem(SKEY,JSON.stringify(SESSION)) : localStorage.removeItem(SKEY); } catch(e){} }
-  SESSION = sLoad();
+  /* trip sessions removed: never restore or enter a live session */
+  SESSION = null; try { localStorage.removeItem(SKEY); } catch(e){}
 
   function isoForDi(di){
     return new Date(Date.UTC(DAY0.y, DAY0.mo-1, DAY0.d+di)).toISOString().slice(0,10);
@@ -2169,6 +2119,42 @@
   }
 
 
+  /* ============ FIND: where to go, with map directions ============ */
+  function renderFind(){
+    const el=document.getElementById("find"); if(!el) return;
+    const ft=(typeof FISH_TYPE!=="undefined")?FISH_TYPE:"bay";
+    const pool=SPOTS.slice().sort((a,b)=>((b.types||["bay"]).includes(ft)?1:0)-((a.types||["bay"]).includes(ft)?1:0));
+    const card = s => {
+      const match=(s.types||["bay"]).includes(ft);
+      return `<div class="gearcard">
+        <div class="gh"><h4>${s.name}</h4>
+          ${match?`<span class="gtag now">Your pick</span>`:(s.home?`<span class="gtag">Popular</span>`:"")}
+          ${s.kid?`<span class="gtag">Good for kids</span>`:""}</div>
+        <div class="gsuits">${s.type} &middot; ${s.shelter==='ok'?'sheltered':'exposed to swell'}</div>
+        <div class="grows">
+          <div class="grow"><span class="gk">Target</span><span class="gv">${s.species}</span></div>
+          <div class="grow"><span class="gk">Best tide</span><span class="gv">${s.tide}</span></div>
+          <div class="grow"><span class="gk">Note</span><span class="gv">${s.note}</span></div>
+        </div>
+        <a class="dirlink" href="${mapsLink(s.name)}" target="_blank" rel="noopener">Get directions &nearr;</a>
+      </div>`;
+    };
+    el.innerHTML = `
+    <header class="mast">
+      <div><div class="eyebrow">Where to go</div><h1>Find a spot</h1></div>
+      <div class="stamp"><div>${SPOTS.length} San Diego spots</div><div>tap <b>directions</b> for the map</div></div>
+    </header>
+    <section class="band"><div class="bandhead"><h2>Shore spots</h2><span class="sub">ordered for your <b>${(typeof FTYPE!=="undefined"&&FTYPE[ft]?FTYPE[ft].short:"Bay")}</b> pick</span></div>
+      <div class="geargrid">${pool.map(card).join("")}</div>
+    </section>
+    <section class="band tint"><div class="bandhead"><h2>Reading a spot</h2><span class="sub">what the labels mean</span></div>
+      <div class="cols">
+        <div><h4>Sheltered vs exposed</h4><ul><li><b>Sheltered</b> bay and harbor spots stay fishable when the swell or wind is up.</li><li><b>Exposed</b> open-coast and surf spots are best on calmer days.</li></ul></div>
+        <div><h4>Good for kids</h4><ul><li>Calm water, easy footing, and on a public pier <b>no fishing license needed</b>.</li><li>The bay piers and gentle sand beaches make the easiest first trips.</li></ul></div>
+      </div>
+    </section>`;
+  }
+
   /* ============ GEAR: bait sizes, hooks and weights ============
      A plain reference for what to tie on. Reorders to put the current
      fishing type first, but shows everything. */
@@ -2213,9 +2199,9 @@
         ["Mackerel / smelt","<b>Sabiki rig, size 6 to 10</b>, with a <b>1 to 2 oz</b> weight on the bottom"],
         ["Bonito","A <b>1/2 to 1 oz metal jig</b> (Kastmaster), or a bonito splasher and feather"],
         ["Bait","Sabiki tips: a sliver of squid on each hook helps"],
-        ["Pole","Your bass rod is fine; the sabiki does the work"],
+        ["Pole","Any bass rod is fine; the sabiki does the work"],
       ] },
-    { name:"For Noah (kids)", tag:"Easy", tagcls:"", types:["bay","pier","surf"], suits:"Any calm spot, no license on a pier",
+    { name:"For kids", tag:"Easy", tagcls:"", types:["bay","pier","surf"], suits:"Any calm spot, no license on a pier",
       rows:[
         ["Easiest","<b>1/2 oz Kastmaster</b>: just cast out and reel it back"],
         ["Bait option","A <b>#4 baitholder hook</b> with a strip of <b>market squid under a float</b>, tiny split shot"],
@@ -2223,6 +2209,89 @@
         ["Pole","The Abu Garcia combo"],
       ] },
   ];
+
+  /* ---- Suggestion picker: pick a fish OR a bait, get rig + spot + timing ---- */
+  const FISH_SPOT = {
+    "Spotted bay bass":"Shelter Island Pier",
+    "Halibut":"Harbor Island / Embarcadero",
+    "Rockfish & cabezon":"La Jolla Cove & Shores",
+    "Surfperch & corbina":"Silver Strand, Coronado",
+    "Mackerel, smelt & bonito":"Shelter Island Pier",
+    "For kids":"Shelter Island Pier",
+  };
+  const BAITS = [
+    { name:"Swimbait (3-4 in paddle-tail)", fish:"Spotted bay bass" },
+    { name:"Dropshot plastic worm",         fish:"Spotted bay bass" },
+    { name:"Live or frozen anchovy",        fish:"Halibut" },
+    { name:"Live sardine",                  fish:"Halibut" },
+    { name:"Curl-tail grub / dark swimbait",fish:"Rockfish & cabezon" },
+    { name:"Sand crab",                     fish:"Surfperch & corbina" },
+    { name:"Gulp sandworm / bloodworm",     fish:"Surfperch & corbina" },
+    { name:"Sabiki rig",                    fish:"Mackerel, smelt & bonito" },
+    { name:"Kastmaster / metal jig",        fish:"Mackerel, smelt & bonito" },
+    { name:"Market squid strips",           fish:"For kids" },
+  ];
+  let PICK_MODE="fish", PICK_FISH=GEAR[0].name, PICK_BAIT=BAITS[0].name;
+
+  function pickSpotFor(fish){
+    return SPOTS.find(s=>s.name===FISH_SPOT[fish]) || SPOTS[0];
+  }
+  function pickBestWindow(){
+    const bd = DAYS.find(d=>d.best) || DAYS.slice().sort((a,b)=>dayBay(b).bay-dayBay(a).bay)[0];
+    if(!bd) return { when:"this week", detail:"", spot:"" };
+    const np=nowPos();
+    const when=(np.inRange&&bd.di===np.di)?"Today":(np.inRange&&bd.di===np.di+1)?"Tomorrow":(bd.dow+" "+bd.date);
+    const bw=(bd.wins&&bd.wins[0])||null;
+    return { when, detail: bw?bw.time:"", spot: bw?bw.spot:"" };
+  }
+  function pickResultHTML(){
+    const fish = PICK_MODE==="bait"
+      ? (BAITS.find(b=>b.name===PICK_BAIT)||BAITS[0]).fish
+      : PICK_FISH;
+    const g = GEAR.find(x=>x.name===fish) || GEAR[0];
+    const spot = pickSpotFor(fish);
+    const bw = pickBestWindow();
+    const rows = g.rows.map(([k,v])=>`<div class="grow"><span class="gk">${k}</span><span class="gv">${v}</span></div>`).join("");
+    const lead = PICK_MODE==="bait"
+      ? `<p class="plead"><b>${PICK_BAIT}</b> is a <b>${fish}</b> bait. Here is how to fish it.</p>`
+      : `<p class="plead">To catch <b>${fish}</b>, here is the rig, the spot and the timing.</p>`;
+    return `
+      <div class="presult">
+        ${lead}
+        <div class="pcards">
+          <div class="pcard"><span class="pk">Target</span><span class="pv">${g.name}</span><span class="pmeta">${g.suits}</span></div>
+          <div class="pcard"><span class="pk">Where to go</span><span class="pv">${spot.name}</span><span class="pmeta">${spot.type} &middot; ${spot.shelter==='ok'?'sheltered':'exposed'}</span>
+            <a class="dirlink sm" href="${mapsLink(spot.name)}" target="_blank" rel="noopener">Directions &nearr;</a></div>
+          <div class="pcard"><span class="pk">Best time this week</span><span class="pv">${bw.when}</span><span class="pmeta">${bw.detail?bw.detail+(bw.spot&&bw.spot!==spot.name?" &middot; "+bw.spot:""):"see the Today tab"}</span></div>
+        </div>
+        <div class="grows prows">${rows}</div>
+      </div>`;
+  }
+  function buildPicker(){
+    const fishOpts = GEAR.map(g=>`<option value="${g.name}">${g.name}</option>`).join("");
+    const baitOpts = BAITS.map(b=>`<option value="${b.name}">${b.name}</option>`).join("");
+    return `
+    <section class="band pickband"><div class="bandhead"><h2>What should I use?</h2><span class="sub">pick a fish or a bait and get the rig, spot and timing</span></div>
+      <div class="pseg" role="tablist" aria-label="Suggest by">
+        <button class="pbtn ${PICK_MODE==='fish'?'on':''}" type="button" data-pmode="fish" aria-pressed="${PICK_MODE==='fish'}">I want to catch…</button>
+        <button class="pbtn ${PICK_MODE==='bait'?'on':''}" type="button" data-pmode="bait" aria-pressed="${PICK_MODE==='bait'}">I have this bait…</button>
+      </div>
+      <div class="pselrow">
+        <select id="pickFish" class="psel-dd" aria-label="Target fish"${PICK_MODE==='bait'?' hidden':''}>${fishOpts}</select>
+        <select id="pickBait" class="psel-dd" aria-label="Bait you have"${PICK_MODE==='fish'?' hidden':''}>${baitOpts}</select>
+      </div>
+      <div id="pickResult">${pickResultHTML()}</div>
+    </section>`;
+  }
+  function wirePicker(){
+    const ff=document.getElementById("pickFish"), bb=document.getElementById("pickBait");
+    const paint=()=>{ const r=document.getElementById("pickResult"); if(r) r.innerHTML=pickResultHTML(); };
+    if(ff){ ff.value=PICK_FISH; ff.addEventListener("change", ()=>{ PICK_FISH=ff.value; paint(); }); }
+    if(bb){ bb.value=PICK_BAIT; bb.addEventListener("change", ()=>{ PICK_BAIT=bb.value; paint(); }); }
+    document.querySelectorAll(".pbtn[data-pmode]").forEach(btn=>btn.addEventListener("click", ()=>{
+      PICK_MODE=btn.dataset.pmode; renderGear();
+    }));
+  }
 
   function renderGear(){
     const el=document.getElementById("gear"); if(!el) return;
@@ -2239,6 +2308,8 @@
       <div><div class="eyebrow">Tackle reference</div><h1>Gear &amp; rigs</h1></div>
       <div class="stamp"><div>Bait, hooks &amp; weights</div><div>ordered for your <b>${(typeof FTYPE!=="undefined"&&FTYPE[ft]?FTYPE[ft].short:"Bay")}</b> pick</div></div>
     </header>
+
+    ${buildPicker()}
 
     <section class="band"><div class="bandhead"><h2>What to tie on</h2><span class="sub">by target species</span></div>
       <div class="geargrid">${list.map(card).join("")}</div>
@@ -2271,15 +2342,16 @@
       <p class="note"><b>smallest &rarr; largest.</b> For this board: perch and squid strips sit around #4 to #1, bay bass and halibut around 1/0 to 2/0, reef swimbaits 3/0 to 4/0.</p>
     </section>
 
-    <section class="band tint"><div class="bandhead"><h2>Your rods</h2><span class="sub">which one for what</span></div>
+    <section class="band tint"><div class="bandhead"><h2>Rods, which one for what</h2><span class="sub">a starter kit, any brand works</span></div>
       <div class="cols">
-        <div><h4>Penn Squadron 7'6" + Spinfisher 4500</h4><ul><li>Your <b>bass and reef</b> rod: dropshot, swimbaits, lures</li><li>15 lb braid, the all-day workhorse</li></ul></div>
-        <div><h4>Varmac 7' + Okuma Strikeforce 4000</h4><ul><li>The <b>bait rod</b> for <b>halibut</b> and soaking anchovies</li><li>Carolina rig, heavier sinkers</li></ul></div>
-        <div><h4>Shimano Talavera 7' + Battle II 4000</h4><ul><li>The <b>surf</b> rod: perch and corbina on light Carolina rigs</li><li>Sand crabs and Gulp in the trough</li></ul></div>
-        <div><h4>Abu Garcia combo</h4><ul><li><b>Noah's</b> rod: Kastmaster or bait under a float</li><li>Light and forgiving, lots of bites</li></ul></div>
+        <div><h4>A 7 to 7'6" medium spinning rod</h4><ul><li>Your <b>bass and reef</b> rod: dropshot, swimbaits, lures</li><li>15 lb braid, the all-day workhorse</li></ul></div>
+        <div><h4>A 7' medium-heavy rod</h4><ul><li>The <b>bait rod</b> for <b>halibut</b> and soaking anchovies</li><li>Carolina rig, heavier sinkers</li></ul></div>
+        <div><h4>A 7 to 9' surf rod</h4><ul><li>The <b>surf</b> rod: perch and corbina on light Carolina rigs</li><li>Sand crabs and Gulp in the trough</li></ul></div>
+        <div><h4>A light combo for kids</h4><ul><li>Kastmaster or bait under a float</li><li>Light and forgiving, lots of bites</li></ul></div>
       </div>
       <p class="note"><b>Before you keep anything:</b> halibut 22 in minimum, saltwater basses 14 in with a 5-fish combined limit. Measure every fish and confirm current CDFW rules before one goes in the bag.</p>
     </section>`;
+    wirePicker();
   }
 
 
@@ -2395,16 +2467,18 @@
     MODE=m;
     document.getElementById("detail").hidden=true;
     document.getElementById("week").hidden  = (m!=="week");
-    document.getElementById("learn").hidden = (m!=="learn");
+    const learnEl=document.getElementById("learn"); if(learnEl) learnEl.hidden = true;
     const gearEl=document.getElementById("gear"); if(gearEl) gearEl.hidden = (m!=="gear");
-    document.getElementById("app").hidden   = (m==="week"||m==="learn"||m==="gear");
+    const findEl=document.getElementById("find"); if(findEl) findEl.hidden = (m!=="find");
+    const isApp = !(m==="week"||m==="gear"||m==="find");
+    document.getElementById("app").hidden = !isApp;
     if(m==="gonow"){ renderApp(); window.scrollTo(0,0); return; }
-    document.getElementById("mCall").setAttribute("aria-selected", m!=="week"&&m!=="learn"&&m!=="gear");
+    document.getElementById("mCall").setAttribute("aria-selected", isApp);
     document.getElementById("mWeek").setAttribute("aria-selected", m==="week");
-    document.getElementById("mLearn").setAttribute("aria-selected", m==="learn");
     const mg=document.getElementById("mGear"); if(mg) mg.setAttribute("aria-selected", m==="gear");
-    if(m==="learn"){ renderLearn(); paintBW(); wireHeroTest(); }
-    else if(m==="gear"){ renderGear(); }
+    const mf=document.getElementById("mFind"); if(mf) mf.setAttribute("aria-selected", m==="find");
+    if(m==="gear"){ renderGear(); }
+    else if(m==="find"){ renderFind(); }
     else if(m!=="week") renderApp();
     window.scrollTo(0,0);
   }
@@ -2449,13 +2523,9 @@
     sea.addEventListener("pointercancel", end);
     sea.addEventListener("pointerleave", end);
   }
-  function beginTrip(d, w){
-    const np=nowPos();
-    const startMin = (np.inRange && np.di===d.di && np.min>w.s[0]) ? np.min : w.s[0];
-    SESSION={ di:d.di, startMin, ws:w.s[0], we:w.s[1], spot:w.spot, rig:(POLE[w.kind]||{}).rig||"",
-              kind:w.kind, phase:phaseAt(d,startMin), calledIt:rateHour(d,startMin).t, catches:[] };
-    sSave(); MODE="live"; renderApp(); window.scrollTo(0,0);
-  }
+  /* Trip logging was removed. "Start the trip" now just opens the full day
+     plan to read, nothing is tracked or stored. */
+  function beginTrip(d, w){ openDay(d.di); }
   function wireCall(){
     wireSea();
     wireDial();
@@ -2492,13 +2562,13 @@
       if(el) el.scrollIntoView({behavior:"smooth", block:"center"});
     });
   }
-  document.getElementById("mCall").addEventListener("click", ()=>setMode(SESSION?"live":"call"));
+  document.getElementById("mCall").addEventListener("click", ()=>setMode("call"));
   document.getElementById("mWeek").addEventListener("click", ()=>setMode("week"));
-  document.getElementById("mLearn").addEventListener("click", ()=>setMode("learn"));
-  document.getElementById("homeBtn").addEventListener("click", ()=>{
-    document.getElementById("detail").hidden=true; setMode(SESSION?"live":"call"); window.scrollTo(0,0);
-  });
+  { const _hb=document.getElementById("homeBtn"); if(_hb) _hb.addEventListener("click", ()=>{
+    document.getElementById("detail").hidden=true; setMode("call"); window.scrollTo(0,0);
+  }); }
   { const _mg=document.getElementById("mGear"); if(_mg) _mg.addEventListener("click", ()=>setMode("gear")); }
+  { const _mf=document.getElementById("mFind"); if(_mf) _mf.addEventListener("click", ()=>setMode("find")); }
   (function help(){
     const m=document.getElementById("helpModal"); if(!m) return;
     const open=()=>{ m.hidden=false; };
@@ -2541,14 +2611,14 @@
       recipe:"<b>3/4 to 1 oz egg sinker</b> → bead → #1 swivel → 15in of 15 lb fluoro → <b>#1 to 1/0 hook</b>. Live or frozen anchovy.",
       gear:"Pole: <b>Varmac 7' + Okuma Strikeforce 4000</b>. Off-peak until January, so soak it while you work the bass rod." },
   ];
-  document.getElementById("rigs").innerHTML = RIGS.map(r =>
-    `<div><h4>${r.name}${r.top?' &middot; in season':''}</h4><ul><li>${r.recipe}</li><li class="muted">${r.gear}</li></ul></div>`).join("");
+  { const _rigs=document.getElementById("rigs"); if(_rigs) _rigs.innerHTML = RIGS.map(r =>
+    `<div><h4>${r.name}${r.top?' &middot; in season':''}</h4><ul><li>${r.recipe}</li><li class="muted">${r.gear}</li></ul></div>`).join(""); }
 
   /* the traits the spot picker reasons over: a pier gives you deck shade and
      lights but pins you to one place; a shoreline lets you cover ground but
      gives you neither. That trade is what decides where to send him. */
   const SPOTS = [
-    { name:"Shelter Island Pier", type:"Bay / harbor", types:["bay","pier"], home:true, shelter:"ok", kid:true, species:"Bay bass, bonito, halibut", tide:"Incoming → high", note:"No license · home base",
+    { name:"Shelter Island Pier", type:"Bay / harbor", types:["bay","pier"], home:true, shelter:"ok", kid:true, species:"Bay bass, bonito, halibut", tide:"Incoming → high", note:"No license needed · easy access",
       pier:true, lit:true, shade:true, walk:false, open:false, reef:false, flat:false },
     { name:"Harbor Island / Embarcadero", type:"Harbor", types:["bay"], home:false, shelter:"ok", kid:true, species:"Bay bass, mackerel, halibut", tide:"Moving water", note:"Sheltered, easy access",
       pier:false, lit:false, shade:false, walk:true, open:false, reef:false, flat:false },
@@ -3094,6 +3164,7 @@
 
   // Live weights: the prior until the log says otherwise (see learnFromLog).
   let MODEL = { w:Object.assign({},BAY_PRIOR), n:0, learned:false, notes:[] };
+  let TRIPS = [];  /* personal catch log removed; scores run on the fixed prior */
 
   function bayTier(n){
     if(n>=75) return {c:"sc-1",lab:"prime"};
@@ -3735,7 +3806,7 @@
             "Swimbaits, plus a dropshot setup",
             isPier?"No license needed on a public pier":"A valid California fishing license",
             "Pliers, a tape measure, a rag"];
-            if(GO_KID) L.push("Water, snacks and sunscreen for Noah");
+            if(GO_KID) L.push("Water, snacks and sunscreen for the kids");
             return L.join(" &middot; "); })()}</p>
         </div></div>
 
@@ -3745,8 +3816,8 @@
       </div>
 
       <div class="gnacts">
-        <button class="cta" type="button" id="gnStart">Start the trip</button>
-        <button class="cta ink" type="button" id="gnKid" aria-pressed="${GO_KID}">${GO_KID?"Just me":"Bringing Noah"}</button>
+        <a class="cta" id="gnStart" href="${mapsLink(g.spot.name)}" target="_blank" rel="noopener" role="button">Get directions &nearr;</a>
+        <button class="cta ink" type="button" id="gnKid" aria-pressed="${GO_KID}">${GO_KID?"Just me":"Bringing kids"}</button>
       </div>
 
       <p class="gnfoot"><b>Why this and not something else.</b> ${M.what}</p>
@@ -3757,15 +3828,7 @@
     if(b) b.addEventListener("click", ()=>setMode("call"));
     const k=document.getElementById("gnKid");
     if(k) k.addEventListener("click", ()=>{ GO_KID=!GO_KID; renderApp(); });
-    const s=document.getElementById("gnStart");
-    if(s) s.addEventListener("click", ()=>{
-      const np=nowPos();
-      const d = np.inRange ? DAYS[np.di] : probeDay();
-      const m = np.inRange ? np.min : probeMin();
-      const g = goPlan(d, m, GO_KID);
-      beginTrip(d, { rank:"now", s:[m, Math.max(m+60,g.until)], kind:"bass",
-                     spot:g.spot.name, kid:GO_KID, time:fmtHM(m)+"–"+fmtHM(g.until), tide:"", target:M_NAME(g) });
-    });
+    /* "Get directions" is a plain map link now; no trip is logged */
   }
   const M_NAME = g => MODES[g.mode].name;
 
@@ -3932,7 +3995,7 @@
     const rate=(function(){ const h=(hStats()[k]||{}); return (h.seen?Math.round((h.tap||0)/h.seen*100):0); })();
     return `${staleNoteHTML()}
     <section class="hero" data-v="${k}">
-      <div class="hintro"><b>San Diego Bay fishing.</b> The best days, times and spots to fish this week, in plain English. Every hour gets a <b>0&ndash;100 score, higher is better</b>, and green means go. Tap any day for its tides and a full plan.</div>
+      <div class="hintro"><b>San Diego Bay fishing.</b> Every hour is scored <b>0&ndash;100, higher is better, green means go.</b></div>
       ${(function(){ const bd=DAYS.find(x=>x.best); if(!bd) return ""; const bw=bd.wins&&bd.wins[0]; const np=nowPos();
         const when=(np.inRange&&bd.di===np.di)?"Today":(np.inRange&&bd.di===np.di+1)?"Tomorrow":(bd.dow+" "+bd.date);
         return `<div class="bestcard"><span class="bk">Best day this week</span><span class="bv">${when}</span>${bw?`<span class="bwn">${bw.time} &middot; ${bw.spot}</span>`:""}</div>`; })()}
@@ -3948,8 +4011,8 @@
         <button class="cta hcta" type="button" id="heroGo">${V.cta} &rarr;</button>
         <button class="cta ink hsec" type="button" id="heroSec">${V.sec}</button>
       </div>
-      <p class="htrust">Tide and moon computed here from NOAA 9410170 and exact. Scores, wind and calendar from the last refresh${
-        dataAge().fresh?" today":", "+dataAge().days+" day"+(dataAge().days===1?"":"s")+" ago"}. No trip is logged until you say so.</p>
+      <p class="htrust">Tide and moon computed here from NOAA 9410170 and exact. Scores, wind and swell from the last refresh${
+        dataAge().fresh?" today":", "+dataAge().days+" day"+(dataAge().days===1?"":"s")+" ago"}.</p>
     </section>`;
   }
   function wireHero(){
@@ -4585,6 +4648,7 @@
     approval_required:"Calendar access needs an approval this page cannot request.",
   };
   (async function liveCalendar(){
+    return;                                            // personal calendar removed
     let mcp=null;
     try { mcp = await claude.use("mcp"); } catch(e) { mcp=null; }
     if(!mcp) return;                                   // stay on the baked calendar
@@ -4740,6 +4804,7 @@
     try { sample = await claude.use("sample"); } catch(e) { sample=null; }
     if(!sample) return;
     const head=document.getElementById("askHead"), panel=document.getElementById("askPanel");
+    if(!head||!panel) return;   /* Ask panel removed from the UI */
     const inp=document.getElementById("askInput"), btn=document.getElementById("askBtn");
     const stop=document.getElementById("askStop"), out=document.getElementById("askOut"), err=document.getElementById("askErr");
     head.hidden=false; panel.hidden=false;
@@ -4785,258 +4850,6 @@
   })();
 
 
-  /* ============ CATCH LOG (unchanged) ============ */
-  const SPECIES = ["Skunked","Spotted bay bass","Sand bass","Calico bass","Halibut","Bonito","Mackerel","Corbina","Sheephead","Surfperch","Other"];
-  (function fill(){
-    const sp=document.getElementById("f-spot"); SPOTS.forEach(s=>{ const o=document.createElement("option"); o.value=s.name; o.textContent=s.name; sp.appendChild(o); });
-    const rg=document.getElementById("f-rig"); RIGS.forEach(r=>{ const o=document.createElement("option"); o.value=r.name; o.textContent=r.name; rg.appendChild(o); });
-    const spc=document.getElementById("f-species"); SPECIES.forEach(s=>{ const o=document.createElement("option"); o.value=s; o.textContent=s; spc.appendChild(o); });
-    const d=new Date(); document.getElementById("f-date").value = d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
-    document.getElementById("f-time").value = String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");
-  })();
-
-  let DB=null, TRIPS=[];
-  const MONS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  // map an ISO date to a day index in the currently loaded DAYS window, or -1
-  function dayIndexFor(iso){
-    if(!iso) return -1;
-    const p=iso.split("-").map(Number); if(p.length<3) return -1;
-    const target=new Date(p[0],p[1]-1,p[2]).getTime(), now=Date.now();
-    for(const d of DAYS){
-      const bits=String(d.date).split(" "); const mi=MONS.indexOf(bits[0]); const dd=Number(bits[1]);
-      if(mi<0||!dd) continue;
-      for(const yy of [new Date().getFullYear(), new Date().getFullYear()-1, new Date().getFullYear()+1]){
-        const c=new Date(yy,mi,dd).getTime();
-        if(Math.abs(c-now) < 200*86400000 && c===target) return d.di;
-      }
-    }
-    return -1;
-  }
-  // what the board predicted for that exact date and hour, or null if outside the loaded window
-  function snapshotFor(iso, timeStr){
-    const di=dayIndexFor(iso); if(di<0) return null;
-    const d=DAYS.find(x=>x.di===di); if(!d) return null;
-    const hm=String(timeStr||"").split(":").map(Number);
-    const minute=(isFinite(hm[0])? hm[0]*60+(hm[1]||0) : 720);
-    const abs=d.di*1440+minute;
-    const h=tideAt(abs), slope=tideAt(abs+20)-tideAt(abs-20);
-    const r=rateHour(d,minute);
-    // the model's own inputs for that hour, so the trip becomes a labelled example
-    const probe={ s:[Math.max(0,minute-60), Math.min(1439,minute+60)], kind:"bass", kid:true, spot:"" };
-    const tv=bayTerms(d,probe), terms={};
-    for(const k in tv) terms[k]=Math.round(tv[k].v*1000)/1000;
-    return { score:(d.score==null?null:d.score), rating:r.t, tideFt:Math.round(h*10)/10,
-      tideDir:(slope>0.01?"rising":slope<-0.01?"falling":"slack"),
-      wind:(d.wind==null?null:windAt(d.wind,minute)),
-      illum:d.illum, swing:d.swing, major:inMajor(d,minute), bay:bayScore(d,probe).bay, terms };
-  }
-  function renderPatterns(){
-    const el=document.getElementById("patterns");
-    if(!TRIPS.length){
-      el.innerHTML = `<div class="empty">No trips logged yet. Log two or three and this panel starts telling you which tide phase, spot and rig actually produce for <em>you</em>, which is the part no forecast can know.</div>`;
-      return;
-    }
-    const total=TRIPS.length;
-    const fish=TRIPS.reduce((a,t)=>a+(Number(t.count)||0),0);
-    const skunks=TRIPS.filter(t=>!Number(t.count)).length;
-    const byKey=(key)=>{
-      const m={};
-      TRIPS.forEach(t=>{ const k=t[key]||"?"; m[k]=m[k]||{n:0,f:0}; m[k].n++; m[k].f+=Number(t.count)||0; });
-      let best=null; Object.entries(m).forEach(([k,v])=>{ const avg=v.f/v.n; if(!best||avg>best.avg) best={k,avg,n:v.n}; });
-      return best;
-    };
-    const bp=byKey("phase"), bs=byKey("spot"), br=byKey("rig");
-    const tiles=[
-      ["Trips logged", total, fish+" fish landed"],
-      ["Best tide phase", bp?bp.k:"–", bp?bp.avg.toFixed(1)+" fish/trip over "+bp.n:""],
-      ["Best spot", bs?bs.k.split(" ")[0]:"–", bs?bs.avg.toFixed(1)+" fish/trip":""],
-      ["Best rig", br?br.k:"–", br?br.avg.toFixed(1)+" fish/trip":""],
-    ];
-    const recent=TRIPS.slice(0,5).map(t=>
-      `<div class="trip"><span class="d">${t.date||""}</span><span class="b"><b>${Number(t.count)?t.count+" "+t.species:"Skunked"}</b> · ${t.spot||""} · ${t.phase||""}${t.fc&&t.fc.rating?' · board said '+t.fc.rating:""}${t.notes?" · "+t.notes:""}</span></div>`).join("");
-    // did the board call it right? group by the rating it predicted for that hour
-    const graded=TRIPS.filter(t=>t.fc && t.fc.rating);
-    const ORDER=["Prime","Good","Fair","Slow","Dark","Caution"];
-    const COLOR={Prime:"var(--b1)",Good:"var(--b2)",Fair:"var(--b3)",Slow:"var(--muted)",Dark:"var(--muted)",Caution:"var(--crit)"};
-    let accHtml="";
-    if(graded.length){
-      const g={};
-      graded.forEach(t=>{ const k=t.fc.rating; g[k]=g[k]||{n:0,f:0}; g[k].n++; g[k].f+=Number(t.count)||0; });
-      const gr=ORDER.filter(k=>g[k]);
-      const maxAvg=Math.max(...gr.map(k=>g[k].f/g[k].n),0.001);
-      accHtml=`<div class="acc"><h4>Did the board call it right?</h4>`+gr.map(k=>{
-        const avg=g[k].f/g[k].n;
-        return `<div class="accrow"><span>${k}</span><span class="accbar"><i style="width:${Math.round(avg/maxAvg*100)}%;background:${COLOR[k]}"></i></span><span class="n">${avg.toFixed(1)} fish · n=${g[k].n}</span></div>`;
-      }).join("");
-      const hi=["Prime","Good"].filter(k=>g[k]), lo=["Fair","Slow"].filter(k=>g[k]);
-      if(graded.length>=6 && hi.length && lo.length){
-        const ha=hi.reduce((a,k)=>a+g[k].f,0)/hi.reduce((a,k)=>a+g[k].n,0);
-        const la=lo.reduce((a,k)=>a+g[k].f,0)/lo.reduce((a,k)=>a+g[k].n,0);
-        accHtml += ha>la*1.3
-          ? `<div class="verdict"><b>The board is earning its keep.</b> Your Prime and Good hours are producing ${ha.toFixed(1)} fish per trip against ${la.toFixed(1)} on Fair and Slow. Keep fishing the windows it picks.</div>`
-          : la>ha*1.3
-            ? `<div class="verdict"><b>The board has it backwards for you.</b> Fair and Slow hours are out-producing Prime and Good, ${la.toFixed(1)} to ${ha.toFixed(1)}. Worth telling Claude so the ratings get retuned.</div>`
-            : `<div class="verdict"><b>No clear edge yet.</b> Prime and Good are running ${ha.toFixed(1)} fish per trip against ${la.toFixed(1)} on Fair and Slow, which is inside the noise at ${graded.length} trips. Keep logging.</div>`;
-      } else {
-        accHtml += `<div class="verdict">${graded.length} graded trip${graded.length===1?"":"s"} so far. It takes about six before this comparison means anything.</div>`;
-      }
-      accHtml+=`</div>`;
-    }
-    el.innerHTML = `<div class="pat">`+tiles.map(([k,v,s])=>`<div class="ptile"><div class="k">${k}</div><div class="v">${v}<small>${s}</small></div></div>`).join("")+`</div>
-      <div class="triplist">${recent}</div>
-      ${skunks?`<p class="hint" style="margin-top:11px">${skunks} of ${total} trips were blanks. That is normal, and it is exactly what sharpens the comparisons above.</p>`:""}
-      ${accHtml}`;
-  }
-  async function persistModel(){
-    if(!DB) return;
-    try { await DB.doc("model/weights").set({ w:MODEL.w, n:MODEL.n, learned:MODEL.learned, ts:Date.now() }); } catch(e){}
-  }
-  function refreshModel(){
-    const m=learnFromLog(TRIPS);
-    WEEK_RANGE=null;                 // refitted weights move every score
-    const changed = JSON.stringify(m.w)!==JSON.stringify(MODEL.w);
-    MODEL=m;
-    renderModelPanel();
-    if(changed){ renderAll(); persistModel(); }
-  }
-  function renderModelPanel(){
-    const el=document.getElementById("modelPanel"); if(!el) return;
-    const rows=Object.keys(BAY_PRIOR).map(k=>{
-      const pr=BAY_PRIOR[k], now=MODEL.w[k], delta=now-pr;
-      return `<div class="fac"><span class="fk">${TERM_LABEL[k]}</span>
-        <span class="fb"><i style="width:${Math.round(now*100/0.35)}%"></i></span>
-        <span class="fv">${Math.round(now*100)}${Math.abs(delta)>=0.01?` <span style="color:${delta>0?'var(--b2)':'var(--muted)'}">${delta>0?"+":""}${Math.round(delta*100)}</span>`:""}</span></div>`;
-    }).join("");
-    let head, note;
-    if(MODEL.n===0){
-      head=`<div class="empty">The board is running on its starting weights: the author's prior, not your fish. Log four trips and it begins fitting them to what you actually catch.</div>`;
-      note="";
-    } else if(!MODEL.learned){
-      head=`<div class="empty">${MODEL.n} of 4 trips logged. At four the board starts refitting these weights against your own results.</div>`;
-      note="";
-    } else {
-      const strong=MODEL.notes.slice().sort((a,b)=>Math.abs(b.r)-Math.abs(a.r))[0];
-      head="";
-      note=strong
-        ? `<div class="verdict">Across your ${MODEL.n} logged trips, <b>${TERM_LABEL[strong.k].toLowerCase()}</b> ${strong.r>0?"tracks your catches more strongly than the starting weights assumed":"tracks your catches less than the starting weights assumed"}, so the board has shifted weight ${strong.r>0?"toward":"away from"} it. Numbers in green moved up, grey moved down. This is fitted to ${MODEL.n} trips and shrunk toward the prior, so it will keep moving.</div>`
-        : `<div class="verdict">Fitted across your ${MODEL.n} logged trips. No single factor has separated itself yet, so the weights are still close to where they started.</div>`;
-    }
-    el.innerHTML = head + (MODEL.n>=4?`<div class="facs">${rows}</div>`:"") + note;
-  }
-  renderPatterns();
-  renderModelPanel();
-
-  const LSKEY="biteboard.trips";
-  function lsLoad(){ try { return JSON.parse(localStorage.getItem(LSKEY)||"[]"); } catch(e){ return []; } }
-  function lsSave(a){ try { localStorage.setItem(LSKEY, JSON.stringify(a)); } catch(e){} }
-
-  (async function initStore(){
-    const state=document.getElementById("logState");
-    TRIPS = lsLoad(); renderPatterns(); refreshModel();
-    document.getElementById("logForm").hidden=false;
-    if(window.claude && window.claude.use){
-      try { DB = await window.claude.use("db"); } catch(e) { DB=null; }
-    }
-    if(DB){
-      // one-time lift of anything logged before syncing was switched on
-      try {
-        const probe = await DB.collection("trips").limit(1).get();
-        if(probe.empty){
-          const local = lsLoad();
-          for(const t of local){ try { await DB.collection("trips").add(t); } catch(e){} }
-          if(local.length) { try { localStorage.removeItem(LSKEY); } catch(e){} }
-        }
-      } catch(e){}
-      DB.collection("trips").orderBy("ts","desc").limit(200).onSnapshot(
-        snap => { TRIPS = snap.docs.map(x=>Object.assign({id:x.id}, x.data())); renderPatterns(); refreshModel(); },
-        err => { const m=document.getElementById("logMsg"); m.className="logmsg err"; m.textContent="Couldn't load your log ("+err.code+")."; }
-      );
-    } else {
-      state.hidden=false;
-      state.textContent="Saving in this browser only. Open the published dashboard from your artifact gallery to get the synced log.";
-    }
-  })();
-
-  /* ---- resetting the trip board ----
-     Two steps, because it cannot be undone. Clears the synced collection AND
-     the local fallback, then puts the weights back to the author's prior. */
-  (function wireReset(){
-    const arm=document.getElementById("resetArm"), box=document.getElementById("resetBox"),
-          go=document.getElementById("resetGo"), no=document.getElementById("resetNo"),
-          msg=document.getElementById("resetMsg"), count=document.getElementById("resetCount");
-    if(!arm||!box||!go||!no) return;
-    function close(){ box.hidden=true; arm.hidden=false; }
-    arm.addEventListener("click", ()=>{
-      const n=(TRIPS||[]).length;
-      if(!n){ msg.className="logmsg"; msg.textContent="Nothing to reset, the board has no trips yet."; return; }
-      count.textContent = "You have "+n+" logged trip"+(n===1?"":"s")+".";
-      msg.textContent=""; box.hidden=false; arm.hidden=true; no.focus();
-    });
-    no.addEventListener("click", ()=>{ close(); msg.className="logmsg"; msg.textContent="Kept. Nothing was deleted."; });
-    go.addEventListener("click", async ()=>{
-      go.disabled=true; no.disabled=true;
-      msg.className="logmsg"; msg.textContent="Deleting...";
-      let removed=0, failed=0;
-      try {
-        if(DB){
-          // page through the collection so a log longer than one batch still clears
-          for(let pass=0; pass<20; pass++){
-            const snap=await DB.collection("trips").limit(100).get();
-            if(snap.empty) break;
-            for(const doc of snap.docs){
-              try { await DB.collection("trips").doc(doc.id).delete(); removed++; }
-              catch(e){ failed++; }
-            }
-            if(snap.docs.length<100) break;
-          }
-        } else {
-          removed=(TRIPS||[]).length;
-        }
-        try { localStorage.removeItem(LSKEY); } catch(e){}
-        if(!DB){ TRIPS=[]; renderPatterns(); refreshModel(); }
-        close();
-        msg.className="logmsg";
-        msg.textContent = failed
-          ? ("Deleted "+removed+", but "+failed+" would not delete. Try again.")
-          : ("Trip board reset. "+removed+" trip"+(removed===1?"":"s")+" deleted, weights back to the prior.");
-      } catch(err){
-        close();
-        msg.className="logmsg err";
-        msg.textContent="Couldn't reset ("+((err&&err.code)||"error")+"). Nothing was deleted.";
-      } finally { go.disabled=false; no.disabled=false; }
-    });
-  })();
-
-  document.getElementById("logForm").addEventListener("submit", async (e)=>{
-    e.preventDefault();
-    const msg=document.getElementById("logMsg"), btn=document.getElementById("logBtn");
-    const rec = {
-      date: document.getElementById("f-date").value,
-      spot: document.getElementById("f-spot").value,
-      phase: document.getElementById("f-phase").value,
-      rig: document.getElementById("f-rig").value,
-      species: document.getElementById("f-species").value,
-      count: Number(document.getElementById("f-count").value)||0,
-      notes: document.getElementById("f-notes").value.trim(),
-      time: document.getElementById("f-time").value,
-      ts: Date.now(),
-    };
-    // record what the board predicted for that exact date and hour, so it can be graded
-    rec.fc = snapshotFor(rec.date, rec.time);
-    btn.disabled=true; msg.className="logmsg"; msg.textContent="Saving...";
-    try {
-      if(DB){
-        await DB.collection("trips").add(rec);
-      } else {
-        TRIPS = [rec].concat(TRIPS); lsSave(TRIPS); renderPatterns(); refreshModel();
-      }
-      msg.textContent = rec.fc ? ("Logged. Board had called that hour "+rec.fc.rating+".") : "Logged. That date is outside the forecast window, so it is not graded.";
-      document.getElementById("f-count").value=0; document.getElementById("f-notes").value="";
-    } catch(err) {
-      msg.className="logmsg err";
-      msg.textContent = (err && err.code==="quota_exceeded") ? "Log is full, delete some old trips." : "Couldn't save ("+((err&&err.code)||"error")+"). Try again.";
-    } finally { btn.disabled=false; }
-  });
 
 
   /* ================= LIVE DATA (website build) =================
