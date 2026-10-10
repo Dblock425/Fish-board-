@@ -3,31 +3,40 @@
 San Diego Bite Board -- data fetcher.
 
 Runs on GitHub Actions, where outbound internet is open, and writes data.json
-to the repo. Claude's cloud cannot reach NOAA or FishNotify directly, so this
-robot does the fetching and hands the numbers back through GitHub.
+to the repo. Claude's cloud cannot reach NOAA or the weather APIs directly, so
+this robot does the fetching and hands the numbers back through GitHub.
 
 Sources (all free, no API key):
-  - NOAA CO-OPS  : exact tide predictions, station 9410170 (San Diego bay)
-  - Open-Meteo   : wind, swell, water temp, sunrise/sunset
-  - moon         : computed here (astronomy, deterministic)
+  - NOAA CO-OPS   : exact tide predictions, station 9410170 (San Diego bay)
+  - NWS / weather.gov : local air temperature, wind and conditions for the spot
+  - Open-Meteo    : reliable base (sunrise/sunset, temp/wind fallback) + marine
+                    swell and sea-surface temperature
+  - moon          : computed here (astronomy, deterministic)
 """
-import json, math, datetime, urllib.request, urllib.parse
+import json, math, re, datetime, urllib.request, urllib.parse
 
 STATION = "9410170"
-LAT, LON   = 32.7157, -117.1730     # San Diego bay
+# The fishing area itself (Shelter Island / San Diego Bay), so the weather
+# matches where you actually fish rather than downtown.
+LAT, LON   = 32.7090, -117.2280
 MLAT, MLON = 32.6700, -117.2700     # just offshore (Point Loma) for swell/SST
 TZ = "America/Los_Angeles"
+UA = "bite-board/1.0 (dtorressd@gmail.com)"
 
 def get_json(url, tries=3):
     err = None
     for _ in range(tries):
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "bite-board/1.0"})
+            req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "application/json"})
             with urllib.request.urlopen(req, timeout=40) as r:
                 return json.load(r)
         except Exception as e:
             err = e
     raise RuntimeError("fetch failed: %s (%s)" % (url, err))
+
+def max_num(s):
+    nums = [int(x) for x in re.findall(r"\d+", s or "")]
+    return max(nums) if nums else None
 
 # ---- today in Pacific time (offset good enough for picking the date) ----
 now_utc = datetime.datetime.now(datetime.timezone.utc)
@@ -48,15 +57,50 @@ tides = [{"t": p["t"], "v": round(float(p["v"]), 2), "type": p["type"]}
 if not tides:
     raise RuntimeError("NOAA returned no tide predictions")
 
-# ---- 2) Open-Meteo land forecast (wind, sky, precip, sun) ----
+# ---- 2) Open-Meteo land forecast: the reliable base (sun, temp, wind, sky) ----
 q = urllib.parse.urlencode({
     "latitude": LAT, "longitude": LON,
-    "daily": "weather_code,wind_speed_10m_max,precipitation_sum,sunrise,sunset",
-    "wind_speed_unit": "mph", "precipitation_unit": "inch",
+    "daily": "weather_code,temperature_2m_max,temperature_2m_min,wind_speed_10m_max,precipitation_probability_max,sunrise,sunset",
+    "temperature_unit": "fahrenheit", "wind_speed_unit": "mph", "precipitation_unit": "inch",
     "timezone": TZ, "forecast_days": 9})
 land = get_json("https://api.open-meteo.com/v1/forecast?" + q)["daily"]
 
-# ---- 3) Open-Meteo marine (swell, sea-surface temp) -- optional ----
+SKY = {0:"Clear", 1:"Mostly clear", 2:"Partly cloudy", 3:"Overcast",
+       45:"Fog", 48:"Fog", 51:"Light drizzle", 53:"Drizzle", 55:"Drizzle",
+       61:"Light rain", 63:"Rain", 65:"Heavy rain", 80:"Rain showers",
+       81:"Rain showers", 82:"Heavy showers", 95:"Thunderstorms"}
+
+# ---- 3) NWS / weather.gov: local, official air temp + wind + conditions ----
+# Overrides the Open-Meteo base where available; if NWS is down, the base stands.
+nws_hi, nws_lo, nws_sky, nws_wind, nws_pop = {}, {}, {}, {}, {}
+current = None
+try:
+    pt = get_json("https://api.weather.gov/points/%.4f,%.4f" % (LAT, LON))["properties"]
+    fc = get_json(pt["forecast"])["properties"]["periods"]
+    for p in fc:
+        ds = p["startTime"][:10]
+        t = p.get("temperature")
+        w = max_num(p.get("windSpeed"))
+        pop = (p.get("probabilityOfPrecipitation") or {}).get("value")
+        if p.get("isDaytime"):
+            if t is not None: nws_hi[ds] = max(nws_hi.get(ds, -999), t)
+            nws_sky[ds] = p.get("shortForecast")
+            if w is not None: nws_wind[ds] = max(nws_wind.get(ds, 0), w)
+            if pop is not None: nws_pop[ds] = max(nws_pop.get(ds, 0), pop)
+        else:
+            if t is not None: nws_lo[ds] = min(nws_lo.get(ds, 999), t)
+            nws_sky.setdefault(ds, p.get("shortForecast"))
+            if w is not None: nws_wind[ds] = max(nws_wind.get(ds, 0), w)
+    try:
+        hr = get_json(pt["forecastHourly"])["properties"]["periods"][0]
+        current = {"temp_f": hr.get("temperature"), "wind_mph": max_num(hr.get("windSpeed")),
+                   "sky": hr.get("shortForecast"), "time": hr.get("startTime")}
+    except Exception as e:
+        print("nws hourly skipped:", e)
+except Exception as e:
+    print("NWS fetch skipped, using Open-Meteo base:", e)
+
+# ---- 4) Open-Meteo marine (swell, sea-surface temp) -- optional ----
 swell_by, sst_by = {}, {}
 try:
     mq = urllib.parse.urlencode({
@@ -78,7 +122,7 @@ try:
 except Exception as e:
     print("marine fetch skipped:", e)
 
-# ---- 4) moon (computed) ----
+# ---- 5) moon (computed) ----
 def moon(dt):
     y, m, d = dt.year, dt.month, dt.day
     if m <= 2:
@@ -109,16 +153,28 @@ for i in range(9):
     nm, il, tr, uf = moon(dt)
     def g(key):
         return land[key][j]
+    code = g("weather_code")
+    hi = nws_hi.get(ds)
+    if hi is None and g("temperature_2m_max") is not None: hi = round(g("temperature_2m_max"))
+    lo = nws_lo.get(ds)
+    if lo is None and g("temperature_2m_min") is not None: lo = round(g("temperature_2m_min"))
+    wind = nws_wind.get(ds)
+    if wind is None and g("wind_speed_10m_max") is not None: wind = round(g("wind_speed_10m_max"))
+    sky = nws_sky.get(ds) or SKY.get(code, "")
+    pop = nws_pop.get(ds)
     days.append({
         "date": ds,
         "dow": dt.strftime("%a"),
         "sunrise": (g("sunrise") or "")[11:16],
         "sunset": (g("sunset") or "")[11:16],
-        "wind_mph": None if g("wind_speed_10m_max") is None else round(g("wind_speed_10m_max")),
+        "wind_mph": wind,
         "swell_ft": None if swell_by.get(ds) is None else round(swell_by[ds], 1),
         "water_f": sst_by.get(ds),
-        "weather_code": g("weather_code"),
-        "precip_in": g("precipitation_sum"),
+        "temp_hi_f": hi, "temp_lo_f": lo,
+        "sky": sky,
+        "weather_code": code,
+        "precip_pct": pop,
+        "precip_in": g("precipitation_probability_max"),
         "moon_phase": nm, "moon_illum": il,
         "moon_transit": tr, "moon_underfoot": uf,
     })
@@ -126,9 +182,10 @@ for i in range(9):
 out = {
     "generated_at": now_utc.replace(microsecond=0).isoformat(),
     "station": STATION, "lat": LAT, "lon": LON,
-    "note": "Fetched by GitHub Actions. Tides exact (NOAA), weather from Open-Meteo, moon computed.",
+    "note": "Fetched by GitHub Actions. Tides exact (NOAA); air temp, wind and conditions from NWS (weather.gov); swell and water temp from Open-Meteo; moon computed.",
+    "current": current,
     "tides": tides, "days": days,
 }
 with open("data.json", "w") as f:
     json.dump(out, f, indent=2)
-print("wrote data.json: %d tide extremes, %d days" % (len(tides), len(days)))
+print("wrote data.json: %d tide extremes, %d days; current=%s" % (len(tides), len(days), bool(current)))
