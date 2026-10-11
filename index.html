@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>San Diego Bite Board</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f8f9fd"><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"><link rel="apple-touch-icon" href="icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Bite Board"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px);overflow-x:hidden}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>San Diego Bite Board</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f8f9fd"><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"><link rel="apple-touch-icon" href="icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Bite Board"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px);overflow-x:hidden}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><meta name="description" content="When and where to fish San Diego Bay. Live tides, weather and hour-by-hour bite scores."><meta property="og:title" content="San Diego Bite Board"><meta property="og:description" content="When and where to fish San Diego Bay. Live tides, weather and hour-by-hour bite scores."><meta property="og:type" content="website"><meta property="og:url" content="https://dblock425.github.io/Fish-board-/"><meta property="og:image" content="https://dblock425.github.io/Fish-board-/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="San Diego Bite Board"><meta name="twitter:description" content="When and where to fish San Diego Bay. Live tides, weather and hour-by-hour bite scores."><meta name="twitter:image" content="https://dblock425.github.io/Fish-board-/og-image.png"></head><body>
 <title>San Diego Bite Board</title>
 <meta name="description" content="A San Diego tide instrument: eight days of bay water read as five kinds of fishing day, one-tap "go now" with spot, rig and first cast, and a catch log that retunes the model to your own fish.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;600&family=IBM+Plex+Mono:wght@400;600&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800;900&display=swap">
@@ -1108,6 +1108,10 @@ button.vbetter:hover{ border-color:var(--amber); }
 .wxsky{ font-size:14px; font-weight:600; color:var(--ink2); line-height:1.2; }
 .wxmeta{ font-size:12px; color:var(--mut); line-height:1.2; }
 .tlfishkey{ color:var(--go); }
+.tidechip{ display:inline-flex; align-items:center; gap:6px; margin-top:12px; font-size:13px; font-weight:500;
+  color:var(--amber-ink); background:var(--amber-dim); padding:8px 14px; border-radius:999px; }
+.tidechip b{ font-weight:700; }
+.tcarrow{ font-weight:700; font-size:15px; }
 .timecard{ margin-top:16px; background:var(--panel); border-radius:var(--r-l,20px); padding:16px 16px 13px; box-shadow:var(--m-shadow,0 1px 3px rgba(0,0,0,.12)); border:0; }
 .tlhead{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
 .tlk{ font-size:13px; font-weight:600; color:var(--ink2); }
@@ -1127,7 +1131,20 @@ button.vbetter:hover{ border-color:var(--amber); }
 .rigk{ font-size:11px; font-weight:600; letter-spacing:.07em; text-transform:uppercase; color:var(--mut); }
 .rigtx b{ font-size:16px; font-weight:600; color:var(--ink); line-height:1.25; }
 .rigtx p{ font-size:13px; color:var(--mut); line-height:1.4; margin:0; }
-.rigdot{ color:var(--amber-ink); font-size:26px; flex:none; line-height:1; }
+.rigdot{ color:var(--amber-ink); font-size:16px; flex:none; line-height:1; transition:transform .2s; }
+.rigcard.open .rigdot{ transform:rotate(180deg); }
+.rigdetail{ margin-top:8px; background:var(--panel); border-radius:16px; padding:6px 16px; box-shadow:var(--m-shadow,0 1px 3px rgba(0,0,0,.1)); }
+.rdrow{ display:grid; grid-template-columns:96px 1fr; gap:12px; padding:11px 0; border-bottom:1px solid var(--key); }
+.rdrow:last-child{ border-bottom:0; }
+.rdk{ font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--mut); padding-top:2px; }
+.rdv{ font-size:14px; color:var(--ink2); line-height:1.5; }
+.rdv b{ color:var(--ink); font-weight:600; }
+.bbtoast{ position:fixed; left:50%; bottom:calc(84px + env(safe-area-inset-bottom,0px)); transform:translate(-50%,10px);
+  z-index:120; background:var(--ink); color:var(--bg); font-family:"Roboto",sans-serif; font-size:13px; font-weight:500;
+  padding:11px 18px; border-radius:999px; box-shadow:0 6px 20px rgba(0,0,0,.28); opacity:0; pointer-events:none; transition:opacity .2s, transform .2s; max-width:88vw; text-align:center; }
+.bbtoast.on{ opacity:1; transform:translate(-50%,0); }
+.helptip{ font-size:13px; color:var(--mut); margin-top:14px; line-height:1.5; padding-top:12px; border-top:1px solid var(--key); }
+.helptip b{ color:var(--ink2); font-weight:600; }
 .t3better{ display:flex; align-items:center; gap:9px; flex-wrap:wrap; width:100%; text-align:left; font:inherit; cursor:pointer;
   margin-top:14px; background:var(--panel); border:0; border-left:3px solid var(--amber); border-radius:14px; padding:13px 15px; box-shadow:var(--m-shadow,0 1px 3px rgba(0,0,0,.1)); color:inherit; }
 .t3better .bk{ font-size:11px; font-weight:600; letter-spacing:.07em; text-transform:uppercase; color:var(--amber-ink); }
@@ -1180,6 +1197,9 @@ button.vbetter:hover{ border-color:var(--amber); }
       <option value="classic">Classic</option>
       <option value="apple">Apple</option>
     </select>
+    <button class="iconbtn" id="shareBtn" type="button" title="Share this app" aria-label="Share this app">
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.3 10.8l7.4-4.3M8.3 13.2l7.4 4.3"/></svg>
+    </button>
     <button class="iconbtn" id="helpBtn" type="button" title="How this works" aria-label="How this works">&#63;</button>
     <button class="iconbtn" id="refreshBtn" type="button" title="Refresh tide data" aria-label="Refresh tide data">&#8635;</button>
     <button class="iconbtn" id="themeBtn" type="button" title="Switch theme" aria-label="Switch theme">&#9681;</button>
@@ -1193,9 +1213,6 @@ button.vbetter:hover{ border-color:var(--amber); }
   <button type="button" id="mWeek" role="tab" aria-selected="false" aria-label="Week">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.3" y="4.6" width="17.4" height="15.4" rx="2.2"/><path d="M3.3 9h17.4M8 2.8v3.4M16 2.8v3.4"/></svg>
     <span>Week</span></button>
-  <button type="button" id="mGear" role="tab" aria-selected="false" aria-label="Gear">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 3.5v9.3a4 4 0 1 1-4-4h5.5"/><circle cx="16.5" cy="3.5" r="1.1" fill="currentColor" stroke="none"/></svg>
-    <span>Gear</span></button>
   <button type="button" id="mFind" role="tab" aria-selected="false" aria-label="Find a spot">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21.5c4.2-4.2 6.3-7.6 6.3-10.6a6.3 6.3 0 0 0-12.6 0c0 3 2.1 6.4 6.3 10.6Z"/><circle cx="12" cy="10.8" r="2.3"/></svg>
     <span>Find</span></button>
@@ -1296,9 +1313,10 @@ button.vbetter:hover{ border-color:var(--amber); }
     <ul>
       <li>Every hour gets a <b>0 to 100 score</b>. Higher is better, and <b>green means go</b>.</li>
       <li><b>Drag the timeline</b> to check any hour; the <b>&#128031; fish</b> mark the best windows.</li>
-      <li>Use the tabs at the bottom to get around.</li>
-      <li><b>Week</b> compares the days, <b>Gear</b> tells you what to tie on, <b>Find</b> maps the spots.</li>
+      <li>Tap <b>Tie on</b> to see the rig for the hour you picked.</li>
+      <li>Bottom tabs: <b>Week</b> compares the days, <b>Find</b> maps the spots.</li>
     </ul>
+    <p class="helptip">Tip: tap <b>Share</b> (top right) to send this to a friend, or add it to your home screen.</p>
     <button class="btn" id="helpClose" type="button">Got it, let's fish</button>
   </div>
 </div>
@@ -1935,6 +1953,21 @@ button.vbetter:hover{ border-color:var(--amber); }
     </div>`;
   }
 
+  function nextTide(){
+    const np=nowPos(); const nowAbs = np.inRange ? np.abs : (tlDayIdx()*1440 + (tlDay().sr||420));
+    for(let i=0;i<EXT.length;i++){
+      if(EXT[i][0] > nowAbs){
+        const h=EXT[i][1], prevH=i>0?EXT[i-1][1]:h;
+        return { isHigh:h>=prevH, ft:h, t:EXT[i][0] };
+      }
+    }
+    return null;
+  }
+  function tideChipHTML(){
+    const nt=nextTide(); if(!nt) return "";
+    return `<div class="tidechip"><span class="tcarrow">${nt.isHigh?"↑":"↓"}</span> Next ${nt.isHigh?"high":"low"} tide <b>${nt.ft.toFixed(1)} ft</b> at <b>${fmtHM(nt.t)}</b></div>`;
+  }
+
   function fishChips(){
     const order=["bay","jetty","pier","surf"];
     return `<div class="fchips">`+order.map(t=>{
@@ -1974,6 +2007,10 @@ button.vbetter:hover{ border-color:var(--amber); }
     return `<svg id="tlSvg" class="tlsvg" viewBox="0 0 ${TL_W} ${TL_H}" width="100%" tabindex="0" role="slider"
         aria-valuemin="${TL_X0}" aria-valuemax="${TL_X1}" aria-valuenow="${Math.round(selM)}" aria-label="Drag to see any hour's bite score">
       <defs><linearGradient id="tlg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--dial-hi)" stop-opacity=".40"/><stop offset="1" stop-color="var(--dial-hi)" stop-opacity="0"/></linearGradient></defs>
+      ${(function(){ const yb=TL_H-TL_PADB; let n="";
+        if(d.sr>TL_X0){ n+=`<rect x="${TL_PADX}" y="0" width="${(tlX(Math.min(d.sr,TL_X1))-TL_PADX).toFixed(1)}" height="${yb}" fill="var(--dial-night)" opacity=".45"/>`; }
+        if(d.ss<TL_X1){ const x1=tlX(Math.max(d.ss,TL_X0)); n+=`<rect x="${x1.toFixed(1)}" y="0" width="${(TL_W-TL_PADX-x1).toFixed(1)}" height="${yb}" fill="var(--dial-night)" opacity=".45"/>`; }
+        return n; })()}
       <path d="${area}" fill="url(#tlg)"/>
       <path d="${line}" fill="none" stroke="var(--dial-hi)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
       ${fish}
@@ -1990,8 +2027,14 @@ button.vbetter:hover{ border-color:var(--amber); }
     let sub=rig.split(".").slice(1).join(".").trim();
     if(!sub) sub=(g.M&&g.M.tag)||"The full rig, hooks and weights";
     return `<span class="rigic">&#127907;</span>
-      <span class="rigtx"><span class="rigk">Tie on &middot; tap for all gear</span><b>${title}</b><p>${sub}</p></span>
-      <span class="rigdot">&rsaquo;</span>`;
+      <span class="rigtx"><span class="rigk">Tie on &middot; tap for the full rig</span><b>${title}</b><p>${sub}</p></span>
+      <span class="rigdot" aria-hidden="true">&#9662;</span>`;
+  }
+  function t3RigDetailHTML(d,m){
+    const pb=playbookFor(d,m), g=goPlan(d,m,false);
+    const spot=(g.spot&&g.spot.name)||"";
+    const rows=[["Spot",spot],["Rig",pb&&pb.rig],["How to fish it",pb&&pb.how],["Watch for",pb&&pb.expect]].filter(r=>r[1]);
+    return rows.map(([k,v])=>`<div class="rdrow"><span class="rdk">${k}</span><span class="rdv">${v}</span></div>`).join("");
   }
 
   function t3BetterHTML(){
@@ -2014,6 +2057,7 @@ button.vbetter:hover{ border-color:var(--amber); }
     }
     const v=document.getElementById("t3Verdict"); if(v) v.innerHTML=t3VerdictHTML(d,m);
     const rg=document.getElementById("t3Rig"); if(rg) rg.innerHTML=t3RigInner(d,m);
+    const rd=document.getElementById("t3RigDetail"); if(rd && !rd.hidden) rd.innerHTML=t3RigDetailHTML(d,m);
     const bk=document.getElementById("tlBack2"); if(bk) bk.addEventListener("click", ()=>{ TL_MIN=null; paintTimeline(); });
   }
 
@@ -2052,13 +2096,15 @@ button.vbetter:hover{ border-color:var(--amber); }
       ${fishChips()}
       <div id="t3Verdict" class="t3verdict">${t3VerdictHTML(d,m)}</div>
       ${weatherStrip(d)}
+      ${tideChipHTML()}
       <div class="card timecard">
         <div class="tlhead"><span class="tlk">Today, hour by hour</span><button class="tlnow" type="button" id="tlNow">Now</button></div>
         <div class="tlwrap">${timelineSVG(d,m)}</div>
         <div class="tlaxis"><span>6a</span><span>9a</span><span>12p</span><span>3p</span><span>6p</span><span>9p</span></div>
         <p class="tlhint">Drag the dot to check any hour &middot; <span class="tlfishkey">&#128031;</span> marks the best bite windows.</p>
       </div>
-      <button class="rigcard" type="button" id="t3Rig">${t3RigInner(d,m)}</button>
+      <button class="rigcard" type="button" id="t3Rig" aria-expanded="false" aria-controls="t3RigDetail">${t3RigInner(d,m)}</button>
+      <div class="rigdetail" id="t3RigDetail" hidden>${t3RigDetailHTML(d,m)}</div>
       ${t3BetterHTML()}
     </section>`;
   }
@@ -2655,17 +2701,15 @@ button.vbetter:hover{ border-color:var(--amber); }
     document.getElementById("detail").hidden=true;
     document.getElementById("week").hidden  = (m!=="week");
     const learnEl=document.getElementById("learn"); if(learnEl) learnEl.hidden = true;
-    const gearEl=document.getElementById("gear"); if(gearEl) gearEl.hidden = (m!=="gear");
+    const gearEl=document.getElementById("gear"); if(gearEl) gearEl.hidden = true;
     const findEl=document.getElementById("find"); if(findEl) findEl.hidden = (m!=="find");
-    const isApp = !(m==="week"||m==="gear"||m==="find");
+    const isApp = !(m==="week"||m==="find");
     document.getElementById("app").hidden = !isApp;
     if(m==="gonow"){ renderApp(); window.scrollTo(0,0); return; }
     document.getElementById("mCall").setAttribute("aria-selected", isApp);
     document.getElementById("mWeek").setAttribute("aria-selected", m==="week");
-    const mg=document.getElementById("mGear"); if(mg) mg.setAttribute("aria-selected", m==="gear");
     const mf=document.getElementById("mFind"); if(mf) mf.setAttribute("aria-selected", m==="find");
-    if(m==="gear"){ renderGear(); }
-    else if(m==="find"){ renderFind(); }
+    if(m==="find"){ renderFind(); }
     else if(m!=="week") renderApp();
     window.scrollTo(0,0);
   }
@@ -2722,7 +2766,12 @@ button.vbetter:hover{ border-color:var(--amber); }
       renderSpots(); TL_MIN=null; renderApp();
     }));
     const tn=document.getElementById("tlNow"); if(tn) tn.addEventListener("click", ()=>{ TL_MIN=null; paintTimeline(); });
-    const rg=document.getElementById("t3Rig"); if(rg) rg.addEventListener("click", ()=>setMode("gear"));
+    const rg=document.getElementById("t3Rig"); const rd=document.getElementById("t3RigDetail");
+    if(rg&&rd) rg.addEventListener("click", ()=>{
+      const open=rd.hidden; rd.hidden=!open; rg.setAttribute("aria-expanded", open?"true":"false");
+      rg.classList.toggle("open", open);
+      if(open){ rd.innerHTML=t3RigDetailHTML(tlDay(), tlMin()); }
+    });
     const bt=document.getElementById("t3Better"); if(bt) bt.addEventListener("click", ()=>openDay(+bt.dataset.di));
     const bk=document.getElementById("tlBack2"); if(bk) bk.addEventListener("click", ()=>{ TL_MIN=null; paintTimeline(); });
   }
@@ -2757,8 +2806,24 @@ button.vbetter:hover{ border-color:var(--amber); }
   { const _hb=document.getElementById("homeBtn"); if(_hb) _hb.addEventListener("click", ()=>{
     document.getElementById("detail").hidden=true; setMode("call"); window.scrollTo(0,0);
   }); }
-  { const _mg=document.getElementById("mGear"); if(_mg) _mg.addEventListener("click", ()=>setMode("gear")); }
   { const _mf=document.getElementById("mFind"); if(_mf) _mf.addEventListener("click", ()=>setMode("find")); }
+  /* ---- Share: send the public link to a friend ---- */
+  function toast(msg){
+    let t=document.getElementById("bbToast");
+    if(!t){ t=document.createElement("div"); t.id="bbToast"; t.className="bbtoast"; document.body.appendChild(t); }
+    t.textContent=msg; t.classList.add("on");
+    clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove("on"), 2400);
+  }
+  function shareApp(){
+    const url="https://dblock425.github.io/Fish-board-/";
+    const data={ title:"San Diego Bite Board",
+      text:"When and where to fish San Diego Bay — live tides, weather and hour-by-hour bite scores.", url };
+    if(navigator.share){ navigator.share(data).catch(()=>{}); return; }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(()=>toast("Link copied — send it to a friend")).catch(()=>toast(url));
+    } else { try{ window.prompt("Copy this link:", url); }catch(e){} }
+  }
+  { const _sb=document.getElementById("shareBtn"); if(_sb) _sb.addEventListener("click", shareApp); }
   (function help(){
     const m=document.getElementById("helpModal"); if(!m) return;
     const open=()=>{ m.hidden=false; };
