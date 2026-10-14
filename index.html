@@ -1151,6 +1151,44 @@ button.vbetter:hover{ border-color:var(--amber); }
 .t3better b{ font-size:16px; font-weight:600; color:var(--ink); }
 .t3better .bsc{ font-size:12px; color:var(--mut); }
 .t3better .bspot{ font-size:12px; color:var(--mut); margin-left:auto; }
+/* ---- confidence read ---- */
+.confchip{ display:inline-flex; align-items:center; gap:7px; margin-top:12px; font-size:12.5px; font-weight:500;
+  padding:6px 12px; border-radius:999px; background:var(--panel2); color:var(--ink2); }
+.confchip b{ font-weight:700; color:var(--ink); }
+.confchip .cfnote{ color:var(--mut); font-weight:500; }
+.confchip .cfdot{ width:8px; height:8px; border-radius:50%; flex:none; background:var(--mut); }
+.confchip.solid .cfdot{ background:var(--go); } .confchip.solid b{ color:var(--go); }
+.confchip.partial .cfdot{ background:var(--warn); }
+.confchip.rough .cfdot{ background:var(--bad); }
+/* ---- factor strength meters ---- */
+.facs{ margin-top:16px; background:var(--panel); border-radius:var(--r-l,20px); padding:15px 16px 4px; box-shadow:var(--m-shadow,0 1px 3px rgba(0,0,0,.1)); }
+.fachd{ font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--mut); margin-bottom:12px; }
+.fmrow{ display:flex; align-items:flex-start; gap:11px; margin-bottom:13px; }
+.faca{ width:20px; height:20px; border-radius:50%; display:grid; place-items:center; font-size:12px; font-weight:700; flex:none; margin-top:1px;
+  background:var(--panel2); color:var(--mut); }
+.fmrow.up .faca{ background:var(--go-wash,rgba(80,170,80,.16)); color:var(--go); }
+.fmrow.down .faca{ background:var(--marg-wash,rgba(200,140,0,.16)); color:var(--bad); }
+.facb{ flex:1; min-width:0; }
+.fack{ font-size:13.5px; font-weight:600; color:var(--ink); margin-bottom:6px; }
+.facbar{ height:6px; border-radius:999px; background:var(--sunk,rgba(120,120,120,.18)); overflow:hidden; }
+.facbar i{ display:block; height:100%; border-radius:999px; background:var(--mut); }
+.fmrow.up .facbar i{ background:var(--go); }
+.fmrow.down .facbar i{ background:var(--bad); }
+.facr{ font-size:11.5px; color:var(--mut); line-height:1.4; margin-top:6px; }
+/* ---- rig: bait/lure toggle + diagram ---- */
+.rigseg{ display:flex; gap:6px; margin:10px 0 14px; }
+.rsg{ flex:1; font:inherit; font-family:"Roboto","Helvetica Neue",Arial,sans-serif; font-size:13px; font-weight:600; cursor:pointer;
+  color:var(--mut); background:var(--panel2); border:1px solid var(--key); padding:9px 8px; border-radius:999px; }
+.rsg.on{ background:var(--amber-dim); color:var(--amber-ink); border-color:transparent; }
+.rsg:active{ transform:scale(.97); }
+.rigbody{ display:flex; gap:16px; align-items:center; padding:2px 0 14px; border-bottom:1px solid var(--key); margin-bottom:2px; }
+.rigdia{ flex:none; width:74px; align-self:stretch; display:flex; align-items:center; }
+.rigsvg{ display:block; width:74px; height:auto; }
+.rigspec{ flex:1; min-width:0; }
+.rigspec b{ font-size:15px; font-weight:700; color:var(--ink); display:block; margin-bottom:6px; }
+.rigspec ul{ margin:0 0 7px; padding-left:16px; }
+.rigspec li{ font-size:13px; color:var(--ink2); line-height:1.5; }
+.rigspec p{ margin:0; font-size:12.5px; color:var(--mut); line-height:1.45; }
 
 /* ---- Gear tab: fish/bait suggestion picker ---- */
 .pseg{ display:flex; gap:6px; margin:2px 0 12px; }
@@ -1335,6 +1373,8 @@ button.vbetter:hover{ border-color:var(--amber); }
     surf:  { name:"Surf",         short:"Surf",  species:"barred surfperch, corbina and halibut" },
   };
   let FISH_TYPE = "bay";
+  let RIG_PICK = "either";   /* either | bait | lure, for the rig card */
+  try{ const _rp=localStorage.getItem("biteboard.rigpick"); if(_rp) RIG_PICK=_rp; }catch(e){}
   const SPOT_LL = {
     "Shelter Island Pier":[32.7089,-117.2283], "Harbor Island":[32.7266,-117.2066],
     "Harbor Island / Embarcadero":[32.7266,-117.2066], "Mission Bay (Dana Landing)":[32.7705,-117.2345],
@@ -1976,20 +2016,61 @@ button.vbetter:hover{ border-color:var(--amber); }
     }).join("")+`</div>`;
   }
 
+  /* ---- read confidence: say how much live data is actually behind the score ----
+     Tide and moon are computed exact from NOAA, so the honest variable is the
+     forecast feeds (swell, wind, water temp) and how old the last refresh is. */
+  function listJoin(a){ return a.length<=1 ? (a[0]||"") : a.slice(0,-1).join(", ")+" and "+a[a.length-1]; }
+  function readConfidence(d){
+    const miss=[];
+    if(d.swell==null) miss.push("swell");
+    if(d.wind==null) miss.push("wind");
+    if(nearestWater(d.di).est) miss.push("water temp");
+    const age=dataAge();
+    const n=miss.length;
+    let level = (n===0 && age.fresh) ? "solid" : (n>=2 || age.stale) ? "rough" : "partial";
+    return { level, miss, age };
+  }
+  function confChipHTML(d){
+    const c=readConfidence(d);
+    const word = c.level==="solid" ? "Solid read" : c.level==="partial" ? "Fair read" : "Rough read";
+    let note;
+    if(c.miss.length) note = "no "+listJoin(c.miss)+" data";
+    else if(c.age.stale) note = "scores "+c.age.days+" days old";
+    else if(c.age.aging) note = "scores a day old";
+    else note = "tide, moon, swell, wind and water all in";
+    return `<div class="confchip ${c.level}" title="How much live data is behind this score"><span class="cfdot"></span><b>${word}</b> <span class="cfnote">&middot; ${note}</span></div>`;
+  }
+
+  /* ---- factor strength meters: the few readings actually moving the score ---- */
+  function factorMeters(d,m){
+    const w=probeWin(d,m), t=bayScore(d,w).terms;
+    const ranked=Object.keys(t).map(k=>({ k, v:t[k].v, raw:t[k].raw, wt:(MODEL.w[k]||0) }))
+      .sort((a,b)=> (b.wt*Math.abs(b.v-0.5)) - (a.wt*Math.abs(a.v-0.5)) ).slice(0,4);
+    const rows=ranked.map(f=>{
+      const dir = f.v>=0.55 ? "up" : f.v<=0.40 ? "down" : "mid";
+      const arrow = dir==="up" ? "&uarr;" : dir==="down" ? "&darr;" : "&ndash;";
+      const pct=Math.round(Math.max(6,Math.min(100,f.v*100)));
+      return `<div class="fmrow ${dir}"><span class="faca">${arrow}</span><div class="facb">
+          <div class="fack">${TERM_LABEL[f.k]}</div>
+          <div class="facbar"><i style="width:${pct}%"></i></div>
+          <div class="facr">${f.raw}</div></div></div>`;
+    }).join("");
+    return `<div class="facs"><div class="fachd">What's driving this</div>${rows}</div>`;
+  }
+
   function t3VerdictHTML(d,m){
     const sc=tlScore(d,m), gt=goTier(sc), np=nowPos();
     const isNow = np.inRange && d.di===np.di && Math.abs(m-np.min)<=12;
     const slope=tideAt(d.di*1440+m+20)-tideAt(d.di*1440+m-20);
     const dir=slope>0.02?"rising":slope<-0.02?"falling":"slack";
     const g=goPlan(d,m,false);
-    const why=heroWhy(d,m);
-    const chips=why.good.map(x=>`<span class="wc g">${x}</span>`).join("")+why.weak.map(x=>`<span class="wc a">${x}</span>`).join("");
     const sub = isNow
       ? `<b>${g.spot.name}</b> &middot; right now`
       : `at <b>${fmtHM(m)}</b> &middot; ${dir} tide &middot; <button class="tlback" type="button" id="tlBack2">back to now</button>`;
     return `<div class="t3v"><span class="vword ${gt.c}">${gt.word}</span><span class="vscore">${sc}<small>/100</small></span></div>
       <p class="t3sub">${sub}</p>
-      ${chips?`<div class="whyrow">${chips}</div>`:""}`;
+      ${confChipHTML(d)}
+      ${factorMeters(d,m)}`;
   }
 
   function timelineSVG(d,selM){
@@ -2020,6 +2101,66 @@ button.vbetter:hover{ border-color:var(--amber); }
     </svg>`;
   }
 
+  /* ---- rig setups: a bait rig, a lure rig, and an all-round pick per water ---- */
+  const RIGSET = {
+    bay: {
+      either: { fam:"slider", name:"All-round fish-finder", specs:["Sliding egg sinker, 1/2 to 3/4 oz","Barrel swivel","18 to 24 in fluorocarbon leader","#2 to 1/0 live-bait hook"], note:"When nothing about the day is decisive, a fish-finder with fresh bait covers the most water." },
+      bait:   { fam:"slider", name:"Fish-finder rig", specs:["Sliding egg sinker, 1/2 to 3/4 oz","Barrel swivel","18 to 24 in fluorocarbon leader","#2 to 1/0 live-bait hook"], note:"Live anchovy or ghost shrimp on the bottom, worked along the channel edge." },
+      lure:   { fam:"dropshot", name:"Dropshot or weedless swimbait", specs:["3/8 oz dropshot weight or swimbait head","12 to 18 in dropshot leader","#1 to 1/0 hook","3 to 4 in swimbait"], note:"Slow, steady retrieve tight to structure. No jerking." }
+    },
+    jetty: {
+      either: { fam:"highlow", name:"All-round dropper rig", specs:["Pyramid or bank sinker, 2 to 4 oz","Two dropper loops","#1 to 2/0 hooks","Cut squid or anchovy"], note:"Fish the wash between the rocks: let it sit, then move a few feet and sit again." },
+      bait:   { fam:"highlow", name:"High-low dropper rig", specs:["Pyramid or bank sinker, 2 to 4 oz","Two dropper loops","#1 to 2/0 hooks","Cut squid or anchovy"], note:"Two baits at two depths finds whether they are hugging the rocks or up off them." },
+      lure:   { fam:"leadhead", name:"Leadhead swimbait or iron", specs:["3/4 to 1 oz leadhead","Short 20 lb leader","4 to 5 in swimbait, or a small surface iron"], note:"Cast parallel to the rocks and swim it just off the boulders." }
+    },
+    pier: {
+      either: { fam:"slider", name:"All-round fish-finder", specs:["Sliding sinker, 1 to 2 oz","Barrel swivel","24 in leader","#2 to 1/0 hook"], note:"Live or cut bait on the bottom, worked along the shadow line under the deck." },
+      bait:   { fam:"slider", name:"Fish-finder rig", specs:["Sliding sinker, 1 to 2 oz","Barrel swivel","24 in leader","#2 to 1/0 hook"], note:"Live or cut bait on the bottom; fish the shadow line under the deck." },
+      lure:   { fam:"dropshot", name:"Dropshot down the pilings", specs:["3/8 oz dropshot","Longer dropshot leader","#1 hook","3 in swimbait or grub"], note:"Drop straight down alongside a piling, slow lifts and long pauses." }
+    },
+    surf: {
+      either: { fam:"carolina", name:"All-round fish-finder", specs:["Pyramid sinker, 2 to 4 oz","Sliding sinker clip + swivel","18 to 24 in fluorocarbon leader","#4 to #6 circle hook"], note:"Sand crab or Gulp, cast to the trough and let the sweep work it." },
+      bait:   { fam:"carolina", name:"Carolina / fish-finder rig", specs:["Pyramid sinker, 2 to 4 oz","Sliding sinker clip + swivel","18 to 24 in fluorocarbon leader","#4 to #6 circle hook"], note:"Fresh sand crab is first choice; a Gulp sand worm is the backup." },
+      lure:   { fam:"leadhead", name:"Gulp grub or small spoon", specs:["1/2 to 1 oz bullet sinker","Swivel","24 in leader","2 in Gulp grub, or a small spoon"], note:"Fan-cast the trough and keep it moving just above the sand." }
+    }
+  };
+  function swellLine(d){
+    if(d.swell==null) return "No swell reading, so this is the all-round weight for an average day.";
+    return d.swell>=4 ? "Swell is up near "+d.swell+" ft, so go to the heavy end to hold bottom."
+         : d.swell<=2 ? "Swell is down near "+d.swell+" ft, so the light end holds fine."
+         : "Swell is moderate near "+d.swell+" ft, so the middle of the range holds.";
+  }
+  function rigSetup(d,m){
+    const ft = RIGSET[FISH_TYPE] ? FISH_TYPE : "bay";
+    return RIGSET[ft][RIG_PICK] || RIGSET[ft].either;
+  }
+  function rigDiagram(fam){
+    if(fam==="carolina") fam="slider";
+    const hk=(y)=>`<path d="M45 ${y} L45 ${y+22} Q45 ${y+34} 33 ${y+34} Q24 ${y+34} 24 ${y+25}" fill="none" stroke="var(--go)" stroke-width="2.4" stroke-linecap="round"/><path d="M24 ${y+25} l-3.5 -5 M24 ${y+25} l4.5 -4" stroke="var(--go)" stroke-width="2.4" stroke-linecap="round" fill="none"/>`;
+    const dhk=(y)=>`<path d="M45 ${y} L28 ${y} Q21 ${y} 21 ${y+8} Q21 ${y+14} 27 ${y+14}" fill="none" stroke="var(--go)" stroke-width="2.3" stroke-linecap="round"/><path d="M27 ${y+14} l-3.5 -3 M27 ${y+14} l3 -4.5" stroke="var(--go)" stroke-width="2.3" fill="none" stroke-linecap="round"/>`;
+    let body="";
+    if(fam==="slider"){
+      body=`<line x1="45" y1="6" x2="45" y2="92" stroke="var(--ink2)" stroke-width="2" stroke-linecap="round"/>
+        <ellipse cx="45" cy="30" rx="12" ry="7.5" fill="var(--amber-dim)" stroke="var(--amber-ink)" stroke-width="2"/>
+        <circle cx="45" cy="55" r="4" fill="none" stroke="var(--ink2)" stroke-width="2"/><circle cx="45" cy="62" r="4" fill="none" stroke="var(--ink2)" stroke-width="2"/>
+        ${hk(92)}`;
+    } else if(fam==="dropshot"){
+      body=`<line x1="45" y1="6" x2="45" y2="120" stroke="var(--ink2)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M45 52 L30 52 Q22 52 22 60 Q22 67 30 67" fill="none" stroke="var(--go)" stroke-width="2.4" stroke-linecap="round"/><path d="M30 67 l-4 -3 M30 67 l3 -4.5" stroke="var(--go)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+        <rect x="39" y="118" width="12" height="22" rx="4" fill="var(--amber-dim)" stroke="var(--amber-ink)" stroke-width="2"/>`;
+    } else if(fam==="highlow"){
+      body=`<line x1="45" y1="6" x2="45" y2="118" stroke="var(--ink2)" stroke-width="2" stroke-linecap="round"/>
+        ${dhk(40)}${dhk(76)}
+        <path d="M45 118 L55 140 L35 140 Z" fill="var(--amber-dim)" stroke="var(--amber-ink)" stroke-width="2" stroke-linejoin="round"/>`;
+    } else { /* leadhead */
+      body=`<line x1="45" y1="6" x2="45" y2="90" stroke="var(--ink2)" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="45" cy="99" r="9" fill="var(--amber-dim)" stroke="var(--amber-ink)" stroke-width="2"/>
+        <path d="M51 99 Q74 103 64 128 Q60 134 55 129 Q63 116 48 110 Z" fill="var(--go-wash,rgba(80,180,80,.18))" stroke="var(--go)" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M45 108 L45 126 Q45 136 36 136 Q29 136 29 129" fill="none" stroke="var(--go)" stroke-width="2.3" stroke-linecap="round"/>`;
+    }
+    return `<svg class="rigsvg" viewBox="0 0 90 148" width="74" role="img" aria-label="Rig diagram">${body}</svg>`;
+  }
+
   function t3RigInner(d,m){
     const g=goPlan(d,m,false);
     const rig=(g.M&&g.M.rig)||"";
@@ -2033,8 +2174,19 @@ button.vbetter:hover{ border-color:var(--amber); }
   function t3RigDetailHTML(d,m){
     const pb=playbookFor(d,m), g=goPlan(d,m,false);
     const spot=(g.spot&&g.spot.name)||"";
-    const rows=[["Spot",spot],["Rig",pb&&pb.rig],["How to fish it",pb&&pb.how],["Watch for",pb&&pb.expect]].filter(r=>r[1]);
-    return rows.map(([k,v])=>`<div class="rdrow"><span class="rdk">${k}</span><span class="rdv">${v}</span></div>`).join("");
+    const set=rigSetup(d,m);
+    const picks=[["either","Either"],["bait","Bait"],["lure","Lures"]];
+    const seg=picks.map(([v,l])=>`<button class="rsg ${RIG_PICK===v?'on':''}" type="button" data-pick="${v}">${l}</button>`).join("");
+    const bottomFam=(set.fam==="slider"||set.fam==="highlow"||set.fam==="carolina");
+    const note=set.note + (bottomFam?(" "+swellLine(d)):"");
+    const specs=set.specs.map(s=>`<li>${s}</li>`).join("");
+    const rows=[["Spot",spot],["How to fish it",pb&&pb.how],["Watch for",pb&&pb.expect]].filter(r=>r[1]);
+    return `<div class="rigseg">${seg}</div>
+      <div class="rigbody">
+        <div class="rigdia">${rigDiagram(set.fam)}</div>
+        <div class="rigspec"><b>${set.name}</b><ul>${specs}</ul><p>${note}</p></div>
+      </div>
+      ${rows.map(([k,v])=>`<div class="rdrow"><span class="rdk">${k}</span><span class="rdv">${v}</span></div>`).join("")}`;
   }
 
   function t3BetterHTML(){
@@ -2771,6 +2923,12 @@ button.vbetter:hover{ border-color:var(--amber); }
       const open=rd.hidden; rd.hidden=!open; rg.setAttribute("aria-expanded", open?"true":"false");
       rg.classList.toggle("open", open);
       if(open){ rd.innerHTML=t3RigDetailHTML(tlDay(), tlMin()); }
+    });
+    if(rd) rd.addEventListener("click", ev=>{
+      const b=ev.target.closest(".rsg[data-pick]"); if(!b) return;
+      RIG_PICK=b.dataset.pick;
+      try{ localStorage.setItem("biteboard.rigpick",RIG_PICK); }catch(e){}
+      rd.innerHTML=t3RigDetailHTML(tlDay(), tlMin());
     });
     const bt=document.getElementById("t3Better"); if(bt) bt.addEventListener("click", ()=>openDay(+bt.dataset.di));
     const bk=document.getElementById("tlBack2"); if(bk) bk.addEventListener("click", ()=>{ TL_MIN=null; paintTimeline(); });
