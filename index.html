@@ -2044,8 +2044,13 @@ button.vbetter:hover{ border-color:var(--amber); }
   /* ---- factor strength meters: the few readings actually moving the score ---- */
   function factorMeters(d,m){
     const w=probeWin(d,m), t=bayScore(d,w).terms;
-    const ranked=Object.keys(t).map(k=>({ k, v:t[k].v, raw:t[k].raw, wt:(MODEL.w[k]||0) }))
-      .sort((a,b)=> (b.wt*Math.abs(b.v-0.5)) - (a.wt*Math.abs(a.v-0.5)) ).slice(0,4);
+    const all=Object.keys(t).map(k=>({ k, v:t[k].v, raw:t[k].raw, reg:t[k].reg, wt:(MODEL.w[k]||0) }))
+      .sort((a,b)=> (b.wt*Math.abs(b.v-0.5)) - (a.wt*Math.abs(a.v-0.5)) );
+    const ranked=all.slice(0,4);
+    // always surface the barometer when it is actually moving (a real trigger),
+    // even though its model weight keeps it out of the top rank on a flat day
+    const pr=all.find(x=>x.k==="pressure");
+    if(pr && pr.reg!=="steady" && ranked.indexOf(pr)<0) ranked[3]=pr;
     const rows=ranked.map(f=>{
       const dir = f.v>=0.55 ? "up" : f.v<=0.40 ? "down" : "mid";
       const arrow = dir==="up" ? "&uarr;" : dir==="down" ? "&darr;" : "&ndash;";
@@ -3502,10 +3507,10 @@ button.vbetter:hover{ border-color:var(--amber); }
      is allowed to disagree with one. Six physical terms, each 0 to 1, each
      shown to the reader with the number that produced it. */
 
-  const BAY_PRIOR = { movement:0.30, solunar:0.12, range:0.12, thermal:0.12, light:0.14, season:0.20 };
+  const BAY_PRIOR = { movement:0.28, solunar:0.11, range:0.11, thermal:0.11, light:0.13, season:0.18, pressure:0.08 };
   const TERM_LABEL = {
     movement:"Water moving", solunar:"Solunar", range:"Spring vs neap",
-    thermal:"Water temp", light:"Light", season:"Season"
+    thermal:"Water temp", light:"Light", season:"Season", pressure:"Pressure"
   };
   // Optimal water band and peak months per target, San Diego bay and coast.
   const TARGET = {
@@ -3576,7 +3581,24 @@ button.vbetter:hover{ border-color:var(--amber); }
       raw: inPeak?T.name+" at peak this month" : adjacent?T.name+" on the shoulder of its season" : T.name+" off peak this month",
       reg: inPeak ? "peak" : adjacent ? "shoulder" : "off" };
 
-    return { movement, solunar, range, thermal, light, season };
+    // barometric pressure: a falling trend ahead of a front turns fish on; a
+    // sharp rise behind one slows them. Trend (hPa over 24h) carries it; the
+    // absolute reading is context. Neutral when no reading is available.
+    const pt = (d.pressTrend!=null) ? d.pressTrend : null;
+    const pabs = (d.press!=null) ? Math.round(d.press) : null;
+    let pv, preg, praw;
+    if(pt==null){ pv=0.5; preg="steady"; praw=(pabs!=null?pabs+" hPa, ":"")+"no 24h trend yet"; }
+    else {
+      pv = Math.max(0, Math.min(1, 0.5 - pt/8));   // -4 hPa/24h -> 1.0, +4 -> 0, steady -> 0.5
+      preg = pt<=-1.5 ? "falling" : pt>=1.5 ? "rising" : "steady";
+      const dir = pt<=-1.5 ? "falling "+Math.abs(pt).toFixed(1)+" hPa/24h"
+                : pt>=1.5 ? "rising "+pt.toFixed(1)+" hPa/24h"
+                : "holding steady";
+      praw = (pabs!=null?pabs+" hPa, ":"")+dir;
+    }
+    const pressure = { v:pv, raw:praw, reg:preg };
+
+    return { movement, solunar, range, thermal, light, season, pressure };
   }
 
   // Live weights: the prior until the log says otherwise (see learnFromLog).
@@ -4416,6 +4438,7 @@ button.vbetter:hover{ border-color:var(--amber); }
       "thermal:in":"water temp in the zone","thermal:out":"water temp off target",
       "light:edge":"dawn/dusk light","light:partdark":"low light, near dark","light:flat":"flat midday sun",
       "season:peak":fish+" in season","season:shoulder":fish+" on the shoulder","season:off":fish+" off season",
+      "pressure:falling":"barometer falling","pressure:steady":"pressure steady","pressure:rising":"barometer rising",
     };
     const items=Object.keys(t).map(k=>({v:t[k].v, wt:(MODEL.w[k]||0), p:P[k+":"+t[k].reg]||""}));
     const good=items.filter(x=>x.v>=0.55&&x.p).sort((a,b)=>b.v*b.wt-a.v*a.wt).slice(0,2).map(x=>x.p);
@@ -4670,6 +4693,12 @@ button.vbetter:hover{ border-color:var(--amber); }
       shoulder: t=>`${t.raw}. Some fish around, but not the numbers you get at peak, so everything else has to be right.`,
       off:      t=>`${t.raw}. Few fish in the bay, and the ones that are there are less committed, so everything else has to be right.`,
       rule:"Fish what is in season. September is bass; halibut waits for January; rockfish and cabezon open October 1."
+    },
+    pressure: {
+      falling: t=>`${t.raw}. A dropping barometer ahead of a front is a classic feeding trigger: fish sense the change and load up before the weather turns.`,
+      steady:  t=>`${t.raw}. Steady pressure is neutral, neither pushing fish to feed nor shutting them down, so the tide and light carry the window.`,
+      rising:  t=>`${t.raw}. A sharp rise behind a front, the bluebird high, tends to put fish down and make them slow to commit for a day or so.`,
+      rule:"Fish the falling barometer ahead of a front; after it clears, give the bluebird high a day before expecting them to switch back on."
     }
   };
 
@@ -5410,6 +5439,7 @@ button.vbetter:hover{ border-color:var(--amber); }
         else if(dd.swell_ft!=null && dd.swell_ft>=3.5){ sc="st-ease"; stt="Building swell"; }
         newDays.push({ dow:dd.dow, date:MON[dp[1]-1]+" "+dp[2], di:i, score:null, sr, ss,
           wind:dd.wind_mph, swell:dd.swell_ft, water:dd.water_f, swing,
+          press:(dd.pressure_hpa!=null?dd.pressure_hpa:null), pressTrend:(dd.pressure_trend_hpa!=null?dd.pressure_trend_hpa:null),
           tempHi:(dd.temp_hi_f!=null?dd.temp_hi_f:null), tempLo:(dd.temp_lo_f!=null?dd.temp_lo_f:null),
           moon:dd.moon_phase, illum:dd.moon_illum, majors, majorLbl:dd.moon_transit, underfoot:dd.moon_underfoot,
           storm:{c:sc,t:stt}, sky:dd.sky||skyMap[dd.weather_code]||"Clear",

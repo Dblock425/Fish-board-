@@ -1,36 +1,16 @@
 {
-  "generated_at": "2026-10-14T05:39:55+00:00",
+  "generated_at": "2026-10-14T07:04:18+00:00",
   "station": "9410170",
   "lat": 32.709,
   "lon": -117.228,
-  "note": "Fetched by GitHub Actions. Tides exact (NOAA); air temp, wind and conditions from NWS (weather.gov); swell and water temp from Open-Meteo; moon computed.",
+  "note": "Fetched by GitHub Actions. Tides exact (NOAA); air temp, wind and conditions from NWS (weather.gov); swell, water temp and barometric pressure from Open-Meteo; moon computed.",
   "current": {
-    "temp_f": 65,
-    "wind_mph": 10,
+    "temp_f": 63,
+    "wind_mph": 5,
     "sky": "Clear",
-    "time": "2026-10-13T22:00:00-07:00"
+    "time": "2026-10-14T00:00:00-07:00"
   },
   "tides": [
-    {
-      "t": "2026-10-12 03:57",
-      "v": 1.7,
-      "type": "L"
-    },
-    {
-      "t": "2026-10-12 10:12",
-      "v": 6.37,
-      "type": "H"
-    },
-    {
-      "t": "2026-10-12 17:07",
-      "v": 0.06,
-      "type": "L"
-    },
-    {
-      "t": "2026-10-12 23:17",
-      "v": 4.27,
-      "type": "H"
-    },
     {
       "t": "2026-10-13 04:18",
       "v": 2.15,
@@ -180,28 +160,29 @@
       "t": "2026-10-21 18:46",
       "v": 4.98,
       "type": "H"
+    },
+    {
+      "t": "2026-10-22 01:11",
+      "v": 0.67,
+      "type": "L"
+    },
+    {
+      "t": "2026-10-22 07:34",
+      "v": 5.33,
+      "type": "H"
+    },
+    {
+      "t": "2026-10-22 13:36",
+      "v": 1.45,
+      "type": "L"
+    },
+    {
+      "t": "2026-10-22 19:29",
+      "v": 5.11,
+      "type": "H"
     }
   ],
   "days": [
-    {
-      "date": "2026-10-13",
-      "dow": "Tue",
-      "sunrise": "06:51",
-      "sunset": "18:18",
-      "wind_mph": 10,
-      "swell_ft": 3.6,
-      "water_f": 72.3,
-      "temp_hi_f": 73,
-      "temp_lo_f": 60,
-      "sky": "Mostly Clear",
-      "weather_code": 3,
-      "precip_pct": null,
-      "precip_in": 3,
-      "moon_phase": "New",
-      "moon_illum": 4,
-      "moon_transit": "2:25 PM",
-      "moon_underfoot": "2:50 AM"
-    },
     {
       "date": "2026-10-14",
       "dow": "Wed",
@@ -211,11 +192,13 @@
       "swell_ft": 3.2,
       "water_f": 72.3,
       "temp_hi_f": 75,
-      "temp_lo_f": 63,
+      "temp_lo_f": 60,
       "sky": "Sunny",
       "weather_code": 0,
       "precip_pct": 0,
       "precip_in": 0,
+      "pressure_hpa": 1017.5,
+      "pressure_trend_hpa": 2.7,
       "moon_phase": "Waxing crescent",
       "moon_illum": 8,
       "moon_transit": "3:13 PM",
@@ -235,6 +218,8 @@
       "weather_code": 0,
       "precip_pct": 0,
       "precip_in": 0,
+      "pressure_hpa": 1014.9,
+      "pressure_trend_hpa": -2.6,
       "moon_phase": "Waxing crescent",
       "moon_illum": 15,
       "moon_transit": "4:02 PM",
@@ -254,6 +239,8 @@
       "weather_code": 0,
       "precip_pct": 0,
       "precip_in": 2,
+      "pressure_hpa": 1012.3,
+      "pressure_trend_hpa": -2.7,
       "moon_phase": "Waxing crescent",
       "moon_illum": 24,
       "moon_transit": "4:51 PM",
@@ -273,6 +260,8 @@
       "weather_code": 0,
       "precip_pct": 0,
       "precip_in": 6,
+      "pressure_hpa": 1013.0,
+      "pressure_trend_hpa": 0.8,
       "moon_phase": "First quarter",
       "moon_illum": 33,
       "moon_transit": "5:40 PM",
@@ -292,6 +281,8 @@
       "weather_code": 0,
       "precip_pct": 0,
       "precip_in": 0,
+      "pressure_hpa": 1013.2,
+      "pressure_trend_hpa": 0.1,
       "moon_phase": "First quarter",
       "moon_illum": 44,
       "moon_transit": "6:29 PM",
@@ -311,6 +302,8 @@
       "weather_code": 0,
       "precip_pct": 0,
       "precip_in": 1,
+      "pressure_hpa": 1013.6,
+      "pressure_trend_hpa": 0.5,
       "moon_phase": "First quarter",
       "moon_illum": 54,
       "moon_transit": "7:17 PM",
@@ -330,6 +323,8 @@
       "weather_code": 2,
       "precip_pct": 33,
       "precip_in": 30,
+      "pressure_hpa": 1012.3,
+      "pressure_trend_hpa": -1.3,
       "moon_phase": "First quarter",
       "moon_illum": 65,
       "moon_transit": "8:06 PM",
@@ -349,10 +344,33 @@
       "weather_code": 3,
       "precip_pct": null,
       "precip_in": 36,
+      "pressure_hpa": 1010.1,
+      "pressure_trend_hpa": -2.1,
       "moon_phase": "Waxing gibbous",
       "moon_illum": 74,
       "moon_transit": "8:55 PM",
       "moon_underfoot": "9:20 AM"
+    },
+    {
+      "date": "2026-10-22",
+      "dow": "Thu",
+      "sunrise": "06:58",
+      "sunset": "18:07",
+      "wind_mph": 12,
+      "swell_ft": null,
+      "water_f": 72.5,
+      "temp_hi_f": 69,
+      "temp_lo_f": 64,
+      "sky": "Rain showers",
+      "weather_code": 80,
+      "precip_pct": null,
+      "precip_in": 23,
+      "pressure_hpa": 1009.5,
+      "pressure_trend_hpa": -0.6,
+      "moon_phase": "Waxing gibbous",
+      "moon_illum": 83,
+      "moon_transit": "9:44 PM",
+      "moon_underfoot": "10:09 AM"
     }
   ]
 }

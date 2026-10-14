@@ -61,9 +61,29 @@ if not tides:
 q = urllib.parse.urlencode({
     "latitude": LAT, "longitude": LON,
     "daily": "weather_code,temperature_2m_max,temperature_2m_min,wind_speed_10m_max,precipitation_probability_max,sunrise,sunset",
+    "hourly": "pressure_msl",
+    "past_days": 1,
     "temperature_unit": "fahrenheit", "wind_speed_unit": "mph", "precipitation_unit": "inch",
     "timezone": TZ, "forecast_days": 9})
-land = get_json("https://api.open-meteo.com/v1/forecast?" + q)["daily"]
+land_full = get_json("https://api.open-meteo.com/v1/forecast?" + q)
+land = land_full["daily"]
+
+# ---- 2b) daily mean sea-level pressure + its 24h trend (bite factor) ----
+# Falling barometer ahead of a front tends to turn fish on; a sharp high after
+# one slows them. We carry the day's mean (hPa) and the change vs the day before.
+press_mean = {}
+try:
+    ph = land_full.get("hourly", {})
+    _pt = {}
+    for t, v in zip(ph.get("time", []), ph.get("pressure_msl", [])):
+        if v is None:
+            continue
+        _pt.setdefault(t[:10], []).append(v)
+    for day, vals in _pt.items():
+        if vals:
+            press_mean[day] = sum(vals) / len(vals)
+except Exception as e:
+    print("pressure parse skipped:", e)
 
 SKY = {0:"Clear", 1:"Mostly clear", 2:"Partly cloudy", 3:"Overcast",
        45:"Fog", 48:"Fog", 51:"Light drizzle", 53:"Drizzle", 55:"Drizzle",
@@ -162,6 +182,11 @@ for i in range(9):
     if wind is None and g("wind_speed_10m_max") is not None: wind = round(g("wind_speed_10m_max"))
     sky = nws_sky.get(ds) or SKY.get(code, "")
     pop = nws_pop.get(ds)
+    prev_ds = (dt - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+    p_mean = press_mean.get(ds)
+    p_prev = press_mean.get(prev_ds)
+    pressure_hpa = None if p_mean is None else round(p_mean, 1)
+    pressure_trend = None if (p_mean is None or p_prev is None) else round(p_mean - p_prev, 1)
     days.append({
         "date": ds,
         "dow": dt.strftime("%a"),
@@ -175,6 +200,8 @@ for i in range(9):
         "weather_code": code,
         "precip_pct": pop,
         "precip_in": g("precipitation_probability_max"),
+        "pressure_hpa": pressure_hpa,
+        "pressure_trend_hpa": pressure_trend,
         "moon_phase": nm, "moon_illum": il,
         "moon_transit": tr, "moon_underfoot": uf,
     })
@@ -182,7 +209,7 @@ for i in range(9):
 out = {
     "generated_at": now_utc.replace(microsecond=0).isoformat(),
     "station": STATION, "lat": LAT, "lon": LON,
-    "note": "Fetched by GitHub Actions. Tides exact (NOAA); air temp, wind and conditions from NWS (weather.gov); swell and water temp from Open-Meteo; moon computed.",
+    "note": "Fetched by GitHub Actions. Tides exact (NOAA); air temp, wind and conditions from NWS (weather.gov); swell, water temp and barometric pressure from Open-Meteo; moon computed.",
     "current": current,
     "tides": tides, "days": days,
 }
